@@ -85,7 +85,7 @@
     export default LeftPanel;
     ```
 
-- it's preferred to use round braces arround JSX in render()
+- it's preferred to use round braces around JSX in render()
     ```javascript
     // bad
     class RightPanel extends Component {

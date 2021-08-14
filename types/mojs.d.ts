@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 declare module '@mojs/core' {
+  // eslint-disable-next-line import/no-default-export
   export default mojs
   export type Timeline = mojs.Timeline
   export type Shape = mojs.Shape
