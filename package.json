@@ -60,6 +60,7 @@
     "lint-staged": "^11.1.2",
     "propagating-hammerjs": "^2.0.1",
     "react": "^17.0.2",
+    "react-redux": "^7.2.4",
     "redux": "^4.1.1",
     "redux-recycle": "^1.4.0",
     "redux-undo": "^1.0.1",
@@ -117,7 +118,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
+    "*.{ts,tsx}": [
       "prettier --write",
       "yarn run eslint"
     ]
