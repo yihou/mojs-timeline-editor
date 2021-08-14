@@ -1,43 +1,38 @@
 import { constants } from '../constants'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const INITIAL_SIZE = 400
-const INITIAL_STATE = {
+const initialState = {
   prevHeight: INITIAL_SIZE,
   ySize: INITIAL_SIZE,
   isHidden: false,
   isTransition: false
 }
 
-export enum MainPanelConstants {
-  MAIN_PANEL_HIDE_TOGGLE = 'MAIN_PANEL_HIDE_TOGGLE',
-  MAIN_PANEL_SET_YSIZE = 'MAIN_PANEL_SET_YSIZE',
-  MAIN_PANEL_RESET_TRANSITION = 'MAIN_PANEL_RESET_TRANSITION',
-  MAIN_PANEL_SAVE_YPREV = 'MAIN_PANEL_SAVE_YPREV',
-  MAIN_PANEL_SET_HIDDEN = 'MAIN_PANEL_SET_HIDDEN'
-}
+export const mainPanelSlice = createSlice({
+  name: 'mainPanel',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    hideToggle: (state) => {
+      const isHidden = !state.isHidden
+      const ySize = isHidden ? constants.PLAYER_HEIGHT : state.prevHeight
+      const prevHeight = isHidden ? state.ySize : constants.PLAYER_HEIGHT
+      const isTransition = true
 
-export const mainPanel = (state = INITIAL_STATE, action) => {
-  const isHidden = !state.isHidden
-  const ySize = isHidden ? constants.PLAYER_HEIGHT : state.prevHeight
-  const prevHeight = isHidden ? state.ySize : constants.PLAYER_HEIGHT
-  const isTransition = true
-
-  switch (action.type) {
-    case MainPanelConstants.MAIN_PANEL_HIDE_TOGGLE:
       return { ...state, isHidden, ySize, prevHeight, isTransition }
-
-    case MainPanelConstants.MAIN_PANEL_SET_YSIZE:
-      return { ...state, ySize: state.ySize - action.data }
-
-    case MainPanelConstants.MAIN_PANEL_RESET_TRANSITION:
+    },
+    setYSize: (state, action: PayloadAction<number>) => {
+      return { ...state, ySize: state.ySize - action.payload }
+    },
+    resetTransition: (state) => {
       return { ...state, isTransition: false }
-
-    case MainPanelConstants.MAIN_PANEL_SAVE_YPREV:
+    },
+    saveYPrev: (state) => {
       return { ...state, prevHeight: state.ySize }
-
-    case MainPanelConstants.MAIN_PANEL_SET_HIDDEN:
-      return { ...state, isHidden: action.data }
-    default:
-      return state
+    },
+    setHidden: (state, action: PayloadAction<boolean>) => {
+      return { ...state, isHidden: action.payload }
+    }
   }
-}
+})

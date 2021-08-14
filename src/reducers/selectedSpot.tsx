@@ -1,27 +1,30 @@
-export enum SelectedSpotConstants {
-  SET_SELECTED_SPOT = 'SET_SELECTED_SPOT',
-  RESET_SELECTED_SPOT = 'RESET_SELECTED_SPOT'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+export interface SelectedSpot {
+  id: string | null
+  spotIndex: number | null
+  type: string | null
+  prop: any
 }
 
-const INITIAL_STATE = {
+// Define the initial state using that type
+const initialState: SelectedSpot = {
   id: null,
   spotIndex: null,
   type: null,
   prop: null
 }
 
-export const selectedSpot = (state = INITIAL_STATE, action) => {
-  const { data } = action
-
-  switch (action.type) {
-    case SelectedSpotConstants.SET_SELECTED_SPOT: {
-      return { ...data }
-    }
-
-    case SelectedSpotConstants.RESET_SELECTED_SPOT: {
-      return INITIAL_STATE
+export const selectedSpotSlice = createSlice({
+  name: 'selectedSpot',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    setSelectedSpot: (_state, action: PayloadAction<SelectedSpot>) => {
+      return { ...action.payload }
+    },
+    resetSelectedSpot: () => {
+      return { ...initialState }
     }
   }
-
-  return state
-}
+})

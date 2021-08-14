@@ -1,16 +1,14 @@
-export enum ProgressConstants {
-  SET_PROGRESS = 'SET_PROGRESS'
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-const INITIAL_STATE = 0
-export const progress = (state = INITIAL_STATE, action) => {
-  const { data } = action
+const initialState = 0
 
-  switch (action.type) {
-    case ProgressConstants.SET_PROGRESS: {
-      return data
+export const progressSlice = createSlice({
+  name: 'progress',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    setProgress: (_state, action: PayloadAction<number>) => {
+      return action.payload
     }
   }
-
-  return state
-}
+})

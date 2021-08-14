@@ -1,20 +1,20 @@
 import { combineReducers, Reducer } from 'redux'
 import recycleState from 'redux-recycle'
-import { progress } from './progress-reducer'
-import { mainPanel } from './main-panel-reducer'
-import { controls } from './controls-reducer'
-import { points } from './points-reducer'
-import { selectedSpot } from './selected-spot'
+import { progressSlice } from './progress'
+import { mainPanelSlice } from './mainPanel'
+import { controlsSlice } from './controls'
+import { pointsSlice } from './points'
+import { selectedSpotSlice } from './selectedSpot'
 
 export const SET_APP_STATE = 'SET_APP_STATE'
 
 export const allReducers: Reducer = recycleState(
   combineReducers({
-    progress,
-    mainPanel,
-    controls,
-    points,
-    selectedSpot
+    [progressSlice.name]: progressSlice.reducer,
+    [mainPanelSlice.name]: mainPanelSlice.reducer,
+    [controlsSlice.name]: controlsSlice.reducer,
+    [pointsSlice.name]: pointsSlice.reducer,
+    [selectedSpotSlice.name]: selectedSpotSlice.reducer
   }),
   [SET_APP_STATE],
   (_state, action) => action.data

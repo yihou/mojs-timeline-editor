@@ -12,9 +12,9 @@
     "timeline editor",
     "svg"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.modern.js",
-  "source": "src/index.tsx",
+  "main": "dist/TimelineEditor.js",
+  "module": "dist/TimelineEditor.modern.js",
+  "source": "src/TimelineEditor.tsx",
   "engines": {
     "node": ">=14"
   },
@@ -55,9 +55,11 @@
     "@mojs/core": "^1.1.0",
     "@mojs/curve-editor": "^1.7.1",
     "@mojs/player": "^1.0.1",
+    "@reduxjs/toolkit": "^1.6.1",
     "decko": "^1.2.0",
     "hammerjs": "^2.0.8",
     "lint-staged": "^11.1.2",
+    "md5": "^2.3.0",
     "propagating-hammerjs": "^2.0.1",
     "react": "^17.0.2",
     "react-redux": "^7.2.4",
@@ -79,6 +81,7 @@
     "@types/gh-pages": "^3.2.0",
     "@types/hammerjs": "^2.0.40",
     "@types/jest": "^27.0.1",
+    "@types/md5": "^2.3.1",
     "@types/node": "^14.17.9",
     "@types/prettier": "^2.3.2",
     "@types/react": "^17.0.17",

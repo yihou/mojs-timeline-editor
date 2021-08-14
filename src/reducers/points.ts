@@ -1,25 +1,10 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { constants } from '../constants'
 
-import getLast from '../helpers/get-last'
-import createPoint from '../helpers/create-point'
-import createSegment from '../helpers/create-segment'
-import change from '../helpers/change'
-
-export enum PointsConstants {
-  ADD_POINT = 'ADD_POINT',
-  SELECT_POINT = 'SELECT_POINT',
-  TOGGLE_OPEN_POINT = 'TOGGLE_OPEN_POINT',
-  ADD_SNAPSHOT = 'ADD_SNAPSHOT',
-  ADD_PROPERTY_SEGMENT = 'ADD_PROPERTY_SEGMENT',
-  CHANGE_POINT_CURRENT_POSITION = 'CHANGE_POINT_CURRENT_POSITION',
-  SHIFT_SEGMENT = 'SHIFT_SEGMENT',
-  ADD_POINT_PROPERTY = 'ADD_POINT_PROPERTY',
-  UPDATE_SELECTED_SPOT = 'UPDATE_SELECTED_SPOT',
-  UPDATE_SELECTED_SPOT_CURRENT = 'UPDATE_SELECTED_SPOT_CURRENT',
-  SET_EASING = 'SET_EASING'
-}
-
-const INITIAL_STATE = {}
+import { getLast } from '../helpers/get-last'
+import { createPoint, CreatePointOptions, Point } from '../helpers/create-point'
+import { createSegment } from '../helpers/create-segment'
+import { change } from '../helpers/change'
 
 const resetSelectedPoints = (state) => {
   const newState = {}
@@ -81,24 +66,33 @@ export const updateSpot = (currentValue, input) => {
   return newValue
 }
 
-export const points = (state = INITIAL_STATE, action) => {
-  const { data } = action
+export type PointsState = Record<string, Point>
 
-  switch (action.type) {
-    case PointsConstants.ADD_POINT: {
+// Define the initial state using that type
+const initialState: PointsState = {}
+
+export const pointsSlice = createSlice({
+  name: 'points',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    addPoint: (state, action: PayloadAction<CreatePointOptions>) => {
       const newState = resetSelectedPoints(state)
-      const point = createPoint(data, Object.keys(newState).length)
+      const point = createPoint(action.payload, Object.keys(newState).length)
       newState[point.id] = point
       return newState
-    }
-    case PointsConstants.SELECT_POINT: {
-      return change(state, [data, 'isSelected'], (state) => !state)
-    }
-    case PointsConstants.TOGGLE_OPEN_POINT: {
-      return change(state, [data, 'isOpen'], (state) => !state)
-    }
-    case PointsConstants.ADD_SNAPSHOT: {
-      const { id } = data
+    },
+    selectPoint: (state, action: PayloadAction<string>) => {
+      return change(state, [action.payload, 'isSelected'], (state) => !state)
+    },
+    toggleOpenPoint: (state, action: PayloadAction<string>) => {
+      return change(state, [action.payload, 'isOpen'], (state) => !state)
+    },
+    addSnapshot: (
+      state,
+      action: PayloadAction<{ time: number; id: string }>
+    ) => {
+      const { id } = action.payload
       const current = state[id].currentProps
 
       const props = Object.keys(current)
@@ -106,35 +100,47 @@ export const points = (state = INITIAL_STATE, action) => {
       for (let i = 0; i < props.length; i++) {
         const name = props[i]
         newState = change(newState, [id, 'props', name], (segments) =>
-          addSegment([...segments], name, data, current)
+          addSegment([...segments], name, action.payload, current)
         )
       }
 
       return newState
-    }
-
-    case PointsConstants.ADD_PROPERTY_SEGMENT: {
-      const { id, name } = data
+    },
+    addPropertySegment: (
+      state,
+      action: PayloadAction<{ time: number; id: string; name: string }>
+    ) => {
+      const { id, name } = action.payload
       const current = state[id].currentProps
 
-      return change(state, [id, 'props', name], (segments) =>
-        addSegment([...segments], name, data, current)
+      return change<PointsState>(state, [id, 'props', name], (segments) =>
+        addSegment([...segments], name, action.payload, current)
       )
-    }
-
-    case PointsConstants.CHANGE_POINT_CURRENT_POSITION: {
-      return change(state, [data.id, 'currentProps'], (obj) => {
-        const { deltaX: dX, deltaY: dY } = data
+    },
+    changePointCurrentPosition: (
+      state,
+      action: PayloadAction<{ id: string; deltaX: number; deltaY: number }>
+    ) => {
+      return change(state, [action.payload.id, 'currentProps'], (obj) => {
+        const { deltaX: dX, deltaY: dY } = action.payload
         const pos = obj[constants.POSITION_NAME]
         return { ...obj, [constants.POSITION_NAME]: [pos[0] + dX, pos[1] + dY] }
       })
-    }
-
-    case PointsConstants.SHIFT_SEGMENT: {
-      const { id, prop, spotIndex } = data
+    },
+    shiftSegment: (
+      state,
+      action: PayloadAction<{
+        id: string
+        prop: any
+        spotIndex: number
+        delay: number
+        duration: number
+      }>
+    ) => {
+      const { id, prop, spotIndex } = action.payload
 
       const newState = change(state, [id, 'props', prop, spotIndex], (prop) => {
-        const { delay = 0, duration = 0 } = data
+        const { delay = 0, duration = 0 } = action.payload
 
         return {
           ...prop,
@@ -143,27 +149,37 @@ export const points = (state = INITIAL_STATE, action) => {
         }
       })
 
-      ensureTimeBounds(newState[data.id].props[data.prop])
+      ensureTimeBounds(newState[action.payload.id].props[action.payload.prop])
       return newState
-    }
-
-    case PointsConstants.ADD_POINT_PROPERTY: {
-      const { name, count } = data.property
+    },
+    addPointProperty: (
+      state,
+      action: PayloadAction<{ id: string; name: string; count: number }>
+    ) => {
+      const { name, count } = action.payload
       const value = Array(count).fill(0)
 
-      const newState = change(state, [data.id, 'props'], (props) => {
+      const newState = change(state, [action.payload.id, 'props'], (props) => {
         props[name] = [createSegment({ startValue: value, endValue: value })]
         return props
       })
 
-      return change(newState, [data.id, 'currentProps'], (props) => {
+      return change(newState, [action.payload.id, 'currentProps'], (props) => {
         props[name] = value
         return props
       })
-    }
-
-    case PointsConstants.UPDATE_SELECTED_SPOT: {
-      const { id, type, spotIndex, prop, value } = data
+    },
+    updateSelectedSpot: (
+      state,
+      action: PayloadAction<{
+        id: string
+        type: string
+        spotIndex: number
+        prop: any
+        value: any
+      }>
+    ) => {
+      const { id, type, spotIndex, prop, value } = action.payload
       const segments = state[id].props[prop]
       const len = Object.keys(segments).length
 
@@ -191,23 +207,34 @@ export const points = (state = INITIAL_STATE, action) => {
       }
 
       return newState
-    }
+    },
+    updateSelectedSpotCurrent: (
+      state,
+      action: PayloadAction<{ id: string; value: any; name: string }>
+    ) => {
+      const { value, name } = action.payload
 
-    case PointsConstants.UPDATE_SELECTED_SPOT_CURRENT: {
-      const { value, name } = data
-
-      return change(state, [data.id, 'currentProps'], (currentProps) => {
-        currentProps[name] = value
-        return currentProps
-      })
-    }
-
-    case PointsConstants.SET_EASING: {
-      const { id, prop, spotIndex, easing } = data
+      return change(
+        state,
+        [action.payload.id, 'currentProps'],
+        (currentProps) => {
+          currentProps[name] = value
+          return currentProps
+        }
+      )
+    },
+    setEasing: (
+      state,
+      action: PayloadAction<{
+        id: string
+        prop: any
+        spotIndex: number
+        easing: string
+      }>
+    ) => {
+      const { id, prop, spotIndex, easing } = action.payload
 
       return change(state, [id, 'props', prop, spotIndex, 'easing'], easing)
     }
   }
-
-  return state
-}
+})
