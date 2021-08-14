@@ -11,6 +11,7 @@
     "noImplicitReturns": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
+    "experimentalDecorators": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
