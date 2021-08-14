@@ -1,20 +1,23 @@
-import { Component } from 'react'
-import { bind } from 'decko'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import MainPanel from './main-panel/main-panel'
-import Icons from './icons'
-import InsertPoint from './insert-point'
-import Point from './point'
+import { MainPanel } from './main-panel/main-panel'
+import { Icons } from './icons'
+import { InsertPoint } from './insert-point'
+import { Point } from './point'
 
-// const CLASSES = require('../../css/blocks/timeline-editor.postcss.css.json');
-require('../../css/blocks/timeline-editor')
+// const CLASSES = require('../css/blocks/timeline-editor.postcss.css.json');
+require('../css/blocks/timeline-editor')
 
-// @classNames(require('../../css/blocks/timeline-editor.postcss.css.json'))
-export class TimelineEditor extends Component {
-  render() {
+// @classNames(require('../css/blocks/timeline-editor.postcss.css.json'))
+export class TimelineEditorView extends Component {
+  getState = () => {
     const { store } = this.context
-    const state = store.getState()
-    this._state = state
+    return store.getState()
+  }
+
+  render() {
+    const state = this.getState()
 
     return (
       <div>
@@ -29,13 +32,15 @@ export class TimelineEditor extends Component {
   }
 
   _renderPoints() {
-    const results = []
-    const { points } = this._state
+    const results: ReactNode[] = []
+    const { points } = this.getState()
+
     const props = Object.keys(points)
+    const state = this.getState()
 
     for (let i = 0; i < props.length; i++) {
       const key = props[i]
-      results.push(<Point state={points[key]} entireState={this._state} />)
+      results.push(<Point state={points[key]} entireState={state} />)
     }
 
     return results
@@ -47,8 +52,7 @@ export class TimelineEditor extends Component {
     document.addEventListener('mousemove', this._docMouseMove)
   }
 
-  @bind
-  _mouseMove(e) {
+  _mouseMove = (e) => {
     /* we cannot `stopPropagation` the event, because `hammerjs`
        will not be able to work properly on `resize-handle`, so we
        set the `isTimelinePanel` flag instead indicating that we are
@@ -56,7 +60,7 @@ export class TimelineEditor extends Component {
     */
     e.isTimelinePanel = true
     const { store } = this.context
-    const { controls } = this._state
+    const { controls } = this.getState()
     if (controls.isMouseInside) {
       return
     }
@@ -64,18 +68,15 @@ export class TimelineEditor extends Component {
     store.dispatch({ type: 'CONTROLS_SET_MOUSE_INSIDE', data: true })
   }
 
-  @bind
-  _docMouseMove(e) {
+  _docMouseMove = (e) => {
     if (e.isTimelinePanel) {
       return
     }
     const { store } = this.context
-    const { controls } = this._state
+    const { controls } = this.getState()
 
     if (controls.isMouseInside) {
       store.dispatch({ type: 'CONTROLS_SET_MOUSE_INSIDE', data: false })
     }
   }
 }
-
-export default TimelineEditor

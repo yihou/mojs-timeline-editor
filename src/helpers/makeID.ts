@@ -1,3 +1,5 @@
-import md5 from 'md5';
+import md5 from 'md5'
 
-export default () => { return md5( `${Math.random()}${Math.random()}` ); };
+export const makeID = () => {
+  return md5(`${Math.random()}${Math.random()}`)
+}

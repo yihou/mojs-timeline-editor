@@ -1,13 +1,19 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
 
-import PointsPanel from '../points-panel/points-panel'
-import TimelinesPanel from '../timelines-panel'
+import { PointsPanel } from '../points-panel/points-panel'
+import { TimelinesPanel } from '../timelines-panel'
 
 const CLASSES = require('../../../css/blocks/body-panel.postcss.css.json')
 require('../../../css/blocks/body-panel')
 
-class BodyPanel extends Component {
+interface BodyPanelProps {
+  state: {
+    points
+  }
+}
+
+export class BodyPanel extends Component<BodyPanelProps> {
   render() {
     const { state } = this.props
 
@@ -23,5 +29,3 @@ class BodyPanel extends Component {
     )
   }
 }
-
-export default BodyPanel

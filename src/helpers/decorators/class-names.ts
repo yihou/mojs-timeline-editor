@@ -2,21 +2,26 @@
    from the `CLASSES`. If there is no such `hash name` - leave the className
    as is.
 */
-export default function classNames(CLASSES) {
+export function classNames(CLASSES) {
   return (attrs) => {
-    if (!attrs || (!attrs.class && !attrs.className)) { return; }
-    const string = (attrs.class || attrs.className).trim();
-    const split = string.split(' ');
+    if (!attrs || (!attrs.class && !attrs.className)) {
+      return
+    }
+    const string = (attrs.class || attrs.className).trim()
+    const split = string.split(' ')
 
-    let str = '';
+    let str = ''
     for (let i = 0; i < split.length; i++) {
-      const className = split[i];
+      const className = split[i]
       if (className) {
-        const hash = CLASSES[className];
-        str += `${(hash == null) ? className : hash} `;
+        const hash = CLASSES[className]
+        str += `${hash == null ? className : hash} `
       }
     }
-    if (attrs.class) { attrs.class = str; }
-    else { attrs.className = str; }
-  };
+    if (attrs.class) {
+      attrs.class = str
+    } else {
+      attrs.className = str
+    }
+  }
 }

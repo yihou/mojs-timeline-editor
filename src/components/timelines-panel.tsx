@@ -1,13 +1,17 @@
-import { Component } from 'react'
-import { bind } from 'decko'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import PointTimelineLine from './point-timeline-line'
+import { PointTimelineLine } from './point-timeline-line'
 // import resetEvent from '../helpers/global-reset-event';
 
-const CLASSES = require('../../css/blocks/timelines-panel.postcss.css.json')
-require('../../css/blocks/timelines-panel')
+const CLASSES = require('../css/blocks/timelines-panel.postcss.css.json')
+require('../css/blocks/timelines-panel')
 
-class TimelinePanel extends Component {
+interface TimelinesPanelProps {
+  state: any
+}
+
+export class TimelinesPanel extends Component<TimelinesPanelProps> {
   render() {
     return (
       <div className={CLASSES['timelines-panel']}>
@@ -21,7 +25,7 @@ class TimelinePanel extends Component {
     const { points } = state
     const keys = Object.keys(points)
 
-    const results = []
+    const results: ReactNode[] = []
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       results.push(
@@ -36,10 +40,8 @@ class TimelinePanel extends Component {
   //   const {store} = this.context;
   //   console.log('b');
   //   resetEvent.add( (e) => {
-  //     store.dispatch({ type: 'RESET_SELECTED_SPOT' });
+  //     store.dispatch(selectedSpotSlice.actions.resetSelectedSpot())
   //     console.log('a');
   //   });
   // }
 }
-
-export default TimelinePanel

@@ -1,31 +1,42 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
 
-import Point from './point'
-import Button from './button'
-import Icon from '../icon'
-
-// import setSelected from '../../actions/set-selected';
-// import ResizeHandle from '../resize-handle';
-// import TimelinePanel from '../timeline-panel';
+import { InsertPoint } from './point'
+import { ToolsPanelButton } from './button'
+import { Icon } from '../icon'
+import { controlsSlice } from '../../reducers/controls'
 
 const CLASSES = require('../../../css/blocks/tools-panel.postcss.css.json')
 require('../../../css/blocks/tools-panel')
 
+interface ToolsPanelProps {
+  state: any
+}
+
+interface ToolsPanelStates {
+  selected: string
+}
+
 /* TODO:
     [x] refactor to emit `action creators` in event handlers;
 */
-class ToolsPanel extends Component {
+export class ToolsPanel extends Component<ToolsPanelProps, ToolsPanelStates> {
   render() {
     return (
       <div className={CLASSES['tools-panel']}>
-        <Point />
-        <Button className={this._getClassFor('plus')} onClick={this._setPlus}>
+        <InsertPoint />
+        <ToolsPanelButton
+          className={this._getClassFor('plus')}
+          onClick={this._setPlus}
+        >
           <Icon shape='plus' />
-        </Button>
-        <Button className={this._getClassFor('html')} onClick={this._setHtml}>
+        </ToolsPanelButton>
+        <ToolsPanelButton
+          className={this._getClassFor('html')}
+          onClick={this._setHtml}
+        >
           {'HTML'}
-        </Button>
+        </ToolsPanelButton>
 
         <a
           className={`${CLASSES.button} ${CLASSES['is-logo']}`}
@@ -51,19 +62,15 @@ class ToolsPanel extends Component {
     return selected === type ? CLASSES['is-active'] : ''
   }
 
-  @bind
-  _setPlus(e) {
+  _setPlus = () => {
     const { store } = this.context
-    store.dispatch({ type: 'TOOLS_SET_SELECTED', data: 'plus' })
+    store.dispatch(controlsSlice.actions.toolsSetSelected('plus'))
     // store.dispatch(setSelected('OBJECT'));
   }
 
-  @bind
-  _setHtml(e) {
+  _setHtml = () => {
     const { store } = this.context
-    store.dispatch({ type: 'TOOLS_SET_SELECTED', data: 'html' })
+    store.dispatch(controlsSlice.actions.toolsSetSelected('html'))
     // store.dispatch(setSelected('HTML'));
   }
 }
-
-export default ToolsPanel

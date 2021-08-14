@@ -1,17 +1,25 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
 
-import HideButton from '../hide-button'
-import ResizeHandle from '../resize-handle'
-import TimelinePanel from '../timeline-panel'
+import { HideButton } from '../hide-button'
+import { ResizeHandle } from '../resize-handle'
+import { TimelinePanel } from '../timeline-panel'
+import { mainPanelSlice } from '../../reducers/mainPanel'
 
 const CLASSES = require('../../../css/blocks/right-panel.postcss.css.json')
 require('../../../css/blocks/right-panel')
 
-class RightPanel extends Component {
+interface RightPanelProps {
+  state: any
+  onResize: (e: any) => void
+  onResizeEnd: (e: any) => void
+  onResizeStart: (e: any) => void
+}
+
+export class RightPanel extends Component<RightPanelProps> {
   render() {
     const { state } = this.props
-    const { mainPanel, points } = state
+    const { mainPanel } = state
 
     return (
       <div className={CLASSES['right-panel']}>
@@ -22,12 +30,9 @@ class RightPanel extends Component {
     )
   }
 
-  @bind
   _onHideButton() {
     const { store } = this.context
 
-    store.dispatch({ type: 'MAIN_PANEL_HIDE_TOGGLE' })
+    store.dispatch(mainPanelSlice.actions.hideToggle())
   }
 }
-
-export default RightPanel

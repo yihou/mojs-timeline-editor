@@ -1,13 +1,25 @@
 import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
+import { pointsSlice } from '../reducers/points'
+import { controlsSlice } from '../reducers/controls'
 
-const CLASSES = require('../../css/blocks/insert-point.postcss.css.json')
-require('../../css/blocks/insert-point')
+const CLASSES = require('../css/blocks/insert-point.postcss.css.json')
+require('../css/blocks/insert-point')
 
-class Point extends Component {
+interface PointProps {
+  state: {
+    controls: any
+    progress: number
+  }
+}
+
+interface PointStates {
+  x: number
+  y: number
+}
+
+export class InsertPoint extends Component<PointProps, PointStates> {
   render() {
-    const { state } = this.props
     const style = {
       display: this._isVisible() ? 'block' : 'none',
       transform: `translate(${this.state.x}px, ${this.state.y}px)`
@@ -34,18 +46,16 @@ class Point extends Component {
     return isOut && isPlus
   }
 
-  @bind
-  _addPoint() {
+  _addPoint = () => {
     const { store } = this.context
     const { state } = this.props
-    store.dispatch({
-      type: 'ADD_POINT',
-      data: { ...this.state, time: state.progress }
-    })
+    store.dispatch(
+      pointsSlice.actions.addPoint({ ...this.state, time: state.progress })
+    )
+    store.dispatch(controlsSlice.actions.toolsResetSelected())
   }
 
-  @bind
-  _mouseMove(e) {
+  _mouseMove = (e) => {
     if (!this._isVisible()) {
       return
     }
@@ -61,5 +71,3 @@ class Point extends Component {
     document.addEventListener('mousemove', this._mouseMove)
   }
 }
-
-export default Point

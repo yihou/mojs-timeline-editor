@@ -1,7 +1,6 @@
-import isString from './is-string';
-import builder from './decorators/builder';
-import refsFunction from './decorators/refs';
-import classNamesFunction from './decorators/class-names';
+import { builder } from './decorators/builder'
+import { refsFunction } from './decorators/refs'
+import { classNames } from './decorators/class-names'
 
 /* Decorator: `classNames`.
     Overrides clean class names with CSS Modules `hash` classes.
@@ -16,12 +15,13 @@ import classNamesFunction from './decorators/class-names';
       // `some-class` will be overwritten with `hash` from the `CLASSES`
 */
 const classNamesDecorator = function classNamesDecorator(CLASSES) {
-  const fun = classNamesFunction(CLASSES);
-  const decorator = builder([fun]);
-  decorator.__decorFunction = fun;
-  return decorator;
-};
-export {classNamesDecorator as classNames};
+  const fun = classNames(CLASSES)
+  const decorator = builder([fun])
+  // @ts-ignore
+  decorator.__decorFunction = fun
+  return decorator
+}
+export { classNamesDecorator as classNames }
 
 /* Decorator: `refs`.
     Overrides clean string `_refs` with reference to the rendered element
@@ -29,9 +29,10 @@ export {classNamesDecorator as classNames};
       @refs
       class SomeComponent extends Component {}
 */
-const refsDecorator = builder([refsFunction]);
-refsDecorator.__decorFunction = refsFunction;
-export {refsDecorator as refs};
+const refsDecorator = builder([refsFunction])
+// @ts-ignore
+refsDecorator.__decorFunction = refsFunction
+export { refsDecorator as refs }
 
 /* Decorator: `all`.
     Includes all decorators at once.
@@ -40,7 +41,7 @@ export {refsDecorator as refs};
       class SomeComponent extends Component {}
 */
 export function all(CLASSES) {
-  return builder([classNamesFunction(CLASSES), refsFunction]);
+  return builder([classNames(CLASSES), refsFunction])
 }
 
 /* Decorator: `compose`.
@@ -50,7 +51,11 @@ export function all(CLASSES) {
       class SomeComponent extends Component {}
 */
 export function compose(...decorators) {
-  if (decorators.length === 0) { return function id(arg) { return arg; }; }
+  if (decorators.length === 0) {
+    return function id(arg) {
+      return arg
+    }
+  }
 
-  return builder(decorators.map( item => item.__decorFunction ));
+  return builder(decorators.map((item) => item.__decorFunction))
 }

@@ -1,14 +1,20 @@
-import { Component } from 'react'
-import { bind } from 'decko'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import PropertyLine from './property-line'
-import PropertyLineAdd from './property-line-add'
-import Icon from '../icon'
+import { PropertyLine } from './property-line'
+import { PropertyLineAdd } from './property-line-add'
+import { Icon } from '../icon'
+import { pointsSlice } from '../../reducers/points'
 
 const CLS = require('../../../css/blocks/point-line.postcss.css.json')
 require('../../../css/blocks/point-line')
 
-class PointLine extends Component {
+interface PointLineProps {
+  state: any
+  entireState: any
+}
+
+export class PointLine extends Component<PointLineProps> {
   render() {
     const { state } = this.props
 
@@ -50,7 +56,7 @@ class PointLine extends Component {
     const { state } = this.props
     const { props } = state
     const names = Object.keys(props)
-    const results = []
+    const results: ReactNode[] = []
 
     for (let i = 0; i < names.length; i++) {
       const name = names[i]
@@ -62,30 +68,28 @@ class PointLine extends Component {
     return results
   }
 
-  @bind
   _onCheck() {
-    const { state } = this.props
-    const { store } = this.context
-
+    // const { state } = this.props
+    // const { store } = this.context
     // store.dispatch({ type: 'SELECT_POINT', data: state.id });
   }
 
-  @bind
   _onAddSpot() {
     const { state, entireState } = this.props
     const { store } = this.context
 
-    const data = { id: state.id, time: entireState.progress }
-    store.dispatch({ type: 'ADD_SNAPSHOT', data })
+    store.dispatch(
+      pointsSlice.actions.addSnapshot({
+        id: state.id,
+        time: entireState.progress
+      })
+    )
   }
 
-  @bind
-  _onOpen(e) {
+  _onOpen = (e) => {
     e.stopPropagation()
     const { state } = this.props
     const { store } = this.context
-    store.dispatch({ type: 'TOGGLE_OPEN_POINT', data: state.id })
+    store.dispatch(pointsSlice.actions.toggleOpenPoint(state.id))
   }
 }
-
-export default PointLine

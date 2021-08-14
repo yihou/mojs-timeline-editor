@@ -1,17 +1,30 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
+
 import Hammer from 'hammerjs'
-import C from '../constants'
-import isSelectedByConnection from '../helpers/is-selected-by-connection'
-import { classNames, refs, compose } from '../helpers/style-decorator'
+import { constants } from '../constants'
+import { isSelectedByConnection } from '../helpers/is-selected-by-connection'
+import { pointsSlice } from '../reducers/points'
+import { selectedSpotSlice } from '../reducers/selectedSpot'
 
-const CLASSES = require('../../css/blocks/spot.postcss.css.json')
-require('../../css/blocks/spot')
+require('../css/blocks/spot')
 
-@compose(classNames(CLASSES), refs)
-class Spot extends Component {
+interface SpotProps {
+  type: 'start' | 'end'
+  meta: any
+  state: any
+  entireState: any
+}
+
+interface SpotStates {
+  dDelay: number
+  dDuration: number
+}
+
+export class Spot extends Component<SpotProps, SpotStates> {
+  _dot
   render() {
-    const { meta, type, state } = this.props
+    const { type, state } = this.props
     const { delay, duration } = state
     const { dDelay, dDuration } = this.state
 
@@ -50,7 +63,7 @@ class Spot extends Component {
   }
 
   _isSelected() {
-    const { type, state, entireState, meta } = this.props
+    const { type, entireState, meta } = this.props
     const { selectedSpot, points } = entireState
     const { id, spotIndex, type: selType, prop } = selectedSpot
 
@@ -59,7 +72,8 @@ class Spot extends Component {
         type === selType &&
         meta.spotIndex === spotIndex &&
         meta.prop === prop) ||
-    ) || isSelectedByConnection({...meta, type}, selectedSpot, points)
+      isSelectedByConnection({ ...meta, type }, selectedSpot, points)
+    )
   }
 
   componentWillMount() {
@@ -77,12 +91,14 @@ class Spot extends Component {
     mc.on('tap', this._tap)
   }
 
-  @bind
-  _pan(e) {
+  _pan = (e) => {
     const direction = this.props.type
     if (direction === 'end') {
-      const threshold = C.MIN_DURATION
-      const min = -this.props.duration + threshold
+      const threshold = constants.MIN_DURATION
+      // TODO: double check
+      // previously:
+      // const min = -this.props.duration + threshold
+      const min = -this.props.state.duration + threshold
       const dDuration = e.deltaX * 10 < min ? min / 10 : e.deltaX
       this.setState({ dDuration })
     }
@@ -91,30 +107,25 @@ class Spot extends Component {
     }
   }
 
-  @bind
-  _panEnd(e) {
+  _panEnd = () => {
     const { meta } = this.props
     const { store } = this.context
 
-    store.dispatch({
-      type: 'SHIFT_SEGMENT',
-      data: {
+    store.dispatch(
+      pointsSlice.actions.shiftSegment({
         delay: this.state.dDelay * 10,
         duration: this.state.dDuration * 10,
         ...meta
-      }
-    })
+      })
+    )
 
     this.setState({ dDelay: 0, dDuration: 0 })
   }
 
-  @bind
-  _tap(e) {
+  _tap = () => {
     const { store } = this.context
     const { meta, type } = this.props
 
-    store.dispatch({ type: 'SET_SELECTED_SPOT', data: { type, ...meta } })
+    store.dispatch(selectedSpotSlice.actions.setSelectedSpot({ type, ...meta }))
   }
 }
-
-export default Spot

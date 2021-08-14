@@ -1,13 +1,29 @@
-import { Component } from 'react'
-import { bind } from 'decko'
-import C from '../constants'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import TimelineHandle from './timeline-handle'
+import { constants } from '../constants'
 
-const CLASSES = require('../../css/blocks/timeline-panel.postcss.css.json')
-require('../../css/blocks/timeline-panel')
+const CLASSES = require('../css/blocks/timeline-panel.postcss.css.json')
+require('../css/blocks/timeline-panel')
 
-class TimelinePanel extends Component {
+interface TimelinePanelProps {
+  time: number
+  scale?: number
+}
+
+interface TimelinePanelStates {
+  scale: number
+  dashesPerSec: number
+  DASH_STEP: number
+}
+
+export class TimelinePanel extends Component<
+  TimelinePanelProps,
+  TimelinePanelStates
+> {
+  _dashesCnt = 0
+  _timeline: ReactNode = null
+
   constructor(props) {
     super(props)
 
@@ -31,39 +47,32 @@ class TimelinePanel extends Component {
 
   // will be removed when `preact` issue with nested `svg` will be fixed
   componentDidMount() {
-    this._svg.classList.add(CLASSES['main-svg'])
+    // this._svg.current?.classList.add(CLASSES['main-svg'])
   }
 
-  @bind
-  _createTimeline() {
+  _createTimeline = () => {
     const dashes = this._compileDashes()
     const pointerValues = this._compileLabels()
     const { scale } = this.state
 
-    const timeline = (
-      <svg
-        ref={(el) => {
-          this._svg = el
-        }}
-      >
-        <g style={{ 'font-size': `${scale}px` }}>
+    return (
+      <svg>
+        <g style={{ fontSize: `${scale}px` }}>
           {dashes}
           {pointerValues}
         </g>
       </svg>
     )
-    return timeline
   }
 
-  @bind
   _createDash(dashNumber) {
-    const { dashesPerSec, scale, DASH_STEP } = this.state
+    const { dashesPerSec, DASH_STEP } = this.state
     const dashType = this._getDashType(dashNumber, dashesPerSec)
 
     const color = dashType === 'large' ? '#fff' : '#ae9bae'
     const height = dashType === 'large' ? 7 : dashType === 'middle' ? 6 : 4
     const x = DASH_STEP * dashNumber
-    const y = C.TIMELINE_HEIGHT - height
+    const y = constants.TIMELINE_HEIGHT - height
 
     return <rect width='1' height={height} x={`${x}em`} y={y} fill={color} />
   }
@@ -74,8 +83,8 @@ class TimelinePanel extends Component {
     return isLarge ? 'large' : isMiddle ? 'middle' : 'small'
   }
 
-  _compileDashes() {
-    const dashes = []
+  _compileDashes = () => {
+    const dashes: ReactNode[] = []
     for (let j = 0; j <= this._dashesCnt; j++) {
       dashes.push(this._createDash(j))
     }
@@ -83,9 +92,9 @@ class TimelinePanel extends Component {
     return dashes
   }
 
-  _compileLabels() {
-    const labels = []
-    const { dashesPerSec, scale, DASH_STEP } = this.state
+  _compileLabels = () => {
+    const labels: ReactNode[] = []
+    const { dashesPerSec, DASH_STEP } = this.state
 
     for (
       let j = 0, value = 0;
@@ -94,7 +103,7 @@ class TimelinePanel extends Component {
     ) {
       const textAnchor = j === 0 ? 'start' : 'middle'
       const x = DASH_STEP * j
-      const y = C.TIMELINE_HEIGHT / 2
+      const y = constants.TIMELINE_HEIGHT / 2
 
       labels.push(
         <svg x={`${x}em`} style={{ overflow: 'visible' }}>
@@ -108,5 +117,3 @@ class TimelinePanel extends Component {
     return labels
   }
 }
-
-export default TimelinePanel

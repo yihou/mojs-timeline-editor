@@ -1,8 +1,21 @@
+import * as React from 'react'
 import { Component } from 'react'
-const CLASSES = require('../../css/blocks/icon.postcss.css.json')
-require('../../css/blocks/icon')
+const CLASSES = require('../css/blocks/icon.postcss.css.json')
+require('../css/blocks/icon')
 
-class Icon extends Component {
+export interface IconProps {
+  shape:
+    | 'plus'
+    | 'dropdown'
+    | 'hide-icon'
+    | 'spot'
+    | 'ellipsis'
+    | 'handle'
+    | 'tick'
+    | 'mojs-logo'
+}
+
+export class Icon extends Component<IconProps> {
   render() {
     const { shape } = this.props
     const markup = `
@@ -16,9 +29,7 @@ class Icon extends Component {
         className={CLASSES.icon}
         data-component='icon'
         dangerouslySetInnerHTML={{ __html: markup }}
-      ></div>
+      />
     )
   }
 }
-
-export default Icon

@@ -34,7 +34,14 @@ module.exports = {
     semi: 2,
     camelcase: 0,
     'comma-style': 2,
-    'comma-dangle': [2, 'never'],
+    'comma-dangle': [
+      2,
+      {
+        objects: 'only-multiline',
+        arrays: 'only-multiline',
+        functions: 'only-multiline'
+      }
+    ],
     'no-mixed-spaces-and-tabs': [2, 'smart-tabs'],
     'no-trailing-spaces': [2, { skipBlankLines: true }],
     'max-nested-callbacks': [2, 3],

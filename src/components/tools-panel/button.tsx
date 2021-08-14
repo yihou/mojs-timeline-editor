@@ -1,9 +1,15 @@
+import * as React from 'react'
 import { Component } from 'react'
 
 const CLASSES = require('../../../css/blocks/tools-panel.postcss.css.json')
 require('../../../css/blocks/tools-panel')
 
-class ToolsPanelButton extends Component {
+interface ToolsPanelButtonProps {
+  className?: string
+  onClick?: (e: any) => void
+}
+
+export class ToolsPanelButton extends Component<ToolsPanelButtonProps> {
   render() {
     const p = this.props
     const className = `${CLASSES.button} ${p.className || ''}`
@@ -14,5 +20,3 @@ class ToolsPanelButton extends Component {
     )
   }
 }
-
-export default ToolsPanelButton

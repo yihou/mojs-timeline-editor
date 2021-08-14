@@ -1,20 +1,19 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
-import Hammer from 'hammerjs'
-import C from '../constants'
-import { classNames } from '../helpers/style-decorator'
 
-import Spot from './spot'
-import Easing from './easing'
+import { Spot } from './spot'
+import { Easing } from './easing'
 
-const CLASSES = require('../../css/blocks/segment-timeline.postcss.css.json')
-require('../../css/blocks/segment-timeline')
+require('../css/blocks/segment-timeline')
 
-@classNames(CLASSES)
-class SegmentTimeline extends Component {
+export interface SegmentTimelineProps {
+  state: any
+  meta: any
+  entireState: any
+}
+
+export class SegmentTimeline extends Component<SegmentTimelineProps> {
   render() {
-    const { state, meta, entireState } = this.props
-
     return (
       <div className='segment-timeline' data-component='segment-timeline'>
         <div className='segment-timeline__bar'>
@@ -28,5 +27,3 @@ class SegmentTimeline extends Component {
     )
   }
 }
-
-export default SegmentTimeline

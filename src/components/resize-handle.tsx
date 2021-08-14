@@ -1,12 +1,21 @@
+import * as React from 'react'
 import { Component } from 'react'
 import Hammer from 'hammerjs'
 import propagating from 'propagating-hammerjs'
-import Icon from './icon'
+import { Icon } from './icon'
 
-const CLASSES = require('../../css/blocks/resize-handle.postcss.css.json')
-require('../../css/blocks/resize-handle')
+const CLASSES = require('../css/blocks/resize-handle.postcss.css.json')
+require('../css/blocks/resize-handle')
 
-class ResizeHandle extends Component {
+interface ResizeHandleProps {
+  onResize: (e: any) => void
+  onResizeStart: (e: any) => void
+  onResizeEnd: (e: any) => void
+}
+
+export class ResizeHandle extends Component<ResizeHandleProps> {
+  base
+
   render() {
     return (
       <div className={CLASSES['resize-handle']} data-component='resize-handle'>
@@ -18,7 +27,6 @@ class ResizeHandle extends Component {
   componentDidMount() {
     const mc = propagating(new Hammer.Manager(this.base))
     const p = this.props
-    const { store } = this.context
 
     mc.add(new Hammer.Pan({ threshold: 0 }))
     mc.on('pan', (e) => {
@@ -36,5 +44,3 @@ class ResizeHandle extends Component {
       })
   }
 }
-
-export default ResizeHandle

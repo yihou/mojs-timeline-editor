@@ -1,23 +1,26 @@
-import { Component } from 'react';
-import {bind} from 'decko';
-import {classNames} from '../helpers/style-decorator';
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import SegmentTimeline from './segment-timeline';
+import { SegmentTimeline } from './segment-timeline'
+import { Point } from '../helpers/create-point'
 
-const CLASSES =
-  require('../../css/blocks/point-timeline-line.postcss.css.json');
-require('../../css/blocks/point-timeline-line');
+require('../css/blocks/point-timeline-line')
 
-@classNames(CLASSES)
-class PointTimelineLine extends Component {
+interface PointTimelineLineProps {
+  state: Point
+  entireState: any
+}
+
+export class PointTimelineLine extends Component<PointTimelineLineProps> {
   render() {
     const { state } = this.props
 
     return (
       <div
         className={this._getClassName(state)}
-        data-component="point-timeline-line">
+        data-component='point-timeline-line'
       >
+        {'>'}
         <div className='point-timeline-line__inner'>
           <div className='point-timeline-line__header' />
           <div className='point-timeline-line__body'>
@@ -31,7 +34,7 @@ class PointTimelineLine extends Component {
 
   _renderProperties(state) {
     const { props } = state
-    const results = []
+    const results: ReactNode[] = []
 
     const keys = Object.keys(props)
     for (let i = 0; i < keys.length; i++) {
@@ -41,18 +44,16 @@ class PointTimelineLine extends Component {
     return results
   }
 
-  _renderProperty(key, prop) {
+  _renderProperty(key, prop): ReactNode {
     const { state, entireState } = this.props
-    const results = []
+    const results: ReactNode[] = []
 
-    let prevSpot = prop[0]
     for (let i = 0; i < prop.length; i++) {
       const spot = prop[i]
       const meta = { id: state.id, prop: key, spotIndex: i }
       results.push(
         <SegmentTimeline state={spot} meta={meta} entireState={entireState} />
       )
-      prevSpot = spot
     }
 
     return <div className='point-timeline-line__property'>{results}</div>
@@ -64,7 +65,4 @@ class PointTimelineLine extends Component {
 
     return `point-timeline-line ${selectClass} ${openClass}`
   }
-
 }
-
-export default PointTimelineLine

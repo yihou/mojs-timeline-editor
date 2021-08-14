@@ -1,17 +1,23 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
+
 import Hammer from 'hammerjs'
-import C from '../constants'
+import { constants } from '../constants'
+import { pointsSlice } from '../reducers/points'
 
-const CLASSES = require('../../css/blocks/point.postcss.css.json')
-require('../../css/blocks/point')
+const CLASSES = require('../css/blocks/point.postcss.css.json')
+require('../css/blocks/point')
 
-class Point extends Component {
+interface PointProps {
+  state: any
+  entireState: any
+}
+
+export class Point extends Component<PointProps> {
   // getInitialState() { return { deltaX: 0, deltaY: 0 }; }
-  constructor() {
-    super()
-    this.state = { deltaX: 0, deltaY: 0 }
-  }
+  _isPan = false
+  base: any
+  state = { deltaX: 0, deltaY: 0 }
 
   render() {
     const { state } = this.props
@@ -26,7 +32,7 @@ class Point extends Component {
         onClick={this._onClick}
         title={state.name}
         data-component='point'
-      ></div>
+      />
     )
   }
 
@@ -42,7 +48,7 @@ class Point extends Component {
     const { selectedSpot, points } = entireState
 
     if (selectedSpot.id == null) {
-      return state.currentProps[C.POSITION_NAME]
+      return state.currentProps[constants.POSITION_NAME]
     }
 
     const { id, prop, spotIndex, type } = selectedSpot
@@ -62,16 +68,14 @@ class Point extends Component {
     mc.on('panend', this._onPanEnd)
   }
 
-  @bind
-  _onPan(e) {
+  _onPan = (e) => {
     const { deltaX, deltaY } = e
     this._isPan = true
 
     this.setState({ deltaX, deltaY })
   }
 
-  @bind
-  _onPanEnd(e) {
+  _onPanEnd = (e) => {
     const { store } = this.context
     const { state, entireState } = this.props
     const { id } = state
@@ -79,29 +83,26 @@ class Point extends Component {
     const { deltaX, deltaY } = e
 
     if (selectedSpot.id == null) {
-      store.dispatch({
-        type: 'CHANGE_POINT_CURRENT_POSITION',
-        data: { deltaX, deltaY, id }
-      })
+      store.dispatch(
+        pointsSlice.actions.changePointCurrentPosition({ deltaX, deltaY, id })
+      )
     } else {
-      store.dispatch({
-        type: 'UPDATE_SELECTED_SPOT',
-        data: { ...selectedSpot, value: this._getXY() }
-      })
+      store.dispatch(
+        pointsSlice.actions.updateSelectedSpot({
+          ...selectedSpot,
+          value: this._getXY()
+        })
+      )
     }
     this.setState({ deltaX: 0, deltaY: 0 })
   }
 
-  @bind
-  _onClick(e) {
+  _onClick = () => {
     if (this._isPan) {
       return (this._isPan = false)
     }
     const { state } = this.props
     const { store } = this.context
-
-    store.dispatch({ type: 'SELECT_POINT', data: state.id })
+    store.dispatch(pointsSlice.actions.selectPoint(state.id))
   }
 }
-
-export default Point

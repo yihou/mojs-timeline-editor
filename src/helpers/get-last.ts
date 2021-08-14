@@ -1,2 +1,3 @@
-
-export default (arr) => { return arr[arr.length-1]; };
+export const getLast = (arr) => {
+  return arr[arr.length - 1]
+}

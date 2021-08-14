@@ -1,12 +1,20 @@
+import * as React from 'react'
 import { Component } from 'react'
-import { bind } from 'decko'
+
 import Hammer from 'hammerjs'
-import Icon from './icon'
+import { Icon } from './icon'
 
-const CLASSES = require('../../css/blocks/hide-button.postcss.css.json')
-require('../../css/blocks/hide-button')
+const CLASSES = require('../css/blocks/hide-button.postcss.css.json')
+require('../css/blocks/hide-button')
 
-class HideButton extends Component {
+interface HideButtonProps {
+  isHidden: boolean
+  onTap?: (e: any) => void
+}
+
+export class HideButton extends Component<HideButtonProps> {
+  base
+
   render() {
     const p = this.props
     const hideClassName = p.isHidden ? CLASSES['hide-button--is-hidden'] : ''
@@ -29,5 +37,3 @@ class HideButton extends Component {
     })
   }
 }
-
-export default HideButton

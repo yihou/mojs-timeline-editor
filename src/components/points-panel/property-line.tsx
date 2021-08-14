@@ -1,9 +1,8 @@
-import { Component } from 'react'
-import { bind } from 'decko'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import Icon from '../icon'
-
-import resetEvent from '../../helpers/global-reset-event'
+import { Icon } from '../icon'
+import { pointsSlice } from '../../reducers/points'
 
 const CLASSES = require('../../../css/blocks/property-line.postcss.css.json')
 require('../../../css/blocks/property-line')
@@ -11,7 +10,17 @@ const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
 }
 
-class PropertyLine extends Component {
+export interface PropertyLineProps {
+  id: string
+  name: string
+  state: {
+    id: any
+    currentProps: any
+  }
+  entireState: any
+}
+
+export class PropertyLine extends Component<PropertyLineProps> {
   render() {
     const p = this.props
 
@@ -36,7 +45,7 @@ class PropertyLine extends Component {
     let value = this._getValue()
     value = value instanceof Array ? value : [value]
 
-    const result = []
+    const result: ReactNode[] = []
     for (let i = 0; i < value.length; i++) {
       result.push(
         <input
@@ -51,7 +60,6 @@ class PropertyLine extends Component {
     return result
   }
 
-  @bind
   _onKeyDown(e) {
     const { store } = this.context
     const { state, name, entireState } = this.props
@@ -88,26 +96,25 @@ class PropertyLine extends Component {
     }
 
     switch (e.which) {
-    case 38: {
-      data.value[index] += step
-      return store.dispatch({ type: 'UPDATE_SELECTED_SPOT', data })
-    }
+      case 38: {
+        data.value[index] += step
+        return store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+      }
 
-    case 40: {
-      data.value[index] -= step
-      return store.dispatch({ type: 'UPDATE_SELECTED_SPOT', data })
-    }
+      case 40: {
+        data.value[index] -= step
+        return store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+      }
 
-    default: {
-      store.dispatch({ type: 'UPDATE_SELECTED_SPOT', data })
-    }
+      default: {
+        store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+      }
     }
   }
 
   _onKeyDownCurrent(e) {
     const { store } = this.context
-    const { state, name, entireState } = this.props
-    const { selectedSpot } = entireState
+    const { state, name } = this.props
 
     const target = e.target
     const index = parseInt(target.getAttribute('data-index'), 10)
@@ -132,19 +139,25 @@ class PropertyLine extends Component {
     }
 
     switch (e.which) {
-    case 38: {
-      data.value[index] += step
-      return store.dispatch({ type: 'UPDATE_SELECTED_SPOT_CURRENT', data })
-    }
+      case 38: {
+        data.value[index] += step
+        return store.dispatch(
+          pointsSlice.actions.updateSelectedSpotCurrent(data)
+        )
+      }
 
-    case 40: {
-      data.value[index] -= step
-      return store.dispatch({ type: 'UPDATE_SELECTED_SPOT_CURRENT', data })
-    }
+      case 40: {
+        data.value[index] -= step
+        return store.dispatch(
+          pointsSlice.actions.updateSelectedSpotCurrent(data)
+        )
+      }
 
-    default: {
-      return store.dispatch({ type: 'UPDATE_SELECTED_SPOT_CURRENT', data })
-    }
+      default: {
+        return store.dispatch(
+          pointsSlice.actions.updateSelectedSpotCurrent(data)
+        )
+      }
     }
   }
 
@@ -163,17 +176,17 @@ class PropertyLine extends Component {
     return currentProps[name]
   }
 
-  @bind
-  _onAddSpot(e) {
+  _onAddSpot() {
     const { store } = this.context
     const p = this.props
-    const { state, entireState } = p
+    const { entireState } = p
 
-    store.dispatch({
-      type: 'ADD_PROPERTY_SEGMENT',
-      data: { id: p.id, name: p.name, time: entireState.progress }
-    })
+    store.dispatch(
+      pointsSlice.actions.addPropertySegment({
+        id: p.id,
+        name: p.name,
+        time: entireState.progress
+      })
+    )
   }
 }
-
-export default PropertyLine

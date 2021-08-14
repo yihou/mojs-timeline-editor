@@ -25,14 +25,14 @@
 - all **private methods** should be declared **with underscore** in front of the method name
     ```javascript
     // bad
-    toggleVisibility() {
-      ...
+    function toggleVisibility() {
+      // ...
     }
 
 
     // good
-    _toggleVisibility() {
-      ...
+    function _toggleVisibility() {
+      // ...
     }
     ```
 
@@ -123,7 +123,7 @@
         this._toggleVisibility = this._toggleVisibility.bind(this);
       }
 
-      ...
+      // ...
     }
 
 
@@ -142,7 +142,7 @@
         this.setState({ isHidden: !this.state.isHidden });
       }
 
-      ...
+      // ...
     }
     ```
 

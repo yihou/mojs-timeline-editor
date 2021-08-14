@@ -1,12 +1,13 @@
 import { constants } from '../constants'
-import addUnload from './add-unload'
+import { addUnload } from './add-unload'
+import { SET_APP_STATE } from '../reducers/allReducers'
 
 /*
   Function to store state into localStorage on page `unload`
   and restore it on page `load`.
   @param {Object} Redux store.
 */
-export default (store) => {
+export const persist = (store) => {
   if (constants.IS_PERSIST_STATE) {
     // save to localstorage
     addUnload(() => {
@@ -21,7 +22,7 @@ export default (store) => {
     try {
       const stored = localStorage.getItem(constants.NAME)
       if (stored) {
-        store.dispatch({ type: 'SET_APP_STATE', data: JSON.parse(stored) })
+        store.dispatch({ type: SET_APP_STATE, data: JSON.parse(stored) })
       }
     } catch (e) {
       console.error(e)

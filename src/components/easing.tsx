@@ -1,32 +1,47 @@
-import {h, Component} from 'preact';
-import {bind} from 'decko';
+import * as React from 'react'
+import { Component } from 'react'
 
-import Icon from './icon';
-import {classNames} from '../helpers/style-decorator';
-import CurveEditor from './curve-editor';
+import { Icon } from './icon'
+import { CurveEditor } from './curve-editor'
+import { pointsSlice } from '../reducers/points'
 
-const CLASSES = require('../../css/blocks/easing.postcss.css.json');
-require('../../css/blocks/easing');
+require('../css/blocks/easing')
 
-const GAP = '---';
-const DELIMITER = <option value={GAP} disabled>{GAP}</option>;
+const GAP = '---'
+const DELIMITER = (
+  <option value={GAP} disabled>
+    {GAP}
+  </option>
+)
 
-@classNames(CLASSES)
-class Easing extends Component {
-  render () {
-    const {state, meta} = this.props;
-    const {easing} = state;
+interface EasingProps {
+  state: {
+    easing: string
+  }
+  meta: any
+}
+
+export class Easing extends Component<EasingProps> {
+  render() {
+    const { state, meta } = this.props
+    const { easing } = state
 
     return (
-      <div className={this._getClassName()} data-component="easing">
-        <div className="easing__short"><Icon shape="plus" /></div>
-        <div className="easing__full">
-          {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
-          <div className="label" title={easing}>{easing}</div>
-          <div className="dropdown-icon"><Icon shape="dropdown" /></div>
+      <div className={this._getClassName()} data-component='easing'>
+        <div className='easing__short'>
+          <Icon shape='plus' />
         </div>
-        <div className="dropdown">
-          <select className="dropdown__select" onChange={this._onChange}>
+        <div className='easing__full'>
+          {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
+          <div className='label' title={easing}>
+            {easing}
+          </div>
+          <div className='dropdown-icon'>
+            <Icon shape='dropdown' />
+          </div>
+        </div>
+        <div className='dropdown'>
+          <select className='dropdown__select' onChange={this._onChange}>
             {this._makeOption('none')}
             {DELIMITER}
             {this._makeOption('custom')}
@@ -77,7 +92,7 @@ class Easing extends Component {
           </select>
         </div>
       </div>
-    );
+    )
   }
 
   // _renderEasing() {
@@ -90,32 +105,32 @@ class Easing extends Component {
   // }
 
   _makeOption(name) {
-    const {easing} = this.props.state;
-    return <option value={name} selected={easing===name}>{name}</option>;
+    const { easing } = this.props.state
+    return (
+      <option value={name} selected={easing === name}>
+        {name}
+      </option>
+    )
   }
 
   _getClassName() {
-    const isFull = (this.props.state.easing !== 'none') ? 'is-full' : '';
-    return `easing ${isFull}`;
+    const isFull = this.props.state.easing !== 'none' ? 'is-full' : ''
+    return `easing ${isFull}`
   }
 
-  @bind
-  _onChange(e) {
-    const {store} = this.context;
-    const {target} = e;
-    const {value} = target.options[target.selectedIndex];
+  _onChange = (e) => {
+    const { store } = this.context
+    const { target } = e
+    const { value } = target.options[target.selectedIndex]
 
-    const data = { ...this.props.meta, easing: value };
-    store.dispatch({ type: 'SET_EASING', data });
+    const data = { ...this.props.meta, easing: value }
+    store.dispatch(pointsSlice.actions.setEasing(data))
   }
 
-  @bind
   _onEasingAdd() {
-    const {store} = this.context;
+    const { store } = this.context
 
-    const data = { ...this.props.meta, easing: 'ease.out' };
-    store.dispatch({ type: 'SET_EASING', data });
+    const data = { ...this.props.meta, easing: 'ease.out' }
+    store.dispatch(pointsSlice.actions.setEasing(data))
   }
 }
-
-export default Easing;

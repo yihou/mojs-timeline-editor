@@ -1,17 +1,19 @@
+// noinspection JSUnusedGlobalSymbols
+
 import * as React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
-import mojs from '@mojs/core'
-import MojsPlayer from '@mojs/player'
+// import mojs from '@mojs/core'
+// import MojsPlayer from '@mojs/player'
 
 import { store } from './store'
-import { TimelineEditor } from './components/timelineEditor'
-import persist from './helpers/persist'
+import { TimelineEditorView } from './components/TimelineEditorView'
+import { persist } from './helpers/persist'
 
 /* TODO:
-    [x] point-timleine.babel.jsx add animation
+    [x] point-timeline.babel.jsx add animation
         when start/end points got selected
     [x] test if `onClick` handler on components is optimized for mobiles
 */
@@ -23,16 +25,25 @@ import persist from './helpers/persist'
 // export default API;
 // window.MojsTimelineEditor = API;
 
-ReactDOM.render(
+export const TimelineEditor = () => (
   <Provider store={store}>
-    <TimelineEditor />
-  </Provider>,
-  document.getElementById('root')
+    <TimelineEditorView />
+  </Provider>
 )
+
+// eslint-disable-next-line import/no-default-export
+export default () => {
+  render(
+    <Provider store={store}>
+      <TimelineEditorView />
+    </Provider>,
+    document.body
+  )
+}
 
 persist(store)
 
-export const mojsPlayer: MojsPlayer = new MojsPlayer({ add: new mojs.Tween() })
+// export const mojsPlayer: MojsPlayer = new MojsPlayer({ add: new mojs.Tween() })
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

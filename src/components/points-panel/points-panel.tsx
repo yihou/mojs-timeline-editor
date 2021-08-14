@@ -1,11 +1,17 @@
-import { Component } from 'react'
+import * as React from 'react'
+import { Component, ReactNode } from 'react'
 
-import PointLine from './point-line'
+import { PointLine } from './point-line'
 
 const CLASSES = require('../../../css/blocks/points-panel.postcss.css.json')
 require('../../../css/blocks/points-panel')
 
-class PointsPanel extends Component {
+interface PointsPanelProps {
+  state: any
+  entireState: any
+}
+
+export class PointsPanel extends Component<PointsPanelProps> {
   render() {
     const { state } = this.props
 
@@ -17,7 +23,7 @@ class PointsPanel extends Component {
   _renderPoints(state) {
     const { entireState } = this.props
     const props = Object.keys(state)
-    const points = []
+    const points: ReactNode[] = []
     for (let i = 0; i < props.length; i++) {
       const key = props[i]
       points.push(<PointLine state={state[key]} entireState={entireState} />)
@@ -25,5 +31,3 @@ class PointsPanel extends Component {
     return points
   }
 }
-
-export default PointsPanel
