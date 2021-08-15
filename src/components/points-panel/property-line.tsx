@@ -4,8 +4,8 @@ import { Component, ReactNode } from 'react'
 import { Icon } from '../icon'
 import { pointsSlice } from '../../reducers/points'
 
-const CLASSES = require('../../../css/blocks/property-line.postcss.css.json')
-require('../../../css/blocks/property-line')
+const CLASSES = require('../../css/blocks/property-line.postcss.css.json')
+require('../../css/blocks/property-line')
 const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
 }

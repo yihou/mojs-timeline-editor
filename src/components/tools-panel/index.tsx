@@ -6,8 +6,8 @@ import { ToolsPanelButton } from './button'
 import { Icon } from '../icon'
 import { controlsSlice } from '../../reducers/controls'
 
-const CLASSES = require('../../../css/blocks/tools-panel.postcss.css.json')
-require('../../../css/blocks/tools-panel')
+const CLASSES = require('../../css/blocks/tools-panel.postcss.css.json')
+require('../../css/blocks/tools-panel')
 
 interface ToolsPanelProps {
   state: any

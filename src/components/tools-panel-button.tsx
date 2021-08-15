@@ -3,7 +3,6 @@ import { Component } from 'react'
 import { Icon, IconProps } from './icon'
 
 const C = require('../css/blocks/tools-panel-button.postcss.css.json')
-require('../css/blocks/tools-panel-button')
 
 interface ToolsPanelButtonProps {
   icon: IconProps['shape']

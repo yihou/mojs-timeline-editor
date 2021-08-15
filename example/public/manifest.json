@@ -1,0 +1,15 @@
+{
+  "short_name": "@mojs/timeline-editor",
+  "name": "@mojs/timeline-editor",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#512750",
+  "background_color": "#3a0839"
+}

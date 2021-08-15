@@ -4,7 +4,6 @@ import { pointsSlice } from '../reducers/points'
 import { controlsSlice } from '../reducers/controls'
 
 const CLASSES = require('../css/blocks/insert-point.postcss.css.json')
-require('../css/blocks/insert-point')
 
 interface PointProps {
   state: {

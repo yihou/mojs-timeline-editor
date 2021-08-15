@@ -5,7 +5,6 @@ import Hammer from 'hammerjs'
 import { Icon } from './icon'
 
 const CLASSES = require('../css/blocks/hide-button.postcss.css.json')
-require('../css/blocks/hide-button')
 
 interface HideButtonProps {
   isHidden: boolean

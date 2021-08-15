@@ -7,7 +7,6 @@ import { InsertPoint } from './insert-point'
 import { Point } from './point'
 
 // const CLASSES = require('../css/blocks/timeline-editor.postcss.css.json');
-require('../css/blocks/timeline-editor')
 
 // @classNames(require('../css/blocks/timeline-editor.postcss.css.json'))
 export class TimelineEditorView extends Component {

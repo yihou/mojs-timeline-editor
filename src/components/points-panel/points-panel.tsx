@@ -3,8 +3,8 @@ import { Component, ReactNode } from 'react'
 
 import { PointLine } from './point-line'
 
-const CLASSES = require('../../../css/blocks/points-panel.postcss.css.json')
-require('../../../css/blocks/points-panel')
+const CLASSES = require('../../css/blocks/points-panel.postcss.css.json')
+require('../../css/blocks/points-panel')
 
 interface PointsPanelProps {
   state: any

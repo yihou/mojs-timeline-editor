@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Component } from 'react'
 
 import { ToolsPanel } from '../tools-panel'
-const CLASSES = require('../../../css/blocks/left-panel.postcss.css.json')
-require('../../../css/blocks/left-panel')
+const CLASSES = require('../../css/blocks/left-panel.postcss.css.json')
+require('../../css/blocks/left-panel')
 
 interface LeftPanelProps {
   state: any

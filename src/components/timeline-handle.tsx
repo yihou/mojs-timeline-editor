@@ -7,7 +7,6 @@ import { selectedSpotSlice } from '../reducers/selectedSpot'
 import { progressSlice } from '../reducers/progress'
 
 const CLASSES = require('../css/blocks/timeline-handle.postcss.css.json')
-require('../css/blocks/timeline-handle')
 
 interface TimelineHandleProps {
   state: any

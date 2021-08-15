@@ -7,8 +7,6 @@ import { isSelectedByConnection } from '../helpers/is-selected-by-connection'
 import { pointsSlice } from '../reducers/points'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
 
-require('../css/blocks/spot')
-
 interface SpotProps {
   type: 'start' | 'end'
   meta: any

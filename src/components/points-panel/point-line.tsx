@@ -6,8 +6,8 @@ import { PropertyLineAdd } from './property-line-add'
 import { Icon } from '../icon'
 import { pointsSlice } from '../../reducers/points'
 
-const CLS = require('../../../css/blocks/point-line.postcss.css.json')
-require('../../../css/blocks/point-line')
+const CLS = require('../../css/blocks/point-line.postcss.css.json')
+require('../../css/blocks/point-line')
 
 interface PointLineProps {
   state: any

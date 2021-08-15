@@ -2,8 +2,6 @@ import * as React from 'react'
 import { Component } from 'react'
 import MojsCurveEditor from '@mojs/curve-editor'
 
-require('../css/blocks/curve-editor')
-
 interface CurveEditorProps {
   meta: {
     id: string

@@ -5,7 +5,6 @@ import propagating from 'propagating-hammerjs'
 import { Icon } from './icon'
 
 const CLASSES = require('../css/blocks/resize-handle.postcss.css.json')
-require('../css/blocks/resize-handle')
 
 interface ResizeHandleProps {
   onResize: (e: any) => void

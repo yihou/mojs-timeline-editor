@@ -6,7 +6,6 @@ import { constants } from '../constants'
 import { pointsSlice } from '../reducers/points'
 
 const CLASSES = require('../css/blocks/point.postcss.css.json')
-require('../css/blocks/point')
 
 interface PointProps {
   state: any

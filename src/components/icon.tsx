@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react'
 const CLASSES = require('../css/blocks/icon.postcss.css.json')
-require('../css/blocks/icon')
 
 export interface IconProps {
   shape:

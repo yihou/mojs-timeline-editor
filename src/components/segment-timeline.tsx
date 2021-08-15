@@ -4,8 +4,6 @@ import { Component } from 'react'
 import { Spot } from './spot'
 import { Easing } from './easing'
 
-require('../css/blocks/segment-timeline')
-
 export interface SegmentTimelineProps {
   state: any
   meta: any

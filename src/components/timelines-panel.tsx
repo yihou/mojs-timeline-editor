@@ -5,7 +5,6 @@ import { PointTimelineLine } from './point-timeline-line'
 // import resetEvent from '../helpers/global-reset-event';
 
 const CLASSES = require('../css/blocks/timelines-panel.postcss.css.json')
-require('../css/blocks/timelines-panel')
 
 interface TimelinesPanelProps {
   state: any

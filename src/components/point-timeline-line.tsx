@@ -4,8 +4,6 @@ import { Component, ReactNode } from 'react'
 import { SegmentTimeline } from './segment-timeline'
 import { Point } from '../helpers/create-point'
 
-require('../css/blocks/point-timeline-line')
-
 interface PointTimelineLineProps {
   state: Point
   entireState: any

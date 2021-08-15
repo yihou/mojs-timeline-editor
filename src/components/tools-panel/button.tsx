@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Component } from 'react'
 
-const CLASSES = require('../../../css/blocks/tools-panel.postcss.css.json')
-require('../../../css/blocks/tools-panel')
+const CLASSES = require('../../css/blocks/tools-panel.postcss.css.json')
+require('../../css/blocks/tools-panel')
 
 interface ToolsPanelButtonProps {
   className?: string

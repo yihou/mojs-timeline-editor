@@ -8,8 +8,8 @@ import { TimelineHandle } from '../timeline-handle'
 import { constants } from '../../constants'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 
-const CLASSES = require('../../../css/blocks/main-panel.postcss.css.json')
-require('../../../css/blocks/main-panel')
+const CLASSES = require('../../css/blocks/main-panel.postcss.css.json')
+require('../../css/blocks/main-panel')
 
 interface MainPanelProps {
   state: any

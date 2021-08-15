@@ -7,8 +7,8 @@ import { ToolsPanelButton } from '../tools-panel-button'
 import { classNames, refs, compose } from '../../helpers/style-decorator'
 import { pointsSlice } from '../../reducers/points'
 
-const CLS = require('../../../css/blocks/property-line-add.postcss.css.json')
-require('../../../css/blocks/property-line-add')
+const CLS = require('../../css/blocks/property-line-add.postcss.css.json')
+require('../../css/blocks/property-line-add')
 
 const EXIST_MESSAGE = 'already exist'
 const DEFAULT_STATE = {

@@ -12,15 +12,21 @@
     "timeline editor",
     "svg"
   ],
-  "main": "dist/TimelineEditor.js",
-  "module": "dist/TimelineEditor.modern.js",
-  "source": "src/TimelineEditor.tsx",
+  "main": "dist/timeline-editor.js",
+  "umd:main": "dist/timeline-editor.umd.js",
+  "module": "dist/timeline-editor.modern.js",
+  "exports": {
+    "require": "./dist/timeline-editor.js",
+    "default": "./dist/timeline-editor.modern.js"
+  },
+  "types": "dist/MojsTimelineEditor.d.ts",
+  "source": "src/MojsTimelineEditor.tsx",
   "engines": {
     "node": ">=14"
   },
   "scripts": {
-    "build": "microbundle-crl --jsx React.createElement --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --jsx React.createElement --no-compress --format modern,cjs",
+    "build": "microbundle-crl --name @mojs/timeline-editor --jsx React.createElement --no-compress",
+    "start": "microbundle-crl watch --name @mojs/timeline-editor --jsx React.createElement --no-sourcemap --no-compress",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -28,6 +34,7 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && yarn install && yarn run build",
+    "deploy": "gh-pages -d example/build",
     "typesync": "npx typesync",
     "type-check": "tsc --noEmit --p ./tsconfig.json",
     "dedup": "npx yarn-deduplicate"

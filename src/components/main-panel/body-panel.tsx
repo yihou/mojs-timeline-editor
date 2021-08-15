@@ -4,8 +4,7 @@ import { Component } from 'react'
 import { PointsPanel } from '../points-panel/points-panel'
 import { TimelinesPanel } from '../timelines-panel'
 
-const CLASSES = require('../../../css/blocks/body-panel.postcss.css.json')
-require('../../../css/blocks/body-panel')
+const CLASSES = require('../../css/blocks/body-panel.postcss.css.json')
 
 interface BodyPanelProps {
   state: {

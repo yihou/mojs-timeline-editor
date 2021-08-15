@@ -6,8 +6,8 @@ import { ResizeHandle } from '../resize-handle'
 import { TimelinePanel } from '../timeline-panel'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 
-const CLASSES = require('../../../css/blocks/right-panel.postcss.css.json')
-require('../../../css/blocks/right-panel')
+const CLASSES = require('../../css/blocks/right-panel.postcss.css.json')
+require('../../css/blocks/right-panel')
 
 interface RightPanelProps {
   state: any

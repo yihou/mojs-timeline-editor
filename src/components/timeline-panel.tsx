@@ -4,7 +4,6 @@ import { Component, ReactNode } from 'react'
 import { constants } from '../constants'
 
 const CLASSES = require('../css/blocks/timeline-panel.postcss.css.json')
-require('../css/blocks/timeline-panel')
 
 interface TimelinePanelProps {
   time: number
