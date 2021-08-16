@@ -1,4 +1,4 @@
-import isString from '../is-string'
+import { isString } from '../is-string'
 
 const pushChildren = (item, stack) => {
   if (!item || !item.children) {

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component } from 'react'
 import Hammer from 'hammerjs'
 import propagating from 'propagating-hammerjs'

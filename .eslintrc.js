@@ -2,11 +2,10 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'standard',
-    'standard-react',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/eslint-recommended'
   ],
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', '@emotion'],
   env: {
     browser: true,
     node: true,
@@ -17,11 +16,6 @@ module.exports = {
     ecmaFeatures: {
       legacyDecorators: true,
       jsx: true
-    }
-  },
-  settings: {
-    react: {
-      version: '17'
     }
   },
   rules: {

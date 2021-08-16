@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component } from 'react'
 
 import { PointsPanel } from '../points-panel/points-panel'

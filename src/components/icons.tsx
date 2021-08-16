@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { css } from '@emotion/react'
 
 export const Icons = () => {
   return (
@@ -7,12 +7,12 @@ export const Icons = () => {
         height='0'
         version='1.1'
         xmlns='http://www.w3.org/2000/svg'
-        style={{
-          position: 'absolute',
-          marginLeft: '-100%',
-          width: 0,
-          height: 0
-        }}
+        css={css`
+          position: absolute;
+          margin-left: -100%;
+          width: 0;
+          height: 0;
+        `}
         xmlnsXlink='http://www.w3.org/1999/xlink'
       >
         <g id='ellipsis-shape'>

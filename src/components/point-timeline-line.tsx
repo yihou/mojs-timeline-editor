@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component, ReactNode } from 'react'
 
 import { SegmentTimeline } from './segment-timeline'

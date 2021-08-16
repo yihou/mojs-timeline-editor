@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component, ReactNode } from 'react'
 
 import { PointTimelineLine } from './point-timeline-line'

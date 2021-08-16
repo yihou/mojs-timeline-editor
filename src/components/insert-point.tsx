@@ -1,7 +1,7 @@
-import * as React from 'react'
 import { Component } from 'react'
 import { pointsSlice } from '../reducers/points'
 import { controlsSlice } from '../reducers/controls'
+import { css } from '@emotion/react'
 
 const CLASSES = require('../css/blocks/insert-point.postcss.css.json')
 
@@ -27,6 +27,15 @@ export class InsertPoint extends Component<PointProps, PointStates> {
     return (
       <div
         style={style}
+        css={css`
+          position: absolute;
+          width: var(--mojs-left-panel-width);
+          height: var(--mojs-point-size);
+          border-radius: 50%;
+          background: var(--mojs-color-orange);
+          margin-left: -(var(--mojs-point-size) / 2) * 1px;
+          margin-top: -(var(--mojs-point-size) / 2) * 1px;
+        `}
         onClick={this._addPoint}
         className={CLASSES['insert-point']}
         data-component='insert-point'

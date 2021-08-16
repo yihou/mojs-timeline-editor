@@ -1,9 +1,27 @@
-import * as React from 'react'
 import { Component, ReactNode } from 'react'
 
 import { constants } from '../constants'
+import styled from '@emotion/styled'
 
 const CLASSES = require('../css/blocks/timeline-panel.postcss.css.json')
+
+const TimelinePanelWrapper = styled.div`
+  position: relative;
+  top: -20px;
+  height: 22px;
+  background: var(--mojs-color-light-purple);
+  box-shadow: 0 2px 4px black;
+
+  .label {
+    fill: var(--mojs-color-white);
+    font-size: 7px;
+  }
+
+  .main-svg {
+    width: 100%;
+    height: 100%;
+  }
+`
 
 interface TimelinePanelProps {
   time: number
@@ -37,7 +55,7 @@ export class TimelinePanel extends Component<
   }
 
   render() {
-    return <div className={CLASSES['timeline-panel']}>{this._timeline}</div>
+    return <TimelinePanelWrapper>{this._timeline}</TimelinePanelWrapper>
   }
 
   componentWillMount() {

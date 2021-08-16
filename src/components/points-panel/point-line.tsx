@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component, ReactNode } from 'react'
 
 import { PropertyLine } from './property-line'

@@ -1,14 +1,30 @@
-import * as React from 'react'
 import { Component, ReactNode } from 'react'
 
 import { MainPanel } from './main-panel/main-panel'
 import { Icons } from './icons'
 import { InsertPoint } from './insert-point'
 import { Point } from './point'
+import styled from '@emotion/styled'
+import { controlsSlice } from '../reducers/controls'
 
 // const CLASSES = require('../css/blocks/timeline-editor.postcss.css.json');
 
 // @classNames(require('../css/blocks/timeline-editor.postcss.css.json'))
+
+const Wrapper = styled.div`
+  .timeline-editor {
+    font-family: Arial, sans-serif;
+    & * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    &__el {
+      outline: 1px solid;
+    }
+  }
+`
+
 export class TimelineEditorView extends Component {
   getState = () => {
     const { store } = this.context
@@ -19,14 +35,14 @@ export class TimelineEditorView extends Component {
     const state = this.getState()
 
     return (
-      <div>
+      <Wrapper>
         <InsertPoint state={state} />
         <div>{this._renderPoints()}</div>
         <div className='timeline-editor' onMouseMove={this._mouseMove}>
           <Icons />
           <MainPanel state={state.mainPanel} entireState={state} />
         </div>
-      </div>
+      </Wrapper>
     )
   }
 
@@ -64,7 +80,7 @@ export class TimelineEditorView extends Component {
       return
     }
 
-    store.dispatch({ type: 'CONTROLS_SET_MOUSE_INSIDE', data: true })
+    store.dispatch(controlsSlice.actions.controlsSetMouseInside(true))
   }
 
   _docMouseMove = (e) => {
@@ -75,7 +91,7 @@ export class TimelineEditorView extends Component {
     const { controls } = this.getState()
 
     if (controls.isMouseInside) {
-      store.dispatch({ type: 'CONTROLS_SET_MOUSE_INSIDE', data: false })
+      store.dispatch(controlsSlice.actions.controlsSetMouseInside(false))
     }
   }
 }

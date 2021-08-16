@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Component, createRef } from 'react'
 
 import { clamp } from '../../helpers/clamp'
