@@ -1,4 +1,4 @@
-import isString from '../is-string'
+import { isString } from '../is-string'
 
 /* Function to override string `ref` with automatic function. */
 export function refsFunction(attrs) {
