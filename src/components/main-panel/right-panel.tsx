@@ -4,12 +4,13 @@ import { HideButton } from '../hide-button'
 import { ResizeHandle } from '../resize-handle'
 import { TimelinePanel } from '../timeline-panel'
 import { mainPanelSlice } from '../../reducers/mainPanel'
+import { GlobalState } from '../../../types/store'
 
 const CLASSES = require('../../css/blocks/right-panel.postcss.css.json')
 require('../../css/blocks/right-panel')
 
 interface RightPanelProps {
-  state: any
+  state: GlobalState
   onResize: (e: any) => void
   onResizeEnd: (e: any) => void
   onResizeStart: (e: any) => void

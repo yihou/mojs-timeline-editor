@@ -9,5 +9,5 @@ $panel-width: $LEFT_PANEL_WIDTH*$PX;
   width: $panel-width;
   /*height: 100%;*/
 
-  background: $c-purple;
+  background: var(--mojs-color-purple);
 }

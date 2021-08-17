@@ -12,7 +12,7 @@ $borderRadius: 3*$PX;
   &__bar {
     width: 100%;
     /*height: $size;*/
-    background:     $c-creamy;
+    background:     var(--mojs-color-creamy);
     border-radius:  $borderRadius;
     position:       relative;
     top:            (100% - $size)/2;

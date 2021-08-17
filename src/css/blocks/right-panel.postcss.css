@@ -9,5 +9,5 @@
   height: $POINT_LINE_HEIGHT;
   /*height: 100%;*/
 
-  color: $c-white;
+  color: var(--mojs-color-white);
 }

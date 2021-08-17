@@ -1,13 +1,12 @@
 import { Component, ReactNode } from 'react'
 
 import { PointLine } from './point-line'
-
-const CLASSES = require('../../css/blocks/points-panel.postcss.css.json')
-require('../../css/blocks/points-panel')
+import { css } from '@emotion/react'
+import { GlobalState } from '../../../types/store'
 
 interface PointsPanelProps {
   state: any
-  entireState: any
+  entireState: GlobalState
 }
 
 export class PointsPanel extends Component<PointsPanelProps> {
@@ -15,7 +14,13 @@ export class PointsPanel extends Component<PointsPanelProps> {
     const { state } = this.props
 
     return (
-      <div className={CLASSES['points-panel']}>{this._renderPoints(state)}</div>
+      <div
+        css={css`
+          background: rgba(0, 0, 0, 0.1);
+        `}
+      >
+        {this._renderPoints(state)}
+      </div>
     )
   }
 

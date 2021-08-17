@@ -2,14 +2,10 @@ import { Component } from 'react'
 import { pointsSlice } from '../reducers/points'
 import { controlsSlice } from '../reducers/controls'
 import { css } from '@emotion/react'
-
-const CLASSES = require('../css/blocks/insert-point.postcss.css.json')
+import { GlobalState } from '../../types/store'
 
 interface PointProps {
-  state: {
-    controls: any
-    progress: number
-  }
+  state: GlobalState
 }
 
 interface PointStates {
@@ -37,7 +33,6 @@ export class InsertPoint extends Component<PointProps, PointStates> {
           margin-top: -(var(--mojs-point-size) / 2) * 1px;
         `}
         onClick={this._addPoint}
-        className={CLASSES['insert-point']}
         data-component='insert-point'
       >
         {'>'}

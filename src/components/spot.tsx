@@ -1,16 +1,19 @@
-import { Component } from 'react'
+import { Component, createRef } from 'react'
 
 import Hammer from 'hammerjs'
 import { constants } from '../constants'
 import { isSelectedByConnection } from '../helpers/is-selected-by-connection'
 import { pointsSlice } from '../reducers/points'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+import { GlobalState } from '../../types/store'
 
 interface SpotProps {
   type: 'start' | 'end'
   meta: any
   state: any
-  entireState: any
+  entireState: GlobalState
 }
 
 interface SpotStates {
@@ -18,8 +21,66 @@ interface SpotStates {
   dDuration: number
 }
 
+const SpotWrapper = styled.div<{ type: SpotProps['type']; isSelect: boolean }>`
+  position: relative;
+  float: left;
+  background: #bca5aa;
+  height: 20px;
+  border-top-left-radius: var(--mojs-border-radius);
+  border-bottom-left-radius: var(--mojs-border-radius);
+
+  ${(props) =>
+    props.type === 'end' &&
+    css`
+      display: block;
+      background: transparent;
+    `}
+`
+
+const SpotDot = styled.div<{ isSelected: boolean; isEasing: boolean }>`
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: -3px;
+  margin-top: -3px;
+  cursor: pointer;
+  transform: rotate(45deg);
+  background: var(--mojs-color-purple);
+
+  ${({ isSelected }) =>
+    isSelected &&
+    css`
+      background: var(--mojs-color-orange);
+    `}
+
+  &:hover,
+  &:active {
+    background: var(--mojs-color-light-purple);
+    //outline: 1px solid var(--mojs-color-orange);
+    outline: 2px solid #bca5aa;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    margin-left: 100%;
+    margin-top: 100%;
+    transform: rotate(45deg);
+    user-select: none;
+  }
+
+  [data-component='easing'] {
+    display: ${(props) => (props.isEasing ? 'block' : 'none')};
+  }
+`
+
 export class Spot extends Component<SpotProps, SpotStates> {
-  _dot
+  _dot = createRef<HTMLDivElement>()
+
   render() {
     const { type, state } = this.props
     const { delay, duration } = state
@@ -32,31 +93,30 @@ export class Spot extends Component<SpotProps, SpotStates> {
       width: `${type === 'start' ? delayWidth : durationWidth}em`
     }
 
+    const isSelect = this._isSelected()
+    const isEasing = this.isEasing()
+
     return (
-      <div className={this._getClassName()} style={style} data-component='spot'>
-        <div className='spot__dot' ref='_dot' />
+      <SpotWrapper
+        type={type}
+        isSelect={isSelect}
+        style={style}
+        data-component='spot'
+      >
+        <SpotDot ref={this._dot} isSelected={isSelect} isEasing={isEasing} />
         {this.props.children}
-      </div>
+      </SpotWrapper>
     )
   }
 
-  _getClassName() {
-    const { type } = this.props
-
-    const endClass = type === 'end' ? 'spot--end' : ''
-    const selectClass = this._isSelected() ? 'is-selected' : ''
-
-    return `spot ${endClass} ${selectClass} ${this._getEasingClass()}`
-  }
-
-  _getEasingClass() {
+  isEasing() {
     const { type, state } = this.props
     if (type === 'start') {
-      return ''
+      return false
     }
 
     const durationWidth = state.duration / 10 + this.state.dDuration
-    return durationWidth >= 80 ? 'is-easing' : ''
+    return durationWidth >= 80
   }
 
   _isSelected() {
@@ -78,14 +138,16 @@ export class Spot extends Component<SpotProps, SpotStates> {
   }
 
   componentDidMount() {
-    const mc = new Hammer.Manager(this._dot)
-    mc.add(new Hammer.Pan())
-    mc.add(new Hammer.Tap())
-    mc.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
+    if (this._dot.current) {
+      const mc = new Hammer.Manager(this._dot.current)
+      mc.add(new Hammer.Pan())
+      mc.add(new Hammer.Tap())
+      mc.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
 
-    mc.on('pan', this._pan)
-    mc.on('panend', this._panEnd)
-    mc.on('tap', this._tap)
+      mc.on('pan', this._pan)
+      mc.on('panend', this._panEnd)
+      mc.on('tap', this._tap)
+    }
   }
 
   _pan = (e) => {

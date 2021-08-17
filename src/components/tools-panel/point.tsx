@@ -1,13 +1,11 @@
-import { Component } from 'react'
+import styled from '@emotion/styled'
 
-const CLASSES = require('../../css/blocks/tools-panel.postcss.css.json')
-require('../../css/blocks/tools-panel')
-
-export class InsertPoint extends Component<{ className?: string }> {
-  render() {
-    const p = this.props
-    const className = `${CLASSES.point} ${p.className || ''}`
-
-    return <div className={className} />
-  }
-}
+export const InsertPoint = styled.div`
+  position: absolute;
+  width: var(--mojs-point-size);
+  height: var(--mojs-point-size);
+  border-radius: 50%;
+  background: var(--mojs-color-orange);
+  margin-left: calc(var(--mojs-point-size) / -2);
+  margin-top: calc(var(--mojs-point-size) / -2);
+`

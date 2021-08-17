@@ -8,7 +8,7 @@ $icon-size: 8*$PX;
   width:        $icon-size;
   height:       $icon-size;
   cursor:       pointer;
-  fill:         $c-white;
+  fill:         var(--mojs-color-white);
   display:      block;
 
   & > svg {

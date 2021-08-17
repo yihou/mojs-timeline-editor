@@ -23,7 +23,7 @@ $icon-size: 8*$PX;
 
     border-top-left-radius: $BRADIUS;
     border-top-right-radius: $BRADIUS;
-    background: $c-purple;
+    background: var(--mojs-color-purple);
   }
 
   & [data-component="icon"] {

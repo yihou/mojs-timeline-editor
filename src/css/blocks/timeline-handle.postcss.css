@@ -5,14 +5,14 @@
   position:   absolute;
   min-height: 100%;
   width:      1*$PX;
-  background: $c-orange;
+  background: var(--mojs-color-orange);
   z-index:    20;
 
   $size: 14*$PX;
   &__head {
     cursor: pointer;
-    background: $c-purple;
-    border: 1*$PX solid $c-orange;
+    background: var(--mojs-color-purple);
+    border: 1*$PX solid var(--mojs-color-orange);
     width:  $size;
     height: $size;
     border-radius: 5*$PX;

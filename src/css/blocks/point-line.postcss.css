@@ -4,7 +4,7 @@
 .point-line {
   margin-top: 10*$PX;
   @mixin pointLine;
-  border-bottom: 1*$PX solid $c-light-purple;
+  border-bottom: 1*$PX solid var(--mojs-color-light-purple);
 
   .label {
     position: absolute;
@@ -19,7 +19,7 @@
         background: rgba(61,12,59,.2);
       }
       &__inner {
-        fill: $c-purple;
+        fill: var(--mojs-color-purple);
       }
     }
     .body, .label {
@@ -41,7 +41,7 @@
 
 .label {
   padding-left: 10*$PX;
-  background: $c-purple;
+  background: var(--mojs-color-purple);
   height: $POINT_LINE_HEIGHT - 2;
   &:hover {
     background: $c-light-purple
@@ -51,7 +51,7 @@
 .body {
   padding-left: 5*$PX;
   /*padding-bottom: 1*$PX;*/
-  background: $c-light-purple;
+  background: var(--mojs-color-light-purple);
   height: auto;
   padding-top: $POINT_LINE_HEIGHT - 2;
   display: none;
@@ -64,7 +64,7 @@
   width:         $POINT_LINE_HEIGHT;
   height:        $POINT_LINE_HEIGHT - 2;
   background:    inherit;
-  border-left:   1px solid $c-light-purple;
+  border-left:   1px solid var(--mojs-color-light-purple);
 
   &__inner {
     position:    absolute;
@@ -87,7 +87,7 @@
   }
 
   &:hover {
-    background: $c-light-purple;
+    background: var(--mojs-color-light-purple);
   }
 
   &.is-spot {
@@ -100,11 +100,11 @@
   right: $POINT_LINE_HEIGHT;
   width: $POINT_LINE_HEIGHT;
   height: $POINT_LINE_HEIGHT;
-  border-left: 1*$PX solid $c-purple;
+  border-left: 1*$PX solid var(--mojs-color-purple);
 
   $size: 6*$PX;
   [data-component="icon"] {
-    fill: $c-purple;
+    fill: var(--mojs-color-purple);
     position: absolute;
     width: $size;
     height: $size;

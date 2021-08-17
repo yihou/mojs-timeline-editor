@@ -3,7 +3,7 @@
 $height: 22;
 .tools-panel {
   height:         $height*$PX;
-  background:     $c-purple;
+  background:     var(--mojs-color-purple);
   box-shadow:     0 2*$PX 4*$PX rgba(0,0,0, .5);
   padding-right:  5*$PX;
   position:       relative;
@@ -28,13 +28,13 @@ $height: 22;
 
   &:active, &.is-active {
     background: white;
-    color:      $c-purple;
-    fill:       $c-purple;
+    color:      var(--mojs-color-purple);
+    fill:       var(--mojs-color-purple);
   }
 
   &.is-logo {
     float:      right;
-    fill:       $c-orange;
+    fill:       var(--mojs-color-orange);
     [data-component="icon"] {
       width:    8*$PX;
       height:   8*$PX;
@@ -43,7 +43,7 @@ $height: 22;
 
   &.is-link {
     float:      right;
-    fill:       $c-white;
+    fill:       var(--mojs-color-white);
     [data-component="icon"] {
       width:    8*$PX;
       height:   8*$PX;

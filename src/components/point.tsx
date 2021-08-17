@@ -3,18 +3,19 @@ import { Component } from 'react'
 import Hammer from 'hammerjs'
 import { constants } from '../constants'
 import { pointsSlice } from '../reducers/points'
-
-const CLASSES = require('../css/blocks/point.postcss.css.json')
+import { css } from '@emotion/react'
+import { GlobalState } from '../../types/store'
+import { Point as PointType } from '../helpers/create-point'
 
 interface PointProps {
-  state: any
-  entireState: any
+  state: PointType
+  entireState: GlobalState
 }
 
 export class Point extends Component<PointProps> {
   // getInitialState() { return { deltaX: 0, deltaY: 0 }; }
   _isPan = false
-  base: any
+  base: any // TODO: check who define base
   state = { deltaX: 0, deltaY: 0 }
 
   render() {
@@ -25,8 +26,31 @@ export class Point extends Component<PointProps> {
 
     return (
       <div
+        css={css`
+          position: absolute;
+          width: var(--mojs-point-size);
+          height: var(--mojs-point-size);
+          border-radius: 50%;
+          background: var(--mojs-color-orange);
+          margin-left: -(var(--mojs-point-size) / 2);
+          margin-top: -(var(--mojs-point-size) / 2);
+
+          &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 150%;
+            height: 150%;
+            border: 1px solid var(--mojs-color-orange);
+            transform: translate(-50%, -50%);
+            /*margin-left: -(150% - 100%);*/
+            /*margin-top: -(150% - 100%);*/
+            border-radius: 50%;
+            opacity: ${state.isSelected ? 1 : 0};
+          }
+        `}
         style={style}
-        className={this._getClassName(state)}
         onClick={this._onClick}
         title={state.name}
         data-component='point'
@@ -50,12 +74,7 @@ export class Point extends Component<PointProps> {
     }
 
     const { id, prop, spotIndex, type } = selectedSpot
-    return points[id].props[prop][spotIndex][type].value
-  }
-
-  _getClassName(state) {
-    const selectClass = state.isSelected ? CLASSES['is-selected'] : ''
-    return `${CLASSES.point} ${selectClass}`
+    return points[id].props[prop][spotIndex as number][type as string].value
   }
 
   componentDidMount() {
@@ -85,9 +104,16 @@ export class Point extends Component<PointProps> {
         pointsSlice.actions.changePointCurrentPosition({ deltaX, deltaY, id })
       )
     } else {
+      if (!selectedSpot.type || !selectedSpot.spotIndex) {
+        throw new Error('Selected spot type | spotIndex is empty')
+      }
+
       store.dispatch(
         pointsSlice.actions.updateSelectedSpot({
-          ...selectedSpot,
+          id: selectedSpot.id,
+          type: selectedSpot.type,
+          spotIndex: selectedSpot.spotIndex,
+          prop: selectedSpot.prop,
           value: this._getXY()
         })
       )

@@ -34,11 +34,11 @@ $labelWidth: 25%;
     [data-component="tools-panel-button"] {
       cursor:   pointer;
       &:hover {
-        background: $c-light-purple;
+        background: var(--mojs-color-light-purple);
       }
       [data-component="icon"] {
         opacity: 1;
-        fill:    $c-green;
+        fill:    var(--mojs-color-green);
       }
     }
   }
@@ -62,11 +62,11 @@ $labelWidth: 25%;
   letter-spacing: .5*$PX;
   font-weight:    bold;
   margin-top:    -1*$PX;
-  background:     $c-orange;
-  /*color: $c-purple;*/
-  /*background:     $c-purple;*/
-  /*color: $c-orange;*/
-  /*border: 1*$PX solid $c-orange;*/
+  background:     var(--mojs-color-orange);
+  /*color: var(--mojs-color-purple);*/
+  /*background:     var(--mojs-color-purple);*/
+  /*color: var(--mojs-color-orange);*/
+  /*border: 1*$PX solid var(--mojs-color-orange);*/
   border-bottom-left-radius:  $BRADIUS;
   border-bottom-right-radius: $BRADIUS;
   transform: translateX(-50%);
@@ -80,7 +80,7 @@ $labelWidth: 25%;
   line-height: $POINT_LINE_HEIGHT - 1;
   &:hover {
     cursor: pointer;
-    /*background: $c-light-purple;*/
+    /*background: var(--mojs-color-light-purple);*/
     text-decoration: underline;
   }
 }
@@ -97,11 +97,11 @@ $labelWidth: 25%;
   padding-top:  0;
   padding-bottom: 2*$PX;
   position:     absolute;
-  border-left: 1*$PX solid $c-light-purple;
+  border-left: 1*$PX solid var(--mojs-color-light-purple);
   display:     none;
 
   &::selection {
-    background: $c-orange;
+    background: var(--mojs-color-orange);
   }
 
   &--name {
@@ -109,7 +109,7 @@ $labelWidth: 25%;
     border-left: none;
     text-align: left;
     padding-left: 10*$PX;
-    border: 1*$PX solid $c-orange;
+    border: 1*$PX solid var(--mojs-color-orange);
   }
 
   &--count {
@@ -126,7 +126,7 @@ $labelWidth: 25%;
   width:         $POINT_LINE_HEIGHT;
   height:        $POINT_LINE_HEIGHT - 1;
   background:    inherit;
-  border-left:   1px solid $c-light-purple;
+  border-left:   1px solid var(--mojs-color-light-purple);
   display:       none;
   cursor: default;
 

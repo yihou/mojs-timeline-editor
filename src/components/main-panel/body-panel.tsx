@@ -2,28 +2,53 @@ import { Component } from 'react'
 
 import { PointsPanel } from '../points-panel/points-panel'
 import { TimelinesPanel } from '../timelines-panel'
-
-const CLASSES = require('../../css/blocks/body-panel.postcss.css.json')
+import styled from '@emotion/styled'
+import { GlobalState } from '../../../types/store'
 
 interface BodyPanelProps {
-  state: {
-    points
-  }
+  state: GlobalState
 }
+
+const BodyPanelWrapper = styled.div`
+  position: absolute;
+  top: var(--mojs-top-panel-size);
+  left: 0;
+  right: 0;
+  bottom: var(--mojs-player-size);
+  z-index: 0;
+  overflow: auto;
+`
+
+const BodyPanelLeft = styled.div`
+  min-height: 100%;
+  padding-top: 1px;
+  float: left;
+  width: var(--mojs-left-panel-size);
+  background: var(--mojs-color-purple);
+`
+
+const BodyPanelRight = styled.div`
+  min-height: 100%;
+  padding-top: 1px;
+  margin-left: var(--mojs-left-panel-size);
+  background: var(--mojs-color-light-purple);
+  overflow: auto;
+  /*min-width: 1600px*/
+`
 
 export class BodyPanel extends Component<BodyPanelProps> {
   render() {
     const { state } = this.props
 
     return (
-      <div className={CLASSES['body-panel']}>
-        <div className={CLASSES['body-panel__left']}>
+      <BodyPanelWrapper>
+        <BodyPanelLeft>
           <PointsPanel state={state.points} entireState={state} />
-        </div>
-        <div className={CLASSES['body-panel__right']}>
+        </BodyPanelLeft>
+        <BodyPanelRight>
           <TimelinesPanel state={state} />
-        </div>
-      </div>
+        </BodyPanelRight>
+      </BodyPanelWrapper>
     )
   }
 }

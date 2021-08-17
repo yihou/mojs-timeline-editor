@@ -1,31 +1,37 @@
 import { Component } from 'react'
-import { Icon, IconProps } from './icon'
-
-const C = require('../css/blocks/tools-panel-button.postcss.css.json')
+import { IconProps } from './icon'
+import { css } from '@emotion/react'
+import { Button } from './button'
 
 interface ToolsPanelButtonProps {
   icon: IconProps['shape']
-  onClick: (e: any) => void
+  onClick?: (e: any) => void
 }
 
 export class ToolsPanelButton extends Component<ToolsPanelButtonProps> {
   render() {
     return (
-      <div
-        className={C['tools-panel-button']}
-        onClick={this._onSubmit}
-        data-component='tools-panel-button'
-      >
-        <div className={C['tools-panel-button__inner']}>
-          <Icon shape={this.props.icon} />
-        </div>
-      </div>
-    )
-  }
+      <Button
+        css={css`
+          width: 24px;
+          height: 23px;
+          border-left: 1px solid var(--mojs-color-light-purple);
+          // TODO: not sure why it's hidden
+          display: none;
+          cursor: default;
 
-  _onSubmit(e) {
-    if (typeof this.props.onClick === 'function') {
-      this.props.onClick(e)
-    }
+          [data-component='icon'] {
+            width: 7px;
+            height: 7px;
+            margin-top: -3.5px;
+            margin-left: -3.5px;
+            opacity: 0.5;
+            cursor: inherit;
+          }
+        `}
+        {...this.props}
+        data-component='tools-panel-button'
+      />
+    )
   }
 }

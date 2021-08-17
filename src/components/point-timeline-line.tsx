@@ -2,30 +2,62 @@ import { Component, ReactNode } from 'react'
 
 import { SegmentTimeline } from './segment-timeline'
 import { Point } from '../helpers/create-point'
+import styled from '@emotion/styled'
 
 interface PointTimelineLineProps {
   state: Point
   entireState: any
 }
 
+const POINT_LINE_HEIGHT = 24
+
+const PointTimelineLineInner = styled.div`
+  display: inline-block;
+  vertical-align: top;
+`
+
+const PointTimelineLineHeader = styled.div`
+  width: 100%;
+  height: ${POINT_LINE_HEIGHT}px;
+  background: var(--mojs-color-creamy);
+  border-radius: 0 3px 3px 0;
+  opacity: 0.2;
+`
+
+const PointTimelineLineBody = styled.div<{ isOpen: boolean }>`
+  height: ${(props) => (props.isOpen ? 'auto' : 0)};
+  overflow: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
+`
+
+const PointTimelineLineProperty = styled.div`
+  height: ${POINT_LINE_HEIGHT}px;
+`
+
+const PointTimelineLineWrapper = styled.div`
+  min-height: ${POINT_LINE_HEIGHT}px;
+  margin-top: 10px;
+  position: relative;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+`
+
 export class PointTimelineLine extends Component<PointTimelineLineProps> {
   render() {
     const { state } = this.props
 
     return (
-      <div
-        className={this._getClassName(state)}
-        data-component='point-timeline-line'
-      >
+      <PointTimelineLineWrapper data-component='point-timeline-line'>
         {'>'}
-        <div className='point-timeline-line__inner'>
-          <div className='point-timeline-line__header' />
-          <div className='point-timeline-line__body'>
+        <PointTimelineLineInner>
+          <PointTimelineLineHeader />
+          <PointTimelineLineBody isOpen={state.isOpen}>
             <span>{this._renderProperties(state)}</span>
-            <div className='point-timeline-line__property' />
-          </div>
-        </div>
-      </div>
+            <PointTimelineLineProperty />
+          </PointTimelineLineBody>
+        </PointTimelineLineInner>
+      </PointTimelineLineWrapper>
     )
   }
 
@@ -53,13 +85,6 @@ export class PointTimelineLine extends Component<PointTimelineLineProps> {
       )
     }
 
-    return <div className='point-timeline-line__property'>{results}</div>
-  }
-
-  _getClassName(state) {
-    const selectClass = state.isSelected ? 'is-selected' : ''
-    const openClass = state.isOpen ? 'is-open' : ''
-
-    return `point-timeline-line ${selectClass} ${openClass}`
+    return <PointTimelineLineProperty>{results}</PointTimelineLineProperty>
   }
 }

@@ -1,18 +1,24 @@
 import { Component, ReactNode } from 'react'
 
 import { PointTimelineLine } from './point-timeline-line'
-// import resetEvent from '../helpers/global-reset-event';
-
-const CLASSES = require('../css/blocks/timelines-panel.postcss.css.json')
+import { css } from '@emotion/react'
+import { GlobalState } from '../../types/store'
 
 interface TimelinesPanelProps {
-  state: any
+  state: GlobalState
 }
 
 export class TimelinesPanel extends Component<TimelinesPanelProps> {
   render() {
     return (
-      <div className={CLASSES['timelines-panel']}>
+      <div
+        css={css`
+          display: inline-block;
+          /*min-width:   100%;*/
+          min-width: 1600px;
+          min-height: 100%;
+        `}
+      >
         {this._renderTimelines()}
       </div>
     )

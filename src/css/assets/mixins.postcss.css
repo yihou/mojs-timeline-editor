@@ -8,11 +8,11 @@ $POINT_LINE_HEIGHT: 24*$PX;
   font-size:      9*$FPX;
   letter-spacing: .5*$PX;
   line-height:    $POINT_LINE_HEIGHT;
-  background:     $c-purple;
-  border-top:     1*$PX solid $c-light-purple;
+  background:     var(--mojs-color-purple);
+  border-top:     1*$PX solid var(--mojs-color-light-purple);
 
   &.is-check {
-    background: $c-white;
+    background: var(--mojs-color-white);
     color:      $c-purple
   }
 }

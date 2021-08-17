@@ -19,7 +19,7 @@
   &__dot {
     width:        $size;
     height:       $size;
-    background:   $c-purple;
+    background:   var(--mojs-color-purple);
     position:     absolute;
     z-index:      1;
     top:          50%;
@@ -30,8 +30,8 @@
 
     &:hover,
     &:active {
-      background: $c-light-purple;
-      outline:    1*$PX solid $c-orange;
+      background: var(--mojs-color-light-purple);
+      outline:    1*$PX solid var(--mojs-color-orange);
       outline:    2*$PX solid #BCA5AA;
     }
 
@@ -54,7 +54,7 @@
 
   &.is-selected {
     .spot__dot {
-      background: $c-orange;
+      background: var(--mojs-color-orange);
     }
   }
 

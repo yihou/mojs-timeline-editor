@@ -5,6 +5,7 @@ import { resetEvent } from '../../helpers/global-reset-event'
 import { ToolsPanelButton } from '../tools-panel-button'
 import { classNames, refs, compose } from '../../helpers/style-decorator'
 import { pointsSlice } from '../../reducers/points'
+import { css } from '@emotion/react'
 
 const CLS = require('../../css/blocks/property-line-add.postcss.css.json')
 require('../../css/blocks/property-line-add')
@@ -42,6 +43,127 @@ export class PropertyLineAdd extends Component<PropertyLineAddProps> {
     const { name, count, error } = this.state
     return (
       <div
+        css={css`
+          $labelWidth: 25%;
+          .property-line-add {
+            @mixin pointLine;
+            width: 100%;
+            cursor: default;
+
+            &__inputs {
+              position: absolute;
+              right: $POINT_LINE_HEIGHT;
+              left: 0;
+            }
+
+            &.is-add {
+              .input,
+              [data-component='tools-panel-button'],
+              .name-input-wrapper {
+                display: block;
+              }
+
+              .label {
+                display: none;
+              }
+            }
+
+            &.is-valid {
+              .error-label {
+                display: none;
+              }
+              .input {
+                &--name {
+                  border: 1 * $PX solid transparent;
+                }
+              }
+              [data-component='tools-panel-button'] {
+                cursor: pointer;
+                &:hover {
+                  background: var(--mojs-color-light-purple);
+                }
+                [data-component='icon'] {
+                  opacity: 1;
+                  fill: var(--mojs-color-green);
+                }
+              }
+            }
+          }
+
+          .name-input-wrapper {
+            position: absolute;
+            left: 0;
+            width: 85.5%;
+            display: none;
+            height: $POINT_LINE_HEIGHT;
+          }
+
+          .error-label {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            padding: 2 * $PX 4 * $PX;
+            font-size: 7 * $FPX;
+            line-height: 1.5;
+            letter-spacing: 0.5 * $PX;
+            font-weight: bold;
+            margin-top: -1 * $PX;
+            background: var(--mojs-color-orange);
+            /*color: var(--mojs-color-purple);*/
+            /*background:     var(--mojs-color-purple);*/
+            /*color: var(--mojs-color-orange);*/
+            /*border: 1*$PX solid var(--mojs-color-orange);*/
+            border-bottom-left-radius: $BRADIUS;
+            border-bottom-right-radius: $BRADIUS;
+            transform: translateX(-50%);
+          }
+
+          .label {
+            position: absolute;
+            left: 0;
+            width: $labelWidth;
+            padding-left: 10 * $PX;
+            line-height: $POINT_LINE_HEIGHT - 1;
+            &:hover {
+              cursor: pointer;
+              /*background: var(--mojs-color-light-purple);*/
+              text-decoration: underline;
+            }
+          }
+
+          .input {
+            display: block;
+            color: white;
+            background: transparent;
+            border: none;
+            height: $POINT_LINE_HEIGHT;
+            text-align: center;
+            outline: 0;
+            font-size: 10 * $PX;
+            padding-top: 0;
+            padding-bottom: 2 * $PX;
+            position: absolute;
+            border-left: 1 * $PX solid var(--mojs-color-light-purple);
+            display: none;
+
+            &::selection {
+              background: var(--mojs-color-orange);
+            }
+
+            &--name {
+              width: 100%;
+              border-left: none;
+              text-align: left;
+              padding-left: 10 * $PX;
+              border: 1 * $PX solid var(--mojs-color-orange);
+            }
+
+            &--count {
+              right: 0;
+              width: $POINT_LINE_HEIGHT;
+            }
+          }
+        `}
         className={this._getClassName()}
         onClick={(e) => e.stopPropagation()}
       >

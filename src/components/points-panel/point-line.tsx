@@ -1,54 +1,106 @@
-import { Component, ReactNode } from 'react'
+import { Component, FC, ReactNode } from 'react'
 
 import { PropertyLine } from './property-line'
 import { PropertyLineAdd } from './property-line-add'
-import { Icon } from '../icon'
 import { pointsSlice } from '../../reducers/points'
-
-const CLS = require('../../css/blocks/point-line.postcss.css.json')
-require('../../css/blocks/point-line')
+import { BasePointLine } from './BasePointLine'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Button, ButtonProps } from '../button'
+import { GlobalState } from '../../../types/store'
 
 interface PointLineProps {
   state: any
-  entireState: any
+  entireState: GlobalState
 }
+
+const PointLineLabel = styled.div<{ isCheck: boolean }>`
+  position: absolute;
+  left: 0;
+  right: var(--mojs-point-line-height);
+  line-height: calc(var(--mojs-point-line-height)- 3);
+  padding-left: 10px;
+  background: var(--mojs-color-purple);
+
+  &:hover {
+    background: var(--mojs-color-light-purple);
+  }
+
+  ${({ isCheck }) =>
+    isCheck &&
+    css`
+      background: inherit;
+    `}
+`
+
+const PointLineBody = styled.div<{ isOpen: boolean; isCheck: boolean }>`
+  padding-left: 5px;
+  /*padding-bottom: 1px;*/
+  background: var(--mojs-color-light-purple);
+  height: auto;
+  padding-top: 22px;
+  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  ${({ isCheck }) =>
+    isCheck &&
+    css`
+      background: inherit;
+    `};
+`
+
+interface PointLineButtonProps extends ButtonProps {
+  isCheck?: boolean
+}
+
+const PointLineButton = styled(Button)<PointLineButtonProps>`
+  &:hover {
+    background: ${({ isCheck }) => isCheck && 'rgba(61, 12, 59, 0.2)'};
+  }
+  [data-component='button-inner'] {
+    fill: ${({ isCheck }) => isCheck && 'var(--mojs-color-purple)'};
+  }
+` as FC<PointLineButtonProps>
 
 export class PointLine extends Component<PointLineProps> {
   render() {
     const { state } = this.props
 
     return (
-      <div className={this._getClassName(state)}>
-        <div className={CLS.label} onClick={this._onCheck}>
+      <BasePointLine
+        isCheck={state.isSelected}
+        css={css`
+          margin-top: 10px;
+          border-bottom: 1px solid var(--mojs-color-light-purple);
+        `}
+      >
+        <PointLineLabel isCheck={state.isSelected} onClick={this._onCheck}>
           {state.name}
-        </div>
+        </PointLineLabel>
 
-        <div
-          className={`${CLS.button} ${CLS['is-spot']}`}
+        <PointLineButton
+          css={css`
+            right: 24px;
+          `}
+          icon='spot'
           onClick={this._onAddSpot}
-        >
-          <div className={CLS.button__inner}>
-            <Icon shape='spot' />
-          </div>
-        </div>
+        />
 
-        <div
-          className={`${CLS.button} ${CLS['is-arrow']}`}
+        <PointLineButton
+          css={css`
+            [data-component='button-inner'] {
+              ${state.isOpen &&
+              css`
+                transform: rotate(180deg);
+              `}
+            }
+          `}
+          icon='dropdown'
           onClick={this._onOpen}
-        >
-          <div className={CLS.button__inner}>
-            <Icon shape='dropdown' />
-          </div>
-        </div>
-        <div className={CLS.body}>{this._renderProperties()}</div>
-      </div>
+        />
+        <PointLineBody isOpen={state.isOpen} isCheck={state.isCheck}>
+          {this._renderProperties()}
+        </PointLineBody>
+      </BasePointLine>
     )
-  }
-
-  _getClassName(state) {
-    const openClass = state.isOpen ? CLS['is-open'] : ''
-    const checkClass = state.isSelected ? CLS['is-check'] : ''
-    return `${CLS['point-line']} ${openClass} ${checkClass}`
   }
 
   _renderProperties() {

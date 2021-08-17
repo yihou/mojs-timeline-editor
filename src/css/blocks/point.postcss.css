@@ -5,7 +5,7 @@
   width:      $POINT_SIZE*$PX;
   height:     $POINT_SIZE*$PX;
   border-radius: 50%;
-  background: $c-orange;
+  background: var(--mojs-color-orange);
   margin-left: -($POINT_SIZE/2)*$PX;
   margin-top:  -($POINT_SIZE/2)*$PX;
 
@@ -17,7 +17,7 @@
     top:     50%;
     width:   $size;
     height:  $size;
-    border: 1px solid $c-orange;
+    border: 1px solid var(--mojs-color-orange);
     transform: translate(-50%, -50%);
     /*margin-left: -($size - 100%);*/
     /*margin-top: -($size - 100%);*/

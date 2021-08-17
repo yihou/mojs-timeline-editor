@@ -36,11 +36,11 @@ $labelWidth: 25%;
   width:        100%;
   float:        left;
   position:     relative;
-  border-left: 1*$PX solid $c-light-purple;
+  border-left: 1*$PX solid var(--mojs-color-light-purple);
 
   &::selection {
-    background: $c-orange;
-    /*color: $c-purple;*/
+    background: var(--mojs-color-orange);
+    /*color: var(--mojs-color-purple);*/
   }
 
   & + .input {
@@ -80,7 +80,7 @@ $labelWidth: 25%;
   width:         $POINT_LINE_HEIGHT;
   height:        $POINT_LINE_HEIGHT - 1;
   background:    inherit;
-  border-left:   1px solid $c-light-purple;
+  border-left:   1px solid var(--mojs-color-light-purple);
 
   &__inner {
     position:    absolute;
@@ -103,7 +103,7 @@ $labelWidth: 25%;
   }
 
   &:hover {
-    background: $c-light-purple;
+    background: var(--mojs-color-light-purple);
   }
 
   &.is-spot {

@@ -8,7 +8,7 @@
   width:         $POINT_LINE_HEIGHT;
   height:        $POINT_LINE_HEIGHT - 1;
   background:    inherit;
-  border-left:   1px solid $c-light-purple;
+  border-left:   1px solid var(--mojs-color-light-purple);
   display:       none;
   cursor: default;
 

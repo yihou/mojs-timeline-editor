@@ -15,7 +15,7 @@ $iconSize: 6*$PX;
   &__full {
     width: $width;
     height: $height;
-    background: $c-purple;
+    background: var(--mojs-color-purple);
     display: none;
     border-radius: $BRADIUS;
     margin-left: -$width/2;
@@ -35,7 +35,7 @@ $iconSize: 6*$PX;
       height: $iconSize;
       margin-left: -$iconSize/2;
       margin-top: -$iconSize/2;
-      fill: $c-purple;
+      fill: var(--mojs-color-purple);
     }
   }
 
@@ -55,7 +55,7 @@ $iconSize: 6*$PX;
   left:            -$width/2;
   right:           0;
   top:             3*$PX;
-  color:           $c-white;
+  color:           var(--mojs-color-white);
   font-size:       7*$FPX;
   /*width:           100%;*/
   letter-spacing:  .5*$PX;
@@ -95,7 +95,7 @@ $iconSize: 6*$PX;
   height: $height;
   right: 0;
   top: 0;
-  border-left: 1*$PX solid $c-light-purple;
+  border-left: 1*$PX solid var(--mojs-color-light-purple);
 
   $size: 6*$PX;
   [data-component="icon"] {
@@ -106,6 +106,6 @@ $iconSize: 6*$PX;
     height: $size;
     margin-top: -$size/2;
     margin-left: -$size/2 - 1;
-    fill: $c-white;
+    fill: var(--mojs-color-white);
   }
 }

@@ -1,10 +1,11 @@
 import { Component, ReactNode } from 'react'
 
-import { Icon } from '../icon'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import { pointsSlice } from '../../reducers/points'
+import { BasePointLine } from './BasePointLine'
+import { Button } from '../button'
 
-const CLASSES = require('../../css/blocks/property-line.postcss.css.json')
-require('../../css/blocks/property-line')
 const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
 }
@@ -19,24 +20,93 @@ export interface PropertyLineProps {
   entireState: any
 }
 
+const PropertyLineLabel = styled.div`
+  position: absolute;
+  left: 0;
+  width: 25%;
+  padding-left: 10px;
+  line-height: 23px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+const PropertyLineInput = styled.input`
+  display: block;
+  color: white;
+  background: transparent;
+  border: none;
+  height: 24px;
+  text-align: center;
+  outline: 0;
+  font-size: 10px;
+  padding-top: 0;
+  width: 100%;
+  float: left;
+  position: relative;
+  border-left: 1px solid var(--mojs-color-light-purple);
+
+  &::selection {
+    background: var(--mojs-color-orange);
+    /*color: var(--mojs-color-purple);*/
+  }
+
+  & + & {
+    /*&:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        height: 50%;
+        width: 1px;
+        background: yellow;
+      }*/
+  }
+
+  &[data-width='1/2'] {
+    width: calc(100% / 2);
+    /*&:first-child {
+        text-align: right;
+        padding-right: 5px;
+      }
+      &:last-child {
+        text-align: left;
+        padding-left: 5px;
+      }*/
+  }
+  &[data-width='1/3'] {
+    width: calc(100% / 3);
+  }
+  &[data-width='1/4'] {
+    width: calc(100% / 4);
+  }
+`
+
+const PropertyLineInputs = styled.div`
+  position: absolute;
+  right: 24px;
+  left: 25%;
+`
+
 export class PropertyLine extends Component<PropertyLineProps> {
   render() {
     const p = this.props
 
     return (
-      <div className={CLASSES['property-line']}>
-        <div className={CLASSES.label} title={p.name}>
-          {p.name}
-        </div>
-        <div className={CLASSES['property-line__inputs']}>
-          {this._renderInputs()}
-        </div>
-        <div className={CLASSES.button} onClick={this._onAddSpot}>
-          <div className={CLASSES.button__inner}>
-            <Icon shape='spot' />
-          </div>
-        </div>
-      </div>
+      <BasePointLine
+        css={css`
+          width: 100%;
+          cursor: default;
+        `}
+      >
+        <PropertyLineLabel title={p.name}>{p.name}</PropertyLineLabel>
+        <PropertyLineInputs>{this._renderInputs()}</PropertyLineInputs>
+        <Button
+          css={css`
+            right: var(--mojs-point-line-height);
+          `}
+          icon='spot'
+          onClick={this._onAddSpot}
+        />
+      </BasePointLine>
     )
   }
 
@@ -47,8 +117,7 @@ export class PropertyLine extends Component<PropertyLineProps> {
     const result: ReactNode[] = []
     for (let i = 0; i < value.length; i++) {
       result.push(
-        <input
-          className={CLASSES.input}
+        <PropertyLineInput
           value={value[i]}
           data-width={`1/${value.length}`}
           data-index={i}

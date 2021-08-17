@@ -7,7 +7,7 @@ $player-height: 40*$PX;
   width: 100%;
   /*height: 200*$PX;*/
   color: white;
-  background: $c-purple;
+  background: var(--mojs-color-purple);
 
   &--transition {
     transition: height 0.4s;

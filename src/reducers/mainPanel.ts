@@ -1,7 +1,7 @@
 import { constants } from '../constants'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface MainPanelStates {
+export interface MainPanelStates {
   prevHeight: number
   ySize: number
   isHidden: boolean

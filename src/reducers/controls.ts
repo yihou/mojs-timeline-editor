@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface ControlsStates {
+export interface ControlsStates {
   selected: null | 'html' | 'plus'
   isMouseInside: boolean
 }

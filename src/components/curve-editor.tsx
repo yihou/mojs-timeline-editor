@@ -1,5 +1,10 @@
 import { Component } from 'react'
 import MojsCurveEditor from '@mojs/curve-editor'
+import styled from '@emotion/styled'
+
+const CurveEditorHtml = styled.div`
+  outline: 1px solid cyan;
+`
 
 interface CurveEditorProps {
   meta: {
@@ -14,7 +19,7 @@ export class CurveEditor extends Component<CurveEditorProps> {
   }
 
   render() {
-    return <div className='curve-editor' />
+    return <CurveEditorHtml />
   }
 
   _editor

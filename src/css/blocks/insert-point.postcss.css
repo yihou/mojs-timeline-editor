@@ -5,7 +5,7 @@
   width:      $POINT_SIZE*$PX;
   height:     $POINT_SIZE*$PX;
   border-radius: 50%;
-  background: $c-orange;
+  background: var(--mojs-color-orange);
   margin-left: -($POINT_SIZE/2)*$PX;
   margin-top:  -($POINT_SIZE/2)*$PX;
 }

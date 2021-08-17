@@ -6,6 +6,7 @@ import { InsertPoint } from './insert-point'
 import { Point } from './point'
 import styled from '@emotion/styled'
 import { controlsSlice } from '../reducers/controls'
+import { GlobalState } from '../../types/store'
 
 // const CLASSES = require('../css/blocks/timeline-editor.postcss.css.json');
 
@@ -14,6 +15,7 @@ import { controlsSlice } from '../reducers/controls'
 const Wrapper = styled.div`
   .timeline-editor {
     font-family: Arial, sans-serif;
+
     & * {
       box-sizing: border-box;
       user-select: none;
@@ -26,7 +28,7 @@ const Wrapper = styled.div`
 `
 
 export class TimelineEditorView extends Component {
-  getState = () => {
+  getState = (): GlobalState => {
     const { store } = this.context
     return store.getState()
   }

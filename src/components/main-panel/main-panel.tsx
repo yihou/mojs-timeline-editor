@@ -1,4 +1,6 @@
 import { Component } from 'react'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 
 import { LeftPanel } from './left-panel'
 import { BodyPanel } from './body-panel'
@@ -6,18 +8,35 @@ import { RightPanel } from './right-panel'
 import { TimelineHandle } from '../timeline-handle'
 import { constants } from '../../constants'
 import { mainPanelSlice } from '../../reducers/mainPanel'
-
-const CLASSES = require('../../css/blocks/main-panel.postcss.css.json')
-require('../../css/blocks/main-panel')
+import { GlobalState } from '../../../types/store'
 
 interface MainPanelProps {
-  state: any
-  entireState: any
+  state: GlobalState['mainPanel']
+  entireState: GlobalState
 }
 
 interface MainPanelStates {
   deltaY: number
 }
+
+const MainPanelSection = styled.section<{ isTransition: boolean }>`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /*height: 200px;*/
+  color: white;
+  background: var(--mojs-color-purple);
+  ${(props) =>
+    props.isTransition &&
+    css`
+      transition: height 0.4s;
+    `};
+
+  [data-component='timeline-handle'] {
+    margin-left: var(--mojs-left-panel-width);
+    font-size: 1px;
+  }
+`
 
 export class MainPanel extends Component<MainPanelProps, MainPanelStates> {
   state = { deltaY: 0 }
@@ -32,9 +51,9 @@ export class MainPanel extends Component<MainPanelProps, MainPanelStates> {
     this._checkHideButton(height)
 
     return (
-      <section
+      <MainPanelSection
         style={{ height }}
-        className={this._getClassNames()}
+        isTransition={state.isTransition}
         data-component='main-panel'
       >
         {'>'}
@@ -47,7 +66,7 @@ export class MainPanel extends Component<MainPanelProps, MainPanelStates> {
           onResizeStart={this._resizeHeightStart}
         />
         <BodyPanel state={entireState} />
-      </section>
+      </MainPanelSection>
     )
   }
 
@@ -83,17 +102,6 @@ export class MainPanel extends Component<MainPanelProps, MainPanelStates> {
   }
 
   // HELPERS
-
-  _getClassNames() {
-    const { state } = this.props
-
-    const className = CLASSES['main-panel']
-    const transitionClass = state.isTransition
-      ? CLASSES['main-panel--transition']
-      : ''
-
-    return `${className} ${transitionClass}`
-  }
 
   _clampHeight(height) {
     return Math.max(this._getMinHeight(), height)

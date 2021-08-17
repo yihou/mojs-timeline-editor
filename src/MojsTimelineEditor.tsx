@@ -33,11 +33,13 @@ const MojsTimelineEditorComponent = () => {
             --mojs-color-white: #ffffff;
             --mojs-color-creamy: #fff5e3;
             --mojs-color-green: #50e3c2;
+            --mojs-border-radius: 3px;
 
             --mojs-left-panel-width: 195px; /* old was 165px */
             --mojs-point-size: 6px;
             --mojs-top-panels-size: 22px;
             --mojs-player-size: 40px;
+            --mojs-point-line-height: 24px;
           }
         `}
       />

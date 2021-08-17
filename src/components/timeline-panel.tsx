@@ -1,4 +1,4 @@
-import { Component, ReactNode } from 'react'
+import { Component, createRef, ReactNode } from 'react'
 
 import { constants } from '../constants'
 import styled from '@emotion/styled'
@@ -11,16 +11,16 @@ const TimelinePanelWrapper = styled.div`
   height: 22px;
   background: var(--mojs-color-light-purple);
   box-shadow: 0 2px 4px black;
+`
 
-  .label {
-    fill: var(--mojs-color-white);
-    font-size: 7px;
-  }
+const TimelinePanelMainSvg = styled.svg`
+  width: 100%;
+  height: 100%;
+`
 
-  .main-svg {
-    width: 100%;
-    height: 100%;
-  }
+const TimelinePanelLabel = styled.text`
+  fill: var(--mojs-color-white);
+  font-size: 7px;
 `
 
 interface TimelinePanelProps {
@@ -38,6 +38,7 @@ export class TimelinePanel extends Component<
   TimelinePanelProps,
   TimelinePanelStates
 > {
+  _svg = createRef<SVGSVGElement>()
   _dashesCnt = 0
   _timeline: ReactNode = null
 
@@ -73,12 +74,12 @@ export class TimelinePanel extends Component<
     const { scale } = this.state
 
     return (
-      <svg>
+      <TimelinePanelMainSvg ref={this._svg}>
         <g style={{ fontSize: `${scale}px` }}>
           {dashes}
           {pointerValues}
         </g>
-      </svg>
+      </TimelinePanelMainSvg>
     )
   }
 
@@ -124,9 +125,13 @@ export class TimelinePanel extends Component<
 
       labels.push(
         <svg x={`${x}em`} style={{ overflow: 'visible' }}>
-          <text y={y} className={CLASSES.label} textAnchor={textAnchor}>
+          <TimelinePanelLabel
+            y={y}
+            className={CLASSES.label}
+            textAnchor={textAnchor}
+          >
             {value}
-          </text>
+          </TimelinePanelLabel>
         </svg>
       )
     }
