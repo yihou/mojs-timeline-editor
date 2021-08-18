@@ -1,7 +1,7 @@
-import { MojsTimelineEditor } from '@mojs/timeline-editor'
+import * as React from 'react'
 
 const App = () => {
-  return MojsTimelineEditor
+  return <div>Hello World</div>
 }
 
 export default App

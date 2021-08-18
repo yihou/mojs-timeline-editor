@@ -1,9 +1,10 @@
 import { Component } from 'react'
 import { IconProps } from './icon'
-import { css } from '@emotion/react'
+import { css, Interpolation, Theme } from '@emotion/react'
 import { Button } from './button'
 
 interface ToolsPanelButtonProps {
+  css?: Interpolation<Theme>
   icon: IconProps['shape']
   onClick?: (e: any) => void
 }

@@ -3,8 +3,6 @@ import { Component, createRef, ReactNode } from 'react'
 import { constants } from '../constants'
 import styled from '@emotion/styled'
 
-const CLASSES = require('../css/blocks/timeline-panel.postcss.css.json')
-
 const TimelinePanelWrapper = styled.div`
   position: relative;
   top: -20px;
@@ -125,11 +123,7 @@ export class TimelinePanel extends Component<
 
       labels.push(
         <svg x={`${x}em`} style={{ overflow: 'visible' }}>
-          <TimelinePanelLabel
-            y={y}
-            className={CLASSES.label}
-            textAnchor={textAnchor}
-          >
+          <TimelinePanelLabel y={y} textAnchor={textAnchor}>
             {value}
           </TimelinePanelLabel>
         </svg>

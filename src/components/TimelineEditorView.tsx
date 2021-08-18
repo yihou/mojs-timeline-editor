@@ -8,22 +8,12 @@ import styled from '@emotion/styled'
 import { controlsSlice } from '../reducers/controls'
 import { GlobalState } from '../../types/store'
 
-// const CLASSES = require('../css/blocks/timeline-editor.postcss.css.json');
-
-// @classNames(require('../css/blocks/timeline-editor.postcss.css.json'))
-
 const Wrapper = styled.div`
-  .timeline-editor {
-    font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
 
-    & * {
-      box-sizing: border-box;
-      user-select: none;
-    }
-
-    &__el {
-      outline: 1px solid;
-    }
+  & * {
+    box-sizing: border-box;
+    user-select: none;
   }
 `
 
@@ -40,7 +30,7 @@ export class TimelineEditorView extends Component {
       <Wrapper>
         <InsertPoint state={state} />
         <div>{this._renderPoints()}</div>
-        <div className='timeline-editor' onMouseMove={this._mouseMove}>
+        <div onMouseMove={this._mouseMove}>
           <Icons />
           <MainPanel state={state.mainPanel} entireState={state} />
         </div>

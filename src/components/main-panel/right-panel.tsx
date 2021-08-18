@@ -5,9 +5,7 @@ import { ResizeHandle } from '../resize-handle'
 import { TimelinePanel } from '../timeline-panel'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 import { GlobalState } from '../../../types/store'
-
-const CLASSES = require('../../css/blocks/right-panel.postcss.css.json')
-require('../../css/blocks/right-panel')
+import { css } from '@emotion/react'
 
 interface RightPanelProps {
   state: GlobalState
@@ -22,7 +20,19 @@ export class RightPanel extends Component<RightPanelProps> {
     const { mainPanel } = state
 
     return (
-      <div className={CLASSES['right-panel']}>
+      <div
+        css={css`
+          position: absolute;
+          right: 0;
+          top: 0;
+          left: var(--mojs-left-panel-width);
+          z-index: 1;
+          height: var(--mojs-point-line-height);
+          /*height: 100%;*/
+
+          color: var(--mojs-color-white);
+        `}
+      >
         <HideButton isHidden={mainPanel.isHidden} onTap={this._onHideButton} />
         <ResizeHandle {...this.props} />
         <TimelinePanel time={15} />

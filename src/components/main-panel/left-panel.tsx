@@ -2,8 +2,7 @@ import { Component } from 'react'
 
 import { ToolsPanel } from '../tools-panel'
 import { GlobalState } from '../../../types/store'
-const CLASSES = require('../../css/blocks/left-panel.postcss.css.json')
-require('../../css/blocks/left-panel')
+import { css } from '@emotion/react'
 
 interface LeftPanelProps {
   state: GlobalState
@@ -14,7 +13,18 @@ export class LeftPanel extends Component<LeftPanelProps> {
     const { state } = this.props
 
     return (
-      <div className={CLASSES['left-panel']}>
+      <div
+        css={css`
+          position: absolute;
+          right: var(--mojs-left-panel-width);
+          top: 0;
+          left: 0;
+          width: var(--mojs-left-panel-width);
+          /*height: 100%;*/
+
+          background: var(--mojs-color-purple);
+        `}
+      >
         <ToolsPanel state={state.controls} />
       </div>
     )

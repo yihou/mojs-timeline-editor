@@ -3,12 +3,10 @@ import { Component, createRef } from 'react'
 import { clamp } from '../../helpers/clamp'
 import { resetEvent } from '../../helpers/global-reset-event'
 import { ToolsPanelButton } from '../tools-panel-button'
-import { classNames, refs, compose } from '../../helpers/style-decorator'
 import { pointsSlice } from '../../reducers/points'
 import { css } from '@emotion/react'
-
-const CLS = require('../../css/blocks/property-line-add.postcss.css.json')
-require('../../css/blocks/property-line-add')
+import { BasePointLine } from './BasePointLine'
+import styled from '@emotion/styled'
 
 const EXIST_MESSAGE = 'already exist'
 const DEFAULT_STATE = {
@@ -23,7 +21,72 @@ interface PropertyLineAddProps {
   name: string
 }
 
-@compose(classNames(CLS), refs)
+const PropertyLineAddInputs = styled.div`
+  position: absolute;
+  right: var(--mojs-point-line-height);
+  left: 0;
+`
+const NameInputWrapper = styled.div<{ isAdd: boolean }>`
+  position: absolute;
+  left: 0;
+  width: 85.5%;
+  height: var(--mojs-point-line-height);
+  display: ${(props) => (props.isAdd ? 'none' : 'block')};
+`
+const Input = styled.input<{ isAdd: boolean }>`
+  //display: block;
+  color: white;
+  background: transparent;
+  border: none;
+  height: var(--mojs-point-line-height);
+  text-align: center;
+  outline: 0;
+  font-size: 10px;
+  padding-top: 0;
+  padding-bottom: 2px;
+  position: absolute;
+  border-left: 1px solid var(--mojs-color-light-purple);
+  display: ${(props) => (props.isAdd ? 'none' : 'block')};
+
+  &::selection {
+    background: var(--mojs-color-orange);
+  }
+`
+const ErrorLabel = styled.label<{ isValid: boolean }>`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  padding: 2px 4px;
+  font-size: 7px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  margin-top: -1px;
+  background: var(--mojs-color-orange);
+  /*color: var(--mojs-color-purple);*/
+  /*background:     var(--mojs-color-purple);*/
+  /*color: var(--mojs-color-orange);*/
+  /*border: 1*$PX solid var(--mojs-color-orange);*/
+  border-bottom-left-radius: var(--mojs-border-radius);
+  border-bottom-right-radius: var(--mojs-border-radius);
+  transform: translateX(-50%);
+  display: ${(props) => (props.isValid ? 'none' : 'block')};
+`
+const PropertyLineAddLabel = styled.div<{ isAdd: boolean }>`
+  position: absolute;
+  left: 0;
+  width: 25%;
+  padding-left: 10px;
+  line-height: var(--mojs-point-line-height) - 1;
+  display: ${(props) => (props.isAdd ? 'block' : 'none')};
+
+  &:hover {
+    cursor: pointer;
+    /*background: var(--mojs-color-light-purple);*/
+    text-decoration: underline;
+  }
+`
+
 export class PropertyLineAdd extends Component<PropertyLineAddProps> {
   // getInitialState() {
   //   this.setState({ x: 0, y: 0 });
@@ -41,155 +104,91 @@ export class PropertyLineAdd extends Component<PropertyLineAddProps> {
 
   render() {
     const { name, count, error } = this.state
+    const isValid = !this.state.error
+    const isAdd = !this.state.isAdd
+
     return (
-      <div
+      <BasePointLine
         css={css`
-          $labelWidth: 25%;
-          .property-line-add {
-            @mixin pointLine;
-            width: 100%;
-            cursor: default;
-
-            &__inputs {
-              position: absolute;
-              right: $POINT_LINE_HEIGHT;
-              left: 0;
-            }
-
-            &.is-add {
-              .input,
-              [data-component='tools-panel-button'],
-              .name-input-wrapper {
-                display: block;
-              }
-
-              .label {
-                display: none;
-              }
-            }
-
-            &.is-valid {
-              .error-label {
-                display: none;
-              }
-              .input {
-                &--name {
-                  border: 1 * $PX solid transparent;
-                }
-              }
-              [data-component='tools-panel-button'] {
-                cursor: pointer;
-                &:hover {
-                  background: var(--mojs-color-light-purple);
-                }
-                [data-component='icon'] {
-                  opacity: 1;
-                  fill: var(--mojs-color-green);
-                }
-              }
-            }
-          }
-
-          .name-input-wrapper {
-            position: absolute;
-            left: 0;
-            width: 85.5%;
-            display: none;
-            height: $POINT_LINE_HEIGHT;
-          }
-
-          .error-label {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            padding: 2 * $PX 4 * $PX;
-            font-size: 7 * $FPX;
-            line-height: 1.5;
-            letter-spacing: 0.5 * $PX;
-            font-weight: bold;
-            margin-top: -1 * $PX;
-            background: var(--mojs-color-orange);
-            /*color: var(--mojs-color-purple);*/
-            /*background:     var(--mojs-color-purple);*/
-            /*color: var(--mojs-color-orange);*/
-            /*border: 1*$PX solid var(--mojs-color-orange);*/
-            border-bottom-left-radius: $BRADIUS;
-            border-bottom-right-radius: $BRADIUS;
-            transform: translateX(-50%);
-          }
-
-          .label {
-            position: absolute;
-            left: 0;
-            width: $labelWidth;
-            padding-left: 10 * $PX;
-            line-height: $POINT_LINE_HEIGHT - 1;
-            &:hover {
-              cursor: pointer;
-              /*background: var(--mojs-color-light-purple);*/
-              text-decoration: underline;
-            }
-          }
-
-          .input {
-            display: block;
-            color: white;
-            background: transparent;
-            border: none;
-            height: $POINT_LINE_HEIGHT;
-            text-align: center;
-            outline: 0;
-            font-size: 10 * $PX;
-            padding-top: 0;
-            padding-bottom: 2 * $PX;
-            position: absolute;
-            border-left: 1 * $PX solid var(--mojs-color-light-purple);
-            display: none;
-
-            &::selection {
-              background: var(--mojs-color-orange);
-            }
-
-            &--name {
-              width: 100%;
-              border-left: none;
-              text-align: left;
-              padding-left: 10 * $PX;
-              border: 1 * $PX solid var(--mojs-color-orange);
-            }
-
-            &--count {
-              right: 0;
-              width: $POINT_LINE_HEIGHT;
-            }
-          }
+          width: 100%;
+          cursor: default;
         `}
-        className={this._getClassName()}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className='label' ref='_label' onClick={this._onLabelClick}>
+        <PropertyLineAddLabel
+          isAdd={isAdd}
+          className='label'
+          ref='_label'
+          onClick={this._onLabelClick}
+        >
           {'+ add'}
-        </div>
-        <div className='property-line-add__inputs'>
-          <div className='name-input-wrapper'>
-            <input
+        </PropertyLineAddLabel>
+        <PropertyLineAddInputs className='property-line-add__inputs'>
+          <NameInputWrapper
+            isAdd={isAdd}
+            data-component='name-input-wrapper'
+            className='name-input-wrapper'
+          >
+            <Input
+              isAdd={isAdd}
+              css={css`
+                width: 100%;
+                //border-left: none;
+                text-align: left;
+                padding-left: 10px;
+
+                ${isValid
+                  ? css`
+                      border: 1px solid transparent;
+                    `
+                  : css`
+                      border: 1px solid var(--mojs-color-orange);
+                    `}
+              `}
               className='input input--name'
               ref={this._name}
               value={name}
               onKeyUp={this._onNameKeyUp}
               title='property name'
             />
-            <label className='error-label'>{error}</label>
-          </div>
-          <input
+            <ErrorLabel isValid={isValid} className='error-label'>
+              {error}
+            </ErrorLabel>
+          </NameInputWrapper>
+          <Input
+            isAdd={isAdd}
+            css={css`
+              right: 0;
+              width: var(--mojs-point-line-height);
+            `}
             className='input input--count'
             onKeyUp={this._onCountKeyUp}
             value={count}
             title='number of properties [1...4]'
           />
-        </div>
-        <ToolsPanelButton onClick={this._onSubmit} icon='tick' />
-      </div>
+        </PropertyLineAddInputs>
+        <ToolsPanelButton
+          css={css`
+            ${isAdd &&
+            css`
+              display: block;
+            `}
+            ${isValid &&
+            css`
+              cursor: pointer;
+              &:hover {
+                background: var(--mojs-color-light-purple);
+              }
+              [data-component='icon'] {
+                opacity: 1;
+                fill: var(--mojs-color-green);
+              }
+            `}
+          `}
+          onClick={this._onSubmit}
+          icon='tick'
+        />
+      </BasePointLine>
     )
   }
 
@@ -255,13 +254,6 @@ export class PropertyLineAdd extends Component<PropertyLineAddProps> {
     const value = parseInt(e.target.value, 10)
     const count = clamp(value || this.state.count, min, max)
     this.setState({ count })
-  }
-
-  _getClassName() {
-    const isAdd = this.state.isAdd ? 'is-add' : ''
-    const valid = this.state.error == null ? 'is-valid' : ''
-
-    return `property-line-add ${isAdd} ${valid}`
   }
 
   _onSubmit() {

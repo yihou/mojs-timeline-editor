@@ -12,7 +12,7 @@
     "timeline editor",
     "svg"
   ],
-  "main": "dist/timeline-editor.js",
+  "main": "dist/timeline-editor.umd.js",
   "umd:main": "dist/timeline-editor.umd.js",
   "module": "dist/timeline-editor.modern.js",
   "exports": {
@@ -25,8 +25,8 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "microbundle-crl --name @mojs/timeline-editor --jsx React.createElement --no-compress",
-    "start": "microbundle-crl watch --name @mojs/timeline-editor --jsx React.createElement --no-sourcemap --no-compress",
+    "build": "microbundle-crl --name @mojs/timeline-editor --no-compress",
+    "start": "microbundle-crl watch --name @mojs/timeline-editor --no-sourcemap --no-compress",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",

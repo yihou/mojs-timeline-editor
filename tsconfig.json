@@ -5,7 +5,7 @@
     "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "jsx": "preserve",
-    "jsxImportSource": "@emotion/react",
+    "jsxFactory": "React.createElement",
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
