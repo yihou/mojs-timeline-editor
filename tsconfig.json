@@ -5,7 +5,6 @@
     "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "jsx": "preserve",
-    "jsxFactory": "React.createElement",
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,

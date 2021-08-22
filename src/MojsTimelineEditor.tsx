@@ -6,19 +6,22 @@ import { store } from './store'
 import { TimelineEditorView } from './components/TimelineEditorView'
 import { persist } from './helpers/persist'
 import { createElement, useEffect } from 'react'
-import MojsPlayer from '@mojs/player'
-import mojs from '@mojs/core'
 import { css, Global } from '@emotion/react'
+import { createMojsPlayer } from './player'
 
 /* TODO:
     [x] point-timeline.babel.jsx add animation
         when start/end points got selected
     [x] test if `onClick` handler on components is optimized for mobiles
 */
-const MojsTimelineEditorComponent = () => {
+export const MojsTimelineEditor = ({ withPlayer = true }) => {
   // on mount, persist store
   useEffect(() => {
     persist(store)
+
+    if (withPlayer) {
+      createMojsPlayer()
+    }
   }, [])
 
   return (
@@ -48,10 +51,12 @@ const MojsTimelineEditorComponent = () => {
   )
 }
 
-export const MojsTimelineEditor = createElement(MojsTimelineEditorComponent)
-ReactDOM.render(MojsTimelineEditor, document.getElementById('app'))
-
-export const mojsPlayer: MojsPlayer = new MojsPlayer({ add: new mojs.Tween() })
+export const createTimelineEditor = (
+  parent = document.getElementById('app')
+) => {
+  const TimelineEditor = createElement(MojsTimelineEditor)
+  ReactDOM.render(TimelineEditor, parent)
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
