@@ -1,24 +1,20 @@
-import { Component, createRef } from 'react'
-
-import { clamp } from '../../helpers/clamp'
-import { resetEvent } from '../../helpers/global-reset-event'
-import { ToolsPanelButton } from '../tools-panel-button'
-import { pointsSlice } from '../../reducers/points'
-import { css } from '@emotion/react'
-import { BasePointLine } from './BasePointLine'
 import styled from '@emotion/styled'
+import { useEffect, useRef, useState } from 'react'
+import { resetEvent } from '../../helpers/global-reset-event'
+import { clamp } from '../../helpers/clamp'
+import { pointsSlice } from '../../reducers/points'
+import { BasePointLine } from './BasePointLine'
+import { css } from '@emotion/react'
+import { ToolsPanelButton } from '../tools-panel-button'
+import { useDispatch } from 'react-redux'
+import { Point } from '../../helpers/create-point'
 
 const EXIST_MESSAGE = 'already exist'
 const DEFAULT_STATE = {
   count: 1,
   name: 'property name',
   isAdd: false,
-  error: null
-}
-
-interface PropertyLineAddProps {
-  state: any
-  name: string
+  error: undefined
 }
 
 const PropertyLineAddInputs = styled.div`
@@ -26,6 +22,7 @@ const PropertyLineAddInputs = styled.div`
   right: var(--mojs-point-line-height);
   left: 0;
 `
+
 const NameInputWrapper = styled.div<{ isAdd: boolean }>`
   position: absolute;
   left: 0;
@@ -87,159 +84,71 @@ const PropertyLineAddLabel = styled.div<{ isAdd: boolean }>`
   }
 `
 
-export class PropertyLineAdd extends Component<PropertyLineAddProps> {
-  // getInitialState() {
-  //   this.setState({ x: 0, y: 0 });
-  //   return {...DEFAULT_STATE, error: this._isExist() ? EXIST_MESSAGE: null };
-  // }
-  _isFocus = false
-  _name = createRef<HTMLInputElement>()
+interface PropertyLineAddProps {
+  state: Point
+  name: string
+}
 
-  state = {
-    name: undefined,
-    count: 0,
-    error: undefined,
-    isAdd: false
+export const PropertyLineAdd = (props: PropertyLineAddProps) => {
+  const dispatch = useDispatch()
+
+  const [isFocus, setIsFocus] = useState(false)
+  const nameRef = useRef<HTMLInputElement>(null)
+  const [count, setCount] = useState(DEFAULT_STATE.count)
+  const [error, setError] = useState<string | undefined>(DEFAULT_STATE.error)
+  const [isAdd, setIsAdd] = useState(DEFAULT_STATE.isAdd)
+  const [inputName, setInputName] = useState(props.name || DEFAULT_STATE.name)
+
+  const isValid = !error
+
+  const isSegmentExist = (name = DEFAULT_STATE.name) => {
+    return props.state.props[name] != null
   }
 
-  render() {
-    const { name, count, error } = this.state
-    const isValid = !this.state.error
-    const isAdd = !this.state.isAdd
-
-    return (
-      <BasePointLine
-        css={css`
-          width: 100%;
-          cursor: default;
-        `}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <PropertyLineAddLabel
-          isAdd={isAdd}
-          className='label'
-          ref='_label'
-          onClick={this._onLabelClick}
-        >
-          {'+ add'}
-        </PropertyLineAddLabel>
-        <PropertyLineAddInputs className='property-line-add__inputs'>
-          <NameInputWrapper
-            isAdd={isAdd}
-            data-component='name-input-wrapper'
-            className='name-input-wrapper'
-          >
-            <Input
-              isAdd={isAdd}
-              css={css`
-                width: 100%;
-                //border-left: none;
-                text-align: left;
-                padding-left: 10px;
-
-                ${isValid
-                  ? css`
-                      border: 1px solid transparent;
-                    `
-                  : css`
-                      border: 1px solid var(--mojs-color-orange);
-                    `}
-              `}
-              className='input input--name'
-              ref={this._name}
-              value={name}
-              onKeyUp={this._onNameKeyUp}
-              title='property name'
-            />
-            <ErrorLabel isValid={isValid} className='error-label'>
-              {error}
-            </ErrorLabel>
-          </NameInputWrapper>
-          <Input
-            isAdd={isAdd}
-            css={css`
-              right: 0;
-              width: var(--mojs-point-line-height);
-            `}
-            className='input input--count'
-            onKeyUp={this._onCountKeyUp}
-            value={count}
-            title='number of properties [1...4]'
-          />
-        </PropertyLineAddInputs>
-        <ToolsPanelButton
-          css={css`
-            ${isAdd &&
-            css`
-              display: block;
-            `}
-            ${isValid &&
-            css`
-              cursor: pointer;
-              &:hover {
-                background: var(--mojs-color-light-purple);
-              }
-              [data-component='icon'] {
-                opacity: 1;
-                fill: var(--mojs-color-green);
-              }
-            `}
-          `}
-          onClick={this._onSubmit}
-          icon='tick'
-        />
-      </BasePointLine>
-    )
-  }
-
-  // TODO: to revisit
-  // shouldComponentUpdate(_, nextState) {
-  //   this._isFocus = !this.state.isAdd && nextState.isAdd
-  // }
-
-  componentDidUpdate() {
-    if (this._isFocus) {
-      this._name.current?.focus && this._name.current?.focus()
-      this._name.current?.select && this._name.current?.select()
-    }
-    this._isFocus = false
-  }
-
-  componentDidMount() {
-    this.setState({
-      ...DEFAULT_STATE,
-      error: this._isExist() ? EXIST_MESSAGE : null
-    })
+  // componentDidMount
+  useEffect(() => {
+    setError(isSegmentExist() ? EXIST_MESSAGE : undefined)
 
     resetEvent.add(() => {
-      this.setState({ isAdd: false })
+      setIsAdd(false)
     })
-  }
+  }, [])
 
-  _onNameKeyUp = (e) => {
+  // componentDidUpdate
+  useEffect(() => {
+    if (isFocus) {
+      nameRef.current?.focus && nameRef.current?.focus()
+      nameRef.current?.select && nameRef.current?.select()
+    }
+    setIsFocus(false)
+  }, [isFocus])
+
+  const onNameKeyUp = (e) => {
     if (e.which === 13) {
-      return this._onSubmit()
+      return onSubmit()
     }
 
-    const name = e.target.value
-    const trimmedName = name.trim()
-    const error =
-      trimmedName.length <= 0
-        ? 'none-empty'
-        : this._isExist(name)
-        ? EXIST_MESSAGE
-        : null
+    const inputValue = e.target.value
+    const trimmedName = inputValue.trim()
 
-    this.setState({ name, error })
+    let error
+    if (trimmedName.length <= 0) {
+      error = 'none-empty'
+    } else if (isSegmentExist(inputValue)) {
+      error = EXIST_MESSAGE
+    }
+
+    setInputName(inputValue)
+    setError(error)
   }
 
-  _onCountKeyUp = (e) => {
+  const onCountKeyUp = (e) => {
     const code = e.which
     if (code === 8) {
       return
     } // backspace
     if (code === 13) {
-      return this._onSubmit()
+      return onSubmit()
     }
 
     const min = 1
@@ -247,37 +156,131 @@ export class PropertyLineAdd extends Component<PropertyLineAddProps> {
 
     if (code === 38 || code === 40) {
       const step = e.which === 38 ? 1 : e.which === 40 ? -1 : 0
-      const count = clamp(this.state.count + step, min, max)
-      return this.setState({ count })
-    }
-
-    const value = parseInt(e.target.value, 10)
-    const count = clamp(value || this.state.count, min, max)
-    this.setState({ count })
-  }
-
-  _onSubmit() {
-    if (this.state.error != null) {
+      setCount(clamp(count + step, min, max))
       return
     }
 
-    const { state } = this.props
-    const { store } = this.context
-    const data = { ...state, property: { ...this.state } }
-
-    const isExist = this._isExist()
-    const isDefault = this.state.name === DEFAULT_STATE.name
-    const error = isDefault || isExist ? EXIST_MESSAGE : null
-    this.setState({ ...DEFAULT_STATE, error })
-    store.dispatch(pointsSlice.actions.addPointProperty(data))
+    const value = parseInt(e.target.value, 10)
+    setCount(clamp(value || count, min, max))
   }
 
-  _onLabelClick = () => {
-    this.setState({ isAdd: true })
+  const setDefault = () => {
+    setCount(DEFAULT_STATE.count)
+    setError(DEFAULT_STATE.error)
+    setIsAdd(DEFAULT_STATE.isAdd)
+    setInputName(DEFAULT_STATE.name)
   }
 
-  _isExist(name = DEFAULT_STATE.name) {
-    const { state } = this.props
-    return state.props[name] != null
+  const onSubmit = () => {
+    if (error != null) {
+      return
+    }
+
+    const isExist = isSegmentExist()
+    const isDefault = inputName === DEFAULT_STATE.name
+
+    setDefault()
+    setError(isDefault || isExist ? EXIST_MESSAGE : undefined)
+
+    dispatch(
+      pointsSlice.actions.addPointProperty({
+        count,
+        id: props.state.id,
+        name: props.state.name
+      })
+    )
   }
+
+  const onLabelClick = () => {
+    setIsAdd(true)
+  }
+
+  return (
+    <BasePointLine
+      css={css`
+        width: 100%;
+        cursor: default;
+      `}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <PropertyLineAddLabel
+        isAdd={isAdd}
+        className='label'
+        ref='_label'
+        onClick={onLabelClick}
+      >
+        {'+ add'}
+      </PropertyLineAddLabel>
+      <PropertyLineAddInputs className='property-line-add__inputs'>
+        <NameInputWrapper
+          isAdd={isAdd}
+          data-component='name-input-wrapper'
+          className='name-input-wrapper'
+        >
+          <Input
+            isAdd={isAdd}
+            css={css`
+              width: 100%;
+              //border-left: none;
+              text-align: left;
+              padding-left: 10px;
+
+              ${isValid
+                ? css`
+                    border: 1px solid transparent;
+                  `
+                : css`
+                    border: 1px solid var(--mojs-color-orange);
+                  `}
+            `}
+            className='input input--name'
+            ref={nameRef}
+            value={inputName}
+            onKeyUp={onNameKeyUp}
+            title='property name'
+          />
+          <ErrorLabel isValid={isValid} className='error-label'>
+            {error}
+          </ErrorLabel>
+        </NameInputWrapper>
+        <Input
+          isAdd={isAdd}
+          css={css`
+            right: 0;
+            width: var(--mojs-point-line-height);
+          `}
+          className='input input--count'
+          onKeyUp={onCountKeyUp}
+          value={count}
+          title='number of properties [1...4]'
+        />
+      </PropertyLineAddInputs>
+      <ToolsPanelButton
+        css={css`
+          ${isAdd &&
+          css`
+            display: block;
+          `}
+          ${isValid &&
+          css`
+            cursor: pointer;
+            &:hover {
+              background: var(--mojs-color-light-purple);
+            }
+            [data-component='icon'] {
+              opacity: 1;
+              fill: var(--mojs-color-green);
+            }
+          `}
+        `}
+        onClick={onSubmit}
+        icon='tick'
+      />
+    </BasePointLine>
+  )
 }
+
+// TODO: to revisit
+// shouldComponentUpdate(_, nextState) {
+//   this._isFocus = !this.state.isAdd && nextState.isAdd
+// }

@@ -1,37 +1,26 @@
-import { Component, ReactNode } from 'react'
-
+import { GlobalState } from '../../../types/store'
+import { ReactNode } from 'react'
 import { PointLine } from './point-line'
 import { css } from '@emotion/react'
-import { GlobalState } from '../../../types/store'
+import { useSelector } from 'react-redux'
 
-interface PointsPanelProps {
-  state: any
-  entireState: GlobalState
-}
+export const PointsPanel = () => {
+  const points = useSelector((state: GlobalState) => state.points)
+  const props = Object.keys(points)
+  const pointLines: ReactNode[] = []
 
-export class PointsPanel extends Component<PointsPanelProps> {
-  render() {
-    const { state } = this.props
-
-    return (
-      <div
-        css={css`
-          background: rgba(0, 0, 0, 0.1);
-        `}
-      >
-        {this._renderPoints(state)}
-      </div>
-    )
+  for (let i = 0; i < props.length; i++) {
+    const key = props[i]
+    pointLines.push(<PointLine point={points[key]} />)
   }
 
-  _renderPoints(state) {
-    const { entireState } = this.props
-    const props = Object.keys(state)
-    const points: ReactNode[] = []
-    for (let i = 0; i < props.length; i++) {
-      const key = props[i]
-      points.push(<PointLine state={state[key]} entireState={entireState} />)
-    }
-    return points
-  }
+  return (
+    <div
+      css={css`
+        background: rgba(0, 0, 0, 0.1);
+      `}
+    >
+      {pointLines}
+    </div>
+  )
 }

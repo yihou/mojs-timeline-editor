@@ -1,12 +1,11 @@
-import { Component, ReactNode } from 'react'
-
-import { SegmentTimeline } from './segment-timeline'
 import { Point } from '../helpers/create-point'
 import styled from '@emotion/styled'
+import { ReactNode } from 'react'
+import { SegmentTimeline } from './segment-timeline'
+import { Segment } from '../helpers/create-segment'
 
 interface PointTimelineLineProps {
-  state: Point
-  entireState: any
+  point: Point
 }
 
 const POINT_LINE_HEIGHT = 24
@@ -43,48 +42,41 @@ const PointTimelineLineWrapper = styled.div`
   }
 `
 
-export class PointTimelineLine extends Component<PointTimelineLineProps> {
-  render() {
-    const { state } = this.props
+export const PointTimelineLine = ({ point }: PointTimelineLineProps) => {
+  const renderProperty = (key, prop: Segment[]): ReactNode => {
+    const results: ReactNode[] = []
 
-    return (
-      <PointTimelineLineWrapper data-component='point-timeline-line'>
-        {'>'}
-        <PointTimelineLineInner>
-          <PointTimelineLineHeader />
-          <PointTimelineLineBody isOpen={state.isOpen}>
-            <span>{this._renderProperties(state)}</span>
-            <PointTimelineLineProperty />
-          </PointTimelineLineBody>
-        </PointTimelineLineInner>
-      </PointTimelineLineWrapper>
-    )
+    for (let i = 0; i < prop.length; i++) {
+      const segment = prop[i]
+      const meta = { id: point.id, prop: key, spotIndex: i }
+      results.push(<SegmentTimeline segment={segment} meta={meta} />)
+    }
+
+    return <PointTimelineLineProperty>{results}</PointTimelineLineProperty>
   }
 
-  _renderProperties(state) {
-    const { props } = state
+  const renderProperties = (point: Point) => {
+    const { props } = point
     const results: ReactNode[] = []
 
     const keys = Object.keys(props)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      results.push(this._renderProperty(key, props[key]))
+      results.push(renderProperty(key, props[key]))
     }
     return results
   }
 
-  _renderProperty(key, prop): ReactNode {
-    const { state, entireState } = this.props
-    const results: ReactNode[] = []
-
-    for (let i = 0; i < prop.length; i++) {
-      const spot = prop[i]
-      const meta = { id: state.id, prop: key, spotIndex: i }
-      results.push(
-        <SegmentTimeline state={spot} meta={meta} entireState={entireState} />
-      )
-    }
-
-    return <PointTimelineLineProperty>{results}</PointTimelineLineProperty>
-  }
+  return (
+    <PointTimelineLineWrapper data-component='point-timeline-line'>
+      {'>'}
+      <PointTimelineLineInner>
+        <PointTimelineLineHeader />
+        <PointTimelineLineBody isOpen={point.isOpen}>
+          <span>{renderProperties(point)}</span>
+          <PointTimelineLineProperty />
+        </PointTimelineLineBody>
+      </PointTimelineLineInner>
+    </PointTimelineLineWrapper>
+  )
 }

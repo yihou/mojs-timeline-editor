@@ -3,12 +3,7 @@ import { Component } from 'react'
 import { Spot } from './spot'
 import { Easing } from './easing'
 import styled from '@emotion/styled'
-
-export interface SegmentTimelineProps {
-  state: any
-  meta: any
-  entireState: any
-}
+import { Segment } from '../helpers/create-segment'
 
 const SegmentTimelineWrapper = styled.div`
   height: 100%;
@@ -39,6 +34,11 @@ const SegmentTimelineDelay = styled.div`
   border-bottom-left-radius: 3px;
 `
 
+export interface SegmentTimelineProps {
+  segment: Segment
+  meta: any
+}
+
 export class SegmentTimeline extends Component<SegmentTimelineProps> {
   render() {
     return (
@@ -47,7 +47,7 @@ export class SegmentTimeline extends Component<SegmentTimelineProps> {
           <SegmentTimelineDelay />
           <Spot type='start' {...this.props} />
           <Spot type='end' {...this.props}>
-            <Easing {...this.props} />
+            <Easing meta={this.props.meta} state={this.props.segment} />
           </Spot>
         </SegmentTimelineBar>
       </SegmentTimelineWrapper>

@@ -1,3 +1,9 @@
+const rules = {
+  ON: 2,
+  OFF: 0,
+  WARN: 1
+}
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
@@ -19,14 +25,14 @@ module.exports = {
     }
   },
   rules: {
-    'no-empty': 0,
-    'no-console': 0,
+    'no-empty': rules.OFF,
+    'no-console': rules.OFF,
     'no-unused-vars': [0, { varsIgnorePattern: '^h$' }],
-    'no-use-before-define': 0,
+    'no-use-before-define': rules.OFF,
     'no-cond-assign': 1,
     'import/no-default-export': 2,
     semi: 2,
-    camelcase: 0,
+    camelcase: rules.OFF,
     'comma-style': 2,
     'comma-dangle': [
       2,

@@ -5,6 +5,7 @@
     "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
@@ -14,10 +15,10 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+//    "noUnusedLocals": true,
+//    "noUnusedParameters": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["src", "types"],
-  "exclude": ["node_modules", "dist", "example"]
+  "exclude": ["node_modules", "dist", "example", "app"]
 }

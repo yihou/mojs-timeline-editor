@@ -71,6 +71,14 @@ export type PointsState = Record<string, Point>
 // Define the initial state using that type
 const initialState: PointsState = {}
 
+export interface UpdateSelectedSpotOptions {
+  id: string
+  type: string
+  spotIndex: number
+  prop: any
+  value: any
+}
+
 const reducers = {
   addPoint: (state, action: PayloadAction<CreatePointOptions>) => {
     const newState = resetSelectedPoints(state)
@@ -164,13 +172,7 @@ const reducers = {
   },
   updateSelectedSpot: (
     state,
-    action: PayloadAction<{
-      id: string
-      type: string
-      spotIndex: number
-      prop: any
-      value: any
-    }>
+    action: PayloadAction<UpdateSelectedSpotOptions>
   ) => {
     const { id, type, spotIndex, prop, value } = action.payload
     const segments = state[id].props[prop]

@@ -1,10 +1,11 @@
-import { Component, ReactNode } from 'react'
-
 import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { pointsSlice } from '../../reducers/points'
-import { BasePointLine } from './BasePointLine'
+import { ReactNode } from 'react'
+import { pointsSlice, UpdateSelectedSpotOptions } from '../../reducers/points'
 import { Button } from '../button'
+import { css } from '@emotion/react'
+import { useDispatch, useSelector } from 'react-redux'
+import { GlobalState } from '../../../types/store'
+import { BasePointLine } from './BasePointLine'
 
 const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
@@ -17,7 +18,6 @@ export interface PropertyLineProps {
     id: any
     currentProps: any
   }
-  entireState: any
 }
 
 const PropertyLineLabel = styled.div`
@@ -86,32 +86,14 @@ const PropertyLineInputs = styled.div`
   left: 25%;
 `
 
-export class PropertyLine extends Component<PropertyLineProps> {
-  render() {
-    const p = this.props
+export const PropertyLine = (props: PropertyLineProps) => {
+  const dispatch = useDispatch()
+  const progress = useSelector((state: GlobalState) => state.progress)
+  const selectedSpot = useSelector((state: GlobalState) => state.selectedSpot)
+  const points = useSelector((state: GlobalState) => state.points)
 
-    return (
-      <BasePointLine
-        css={css`
-          width: 100%;
-          cursor: default;
-        `}
-      >
-        <PropertyLineLabel title={p.name}>{p.name}</PropertyLineLabel>
-        <PropertyLineInputs>{this._renderInputs()}</PropertyLineInputs>
-        <Button
-          css={css`
-            right: var(--mojs-point-line-height);
-          `}
-          icon='spot'
-          onClick={this._onAddSpot}
-        />
-      </BasePointLine>
-    )
-  }
-
-  _renderInputs() {
-    let value = this._getValue()
+  const renderInputs = () => {
+    let value = getValue()
     value = value instanceof Array ? value : [value]
 
     const result: ReactNode[] = []
@@ -121,28 +103,26 @@ export class PropertyLine extends Component<PropertyLineProps> {
           value={value[i]}
           data-width={`1/${value.length}`}
           data-index={i}
-          onKeyDown={this._onKeyDown}
+          onKeyDown={onKeyDown}
         />
       )
     }
     return result
   }
 
-  _onKeyDown(e) {
-    const { store } = this.context
-    const { state, name, entireState } = this.props
+  const onKeyDown = (e) => {
+    const { state, name } = props
     const { id } = state
-    const { selectedSpot } = entireState
 
     // if selected spot doesnt match the property line -
     // update the current value
     if (!isMatch(selectedSpot, id, name)) {
-      return this._onKeyDownCurrent(e)
+      return onKeyDownCurrent(e)
     }
 
     const target = e.target
     const index = parseInt(target.getAttribute('data-index'), 10)
-    const current = this._getValue()
+    const current = getValue()
 
     // try to parse the input
     const parsed = parseInt(target.value, 10)
@@ -156,7 +136,13 @@ export class PropertyLine extends Component<PropertyLineProps> {
       newValue[index] = value
     }
 
-    const data = { ...selectedSpot, value: newValue }
+    const data: UpdateSelectedSpotOptions = {
+      ...selectedSpot,
+      id: selectedSpot.id as string,
+      type: selectedSpot.type as string,
+      spotIndex: selectedSpot.spotIndex as number,
+      value: newValue
+    }
 
     let step = e.altKey ? 10 : 1
     if (e.shiftKey) {
@@ -166,27 +152,26 @@ export class PropertyLine extends Component<PropertyLineProps> {
     switch (e.which) {
       case 38: {
         data.value[index] += step
-        return store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+        return dispatch(pointsSlice.actions.updateSelectedSpot(data))
       }
 
       case 40: {
         data.value[index] -= step
-        return store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+        return dispatch(pointsSlice.actions.updateSelectedSpot(data))
       }
 
       default: {
-        store.dispatch(pointsSlice.actions.updateSelectedSpot(data))
+        dispatch(pointsSlice.actions.updateSelectedSpot(data))
       }
     }
   }
 
-  _onKeyDownCurrent(e) {
-    const { store } = this.context
-    const { state, name } = this.props
+  const onKeyDownCurrent = (e) => {
+    const { state, name } = props
 
     const target = e.target
     const index = parseInt(target.getAttribute('data-index'), 10)
-    const current = this._getValue()
+    const current = getValue()
 
     // try to parse the input
     const parsed = parseInt(target.value, 10)
@@ -209,52 +194,65 @@ export class PropertyLine extends Component<PropertyLineProps> {
     switch (e.which) {
       case 38: {
         data.value[index] += step
-        return store.dispatch(
-          pointsSlice.actions.updateSelectedSpotCurrent(data)
-        )
+        return dispatch(pointsSlice.actions.updateSelectedSpotCurrent(data))
       }
 
       case 40: {
         data.value[index] -= step
-        return store.dispatch(
-          pointsSlice.actions.updateSelectedSpotCurrent(data)
-        )
+        return dispatch(pointsSlice.actions.updateSelectedSpotCurrent(data))
       }
 
       default: {
-        return store.dispatch(
-          pointsSlice.actions.updateSelectedSpotCurrent(data)
-        )
+        return dispatch(pointsSlice.actions.updateSelectedSpotCurrent(data))
       }
     }
   }
 
-  _getValue() {
-    const { name, state, entireState } = this.props
-    const { selectedSpot } = entireState
+  const getValue = () => {
+    const { name, state } = props
     const { currentProps, id } = state
 
     // if selected spot matches the property line -
     // get the selected spot values
-    if (isMatch(selectedSpot, id, name)) {
+    if (state && id && isMatch(selectedSpot, id, name)) {
       const { id, prop, spotIndex, type } = selectedSpot
-      return entireState.points[id].props[prop][spotIndex][type].value
+
+      if (id && spotIndex && type) {
+        return points[id].props[prop][spotIndex][type].value
+      }
     }
 
     return currentProps[name]
   }
 
-  _onAddSpot() {
-    const { store } = this.context
-    const p = this.props
-    const { entireState } = p
+  const onAddSpot = () => {
+    const p = props
 
-    store.dispatch(
+    dispatch(
       pointsSlice.actions.addPropertySegment({
         id: p.id,
         name: p.name,
-        time: entireState.progress
+        time: progress
       })
     )
   }
+
+  return (
+    <BasePointLine
+      css={css`
+        width: 100%;
+        cursor: default;
+      `}
+    >
+      <PropertyLineLabel title={props.name}>{props.name}</PropertyLineLabel>
+      <PropertyLineInputs>{renderInputs()}</PropertyLineInputs>
+      <Button
+        css={css`
+          right: var(--mojs-point-line-height);
+        `}
+        icon='spot'
+        onClick={onAddSpot}
+      />
+    </BasePointLine>
+  )
 }

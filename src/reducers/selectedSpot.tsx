@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface SelectedSpot {
-  id: string | null
-  spotIndex: number | null
-  type: string | null
+  id: string | undefined
+  spotIndex: number | undefined
+  type: string | undefined
   prop: any
 }
 
 // Define the initial state using that type
 const initialState: SelectedSpot = {
-  id: null,
-  spotIndex: null,
-  type: null,
-  prop: null
+  id: undefined,
+  spotIndex: undefined,
+  type: undefined,
+  prop: undefined
 }
 
 export const selectedSpotSlice = createSlice({

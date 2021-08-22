@@ -1,12 +1,11 @@
-import { Component, ReactNode } from 'react'
-
-import { MainPanel } from './main-panel/main-panel'
-import { Icons } from './icons'
-import { InsertPoint } from './insert-point'
-import { Point } from './point'
 import styled from '@emotion/styled'
-import { controlsSlice } from '../reducers/controls'
+import { useSelector } from 'react-redux'
 import { GlobalState } from '../../types/store'
+import { ReactNode, useEffect } from 'react'
+import { InsertPoint } from './InsertPoint'
+import { Icons } from './icons'
+import { MainPanel } from './main-panel/main-panel'
+import { Point } from './point'
 
 const Wrapper = styled.div`
   font-family: Arial, sans-serif;
@@ -17,73 +16,63 @@ const Wrapper = styled.div`
   }
 `
 
-export class TimelineEditorView extends Component {
-  getState = (): GlobalState => {
-    const { store } = this.context
-    return store.getState()
+const Points = () => {
+  const points = useSelector((state: GlobalState) => state.points)
+  const results: ReactNode[] = []
+  const props = Object.keys(points)
+
+  for (let i = 0; i < props.length; i++) {
+    const key = props[i]
+    results.push(<Point key={key} state={points[key]} />)
   }
 
-  render() {
-    const state = this.getState()
+  return <div>{results}</div>
+}
 
-    return (
-      <Wrapper>
-        <InsertPoint state={state} />
-        <div>{this._renderPoints()}</div>
-        <div onMouseMove={this._mouseMove}>
-          <Icons />
-          <MainPanel state={state.mainPanel} entireState={state} />
-        </div>
-      </Wrapper>
-    )
-  }
+export const TimelineEditorView = () => {
+  // const { store } = context
 
-  _renderPoints() {
-    const results: ReactNode[] = []
-    const { points } = this.getState()
-
-    const props = Object.keys(points)
-    const state = this.getState()
-
-    for (let i = 0; i < props.length; i++) {
-      const key = props[i]
-      results.push(<Point state={points[key]} entireState={state} />)
-    }
-
-    return results
-  }
-
-  componentDidMount() {
-    const { store } = this.context
-    store.subscribe(this.forceUpdate.bind(this))
-    document.addEventListener('mousemove', this._docMouseMove)
-  }
-
-  _mouseMove = (e) => {
+  const _mouseMove = (e) => {
     /* we cannot `stopPropagation` the event, because `hammerjs`
        will not be able to work properly on `resize-handle`, so we
        set the `isTimelinePanel` flag instead indicating that we are
        inside the `timeline-editor` panel
     */
     e.isTimelinePanel = true
-    const { store } = this.context
-    const { controls } = this.getState()
-    if (controls.isMouseInside) {
-      return
-    }
+    // const { store } = this.context
+    // const { controls } = this.getState()
+    // if (controls.isMouseInside) {
+    //   return
+    // }
 
-    store.dispatch(controlsSlice.actions.controlsSetMouseInside(true))
+    // store.dispatch(controlsSlice.actions.controlsSetMouseInside(true))
   }
 
-  _docMouseMove = (e) => {
+  const docMouseMove = (e) => {
     if (e.isTimelinePanel) {
-      return
     }
-    const { store } = this.context
-    const { controls } = this.getState()
+    // const { store } = this.context
+    // const { controls } = this.getState()
 
-    if (controls.isMouseInside) {
-      store.dispatch(controlsSlice.actions.controlsSetMouseInside(false))
-    }
+    // if (controls.isMouseInside) {
+    //   store.dispatch(controlsSlice.actions.controlsSetMouseInside(false))
+    // }
   }
+
+  useEffect(() => {
+    // const { store } = this.context
+    // store.subscribe(this.forceUpdate.bind(this))
+    document.addEventListener('mousemove', docMouseMove)
+  }, [])
+
+  return (
+    <Wrapper>
+      <InsertPoint />
+      <Points />
+      <div onMouseMove={_mouseMove}>
+        <Icons />
+        <MainPanel />
+      </div>
+    </Wrapper>
+  )
 }

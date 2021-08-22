@@ -1,13 +1,7 @@
-import { Component } from 'react'
-
+import { memo } from 'react'
+import styled from '@emotion/styled'
 import { PointsPanel } from '../points-panel/points-panel'
 import { TimelinesPanel } from '../timelines-panel'
-import styled from '@emotion/styled'
-import { GlobalState } from '../../../types/store'
-
-interface BodyPanelProps {
-  state: GlobalState
-}
 
 const BodyPanelWrapper = styled.div`
   position: absolute;
@@ -36,19 +30,15 @@ const BodyPanelRight = styled.div`
   /*min-width: 1600px*/
 `
 
-export class BodyPanel extends Component<BodyPanelProps> {
-  render() {
-    const { state } = this.props
-
-    return (
-      <BodyPanelWrapper>
-        <BodyPanelLeft>
-          <PointsPanel state={state.points} entireState={state} />
-        </BodyPanelLeft>
-        <BodyPanelRight>
-          <TimelinesPanel state={state} />
-        </BodyPanelRight>
-      </BodyPanelWrapper>
-    )
-  }
-}
+export const BodyPanel = memo(() => {
+  return (
+    <BodyPanelWrapper>
+      <BodyPanelLeft>
+        <PointsPanel />
+      </BodyPanelLeft>
+      <BodyPanelRight>
+        <TimelinesPanel />
+      </BodyPanelRight>
+    </BodyPanelWrapper>
+  )
+})

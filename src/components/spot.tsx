@@ -1,25 +1,13 @@
-import { Component, createRef } from 'react'
-
-import Hammer from 'hammerjs'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+import { FC, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { GlobalState } from '../../types/store'
 import { constants } from '../constants'
 import { isSelectedByConnection } from '../helpers/is-selected-by-connection'
 import { pointsSlice } from '../reducers/points'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
-import { GlobalState } from '../../types/store'
-
-interface SpotProps {
-  type: 'start' | 'end'
-  meta: any
-  state: any
-  entireState: GlobalState
-}
-
-interface SpotStates {
-  dDelay: number
-  dDuration: number
-}
+import { Segment } from '../helpers/create-segment'
 
 const SpotWrapper = styled.div<{ type: SpotProps['type']; isSelect: boolean }>`
   position: relative;
@@ -78,50 +66,35 @@ const SpotDot = styled.div<{ isSelected: boolean; isEasing: boolean }>`
   }
 `
 
-export class Spot extends Component<SpotProps, SpotStates> {
-  _dot = createRef<HTMLDivElement>()
-
-  render() {
-    const { type, state } = this.props
-    const { delay, duration } = state
-    const { dDelay, dDuration } = this.state
-
-    const delayWidth = delay / 10 + dDelay
-    const durationWidth = duration / 10 + dDuration
-
-    const style = {
-      width: `${type === 'start' ? delayWidth : durationWidth}em`
-    }
-
-    const isSelect = this._isSelected()
-    const isEasing = this.isEasing()
-
-    return (
-      <SpotWrapper
-        type={type}
-        isSelect={isSelect}
-        style={style}
-        data-component='spot'
-      >
-        <SpotDot ref={this._dot} isSelected={isSelect} isEasing={isEasing} />
-        {this.props.children}
-      </SpotWrapper>
-    )
+function isSpotEasing(
+  type: SpotProps['type'],
+  duration: number,
+  dDuration: number
+) {
+  if (type === 'start') {
+    return false
   }
 
-  isEasing() {
-    const { type, state } = this.props
-    if (type === 'start') {
-      return false
-    }
+  const durationWidth = duration / 10 + dDuration
+  return durationWidth >= 80
+}
 
-    const durationWidth = state.duration / 10 + this.state.dDuration
-    return durationWidth >= 80
-  }
+interface SpotProps {
+  type: 'start' | 'end'
+  meta: any
+  segment: Segment
+}
 
-  _isSelected() {
-    const { type, entireState, meta } = this.props
-    const { selectedSpot, points } = entireState
+export const Spot: FC<SpotProps> = ({ type, segment, meta, children }) => {
+  const dispatch = useDispatch()
+  const dot = useRef<HTMLDivElement>(null)
+  const selectedSpot = useSelector((state: GlobalState) => state.selectedSpot)
+  const points = useSelector((state: GlobalState) => state.points)
+  const [dDelay, setDDelay] = useState(0)
+  const [dDuration, setDDuration] = useState(0)
+  const isEasing = isSpotEasing(type, segment.duration, dDuration)
+
+  const isSelected = () => {
     const { id, spotIndex, type: selType, prop } = selectedSpot
 
     return (
@@ -133,58 +106,69 @@ export class Spot extends Component<SpotProps, SpotStates> {
     )
   }
 
-  componentWillMount() {
-    this.setState({ dDelay: 0, dDuration: 0 })
-  }
-
-  componentDidMount() {
-    if (this._dot.current) {
-      const mc = new Hammer.Manager(this._dot.current)
-      mc.add(new Hammer.Pan())
-      mc.add(new Hammer.Tap())
-      mc.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
-
-      mc.on('pan', this._pan)
-      mc.on('panend', this._panEnd)
-      mc.on('tap', this._tap)
-    }
-  }
-
-  _pan = (e) => {
-    const direction = this.props.type
-    if (direction === 'end') {
+  const pan = (e) => {
+    if (type === 'end') {
       const threshold = constants.MIN_DURATION
       // TODO: double check
       // previously:
       // const min = -this.props.duration + threshold
-      const min = -this.props.state.duration + threshold
+      const min = -segment.duration + threshold
       const dDuration = e.deltaX * 10 < min ? min / 10 : e.deltaX
-      this.setState({ dDuration })
+      setDDuration(dDuration)
     }
-    if (direction === 'start') {
-      this.setState({ dDelay: e.deltaX })
+    if (type === 'start') {
+      setDDelay(e.deltaX)
     }
   }
 
-  _panEnd = () => {
-    const { meta } = this.props
-    const { store } = this.context
-
-    store.dispatch(
+  const panEnd = () => {
+    dispatch(
       pointsSlice.actions.shiftSegment({
-        delay: this.state.dDelay * 10,
-        duration: this.state.dDuration * 10,
+        delay: dDelay * 10,
+        duration: dDuration * 10,
         ...meta
       })
     )
 
-    this.setState({ dDelay: 0, dDuration: 0 })
+    setDDelay(0)
+    setDDuration(0)
   }
 
-  _tap = () => {
-    const { store } = this.context
-    const { meta, type } = this.props
-
-    store.dispatch(selectedSpotSlice.actions.setSelectedSpot({ type, ...meta }))
+  const tap = () => {
+    dispatch(selectedSpotSlice.actions.setSelectedSpot({ type, ...meta }))
   }
+
+  useEffect(() => {
+    if (dot.current) {
+      const mc = new Hammer.Manager(dot.current)
+      mc.add(new Hammer.Pan())
+      mc.add(new Hammer.Tap())
+      mc.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
+
+      mc.on('pan', pan)
+      mc.on('panend', panEnd)
+      mc.on('tap', tap)
+    }
+  }, [])
+
+  const delayWidth = segment.delay / 10 + dDelay
+  const durationWidth = segment.duration / 10 + dDuration
+
+  const style = {
+    width: `${type === 'start' ? delayWidth : durationWidth}em`
+  }
+
+  const isSelect = isSelected()
+
+  return (
+    <SpotWrapper
+      type={type}
+      isSelect={isSelect}
+      style={style}
+      data-component='spot'
+    >
+      <SpotDot ref={dot} isSelected={isSelect} isEasing={isEasing} />
+      {children}
+    </SpotWrapper>
+  )
 }

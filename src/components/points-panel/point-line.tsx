@@ -1,17 +1,17 @@
-import { Component, FC, ReactNode } from 'react'
-
+import { FC, ReactNode } from 'react'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Button, ButtonProps } from '../button'
 import { PropertyLine } from './property-line'
 import { PropertyLineAdd } from './property-line-add'
 import { pointsSlice } from '../../reducers/points'
 import { BasePointLine } from './BasePointLine'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import { Button, ButtonProps } from '../button'
+import { Point } from '../../helpers/create-point'
+import { useDispatch, useSelector } from 'react-redux'
 import { GlobalState } from '../../../types/store'
 
 interface PointLineProps {
-  state: any
-  entireState: GlobalState
+  point: Point
 }
 
 const PointLineLabel = styled.div<{ isCheck: boolean }>`
@@ -60,87 +60,79 @@ const PointLineButton = styled(Button)<PointLineButtonProps>`
   }
 ` as FC<PointLineButtonProps>
 
-export class PointLine extends Component<PointLineProps> {
-  render() {
-    const { state } = this.props
+export const PointLine = ({ point }: PointLineProps) => {
+  const dispatch = useDispatch()
+  const progress = useSelector((state: GlobalState) => state.progress)
 
-    return (
-      <BasePointLine
-        isCheck={state.isSelected}
-        css={css`
-          margin-top: 10px;
-          border-bottom: 1px solid var(--mojs-color-light-purple);
-        `}
-      >
-        <PointLineLabel isCheck={state.isSelected} onClick={this._onCheck}>
-          {state.name}
-        </PointLineLabel>
-
-        <PointLineButton
-          css={css`
-            right: 24px;
-          `}
-          icon='spot'
-          onClick={this._onAddSpot}
-        />
-
-        <PointLineButton
-          css={css`
-            [data-component='button-inner'] {
-              ${state.isOpen &&
-              css`
-                transform: rotate(180deg);
-              `}
-            }
-          `}
-          icon='dropdown'
-          onClick={this._onOpen}
-        />
-        <PointLineBody isOpen={state.isOpen} isCheck={state.isCheck}>
-          {this._renderProperties()}
-        </PointLineBody>
-      </BasePointLine>
-    )
-  }
-
-  _renderProperties() {
-    const { state } = this.props
-    const { props } = state
-    const names = Object.keys(props)
+  const renderProperties = () => {
+    const names = Object.keys(point)
     const results: ReactNode[] = []
 
     for (let i = 0; i < names.length; i++) {
       const name = names[i]
-      results.push(<PropertyLine id={state.id} name={name} {...this.props} />)
+      results.push(<PropertyLine id={point.id} name={name} state={point} />)
     }
 
-    results.push(<PropertyLineAdd name={'+ add'} {...this.props} />)
+    results.push(<PropertyLineAdd name={'+ add'} state={point} />)
 
     return results
   }
 
-  _onCheck() {
-    // const { state } = this.props
+  const onCheck = () => {
+    // const { point } = this.props
     // const { store } = this.context
-    // store.dispatch({ type: 'SELECT_POINT', data: state.id });
+    // dispatch({ type: 'SELECT_POINT', data: point.id });
   }
 
-  _onAddSpot() {
-    const { state, entireState } = this.props
-    const { store } = this.context
-
-    store.dispatch(
+  const onAddSpot = () => {
+    dispatch(
       pointsSlice.actions.addSnapshot({
-        id: state.id,
-        time: entireState.progress
+        id: point.id,
+        time: progress
       })
     )
   }
 
-  _onOpen = (e) => {
+  const onOpen = (e) => {
     e.stopPropagation()
-    const { state } = this.props
-    const { store } = this.context
-    store.dispatch(pointsSlice.actions.toggleOpenPoint(state.id))
+    dispatch(pointsSlice.actions.toggleOpenPoint(point.id))
   }
+
+  return (
+    <BasePointLine
+      isCheck={point.isSelected}
+      css={css`
+        margin-top: 10px;
+        border-bottom: 1px solid var(--mojs-color-light-purple);
+      `}
+    >
+      <PointLineLabel isCheck={point.isSelected} onClick={onCheck}>
+        {point.name}
+      </PointLineLabel>
+
+      <PointLineButton
+        css={css`
+          right: 24px;
+        `}
+        icon='spot'
+        onClick={onAddSpot}
+      />
+
+      <PointLineButton
+        css={css`
+          [data-component='button-inner'] {
+            ${point.isOpen &&
+            css`
+              transform: rotate(180deg);
+            `}
+          }
+        `}
+        icon='dropdown'
+        onClick={onOpen}
+      />
+      <PointLineBody isOpen={point.isOpen} isCheck={point.isSelected}>
+        {renderProperties()}
+      </PointLineBody>
+    </BasePointLine>
+  )
 }

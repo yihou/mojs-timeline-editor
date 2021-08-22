@@ -1,8 +1,12 @@
-import { Component, HTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, Component, DetailedHTMLProps } from 'react'
 import { Icon, IconProps } from './icon'
 import styled from '@emotion/styled'
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   icon: IconProps['shape']
 }
 

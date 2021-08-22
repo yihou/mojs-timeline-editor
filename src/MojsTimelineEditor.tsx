@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 import { TimelineEditorView } from './components/TimelineEditorView'
 import { persist } from './helpers/persist'
-import { createElement, useEffect } from 'react'
+import { createElement, useEffect, useRef } from 'react'
 import { css, Global } from '@emotion/react'
 import { createMojsPlayer } from './player'
 
@@ -15,12 +15,15 @@ import { createMojsPlayer } from './player'
     [x] test if `onClick` handler on components is optimized for mobiles
 */
 export const MojsTimelineEditor = ({ withPlayer = true }) => {
+  const editorWrapperRef = useRef<HTMLDivElement>(null)
   // on mount, persist store
   useEffect(() => {
     persist(store)
 
     if (withPlayer) {
-      createMojsPlayer()
+      createMojsPlayer({
+        parent: editorWrapperRef.current as HTMLDivElement
+      })
     }
   }, [])
 
@@ -46,7 +49,9 @@ export const MojsTimelineEditor = ({ withPlayer = true }) => {
           }
         `}
       />
-      <TimelineEditorView />
+      <div ref={editorWrapperRef}>
+        <TimelineEditorView />
+      </div>
     </Provider>
   )
 }
