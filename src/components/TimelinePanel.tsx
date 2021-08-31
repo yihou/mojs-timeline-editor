@@ -69,11 +69,6 @@ export class TimelinePanel extends Component<
     )
   }
 
-  // will be removed when `preact` issue with nested `svg` will be fixed
-  componentDidMount() {
-    // this._svg.current?.classList.add(CLASSES['main-svg'])
-  }
-
   _createDash(dashNumber) {
     const { dashesPerSec, DASH_STEP } = this.state
     const dashType = this._getDashType(dashNumber, dashesPerSec)
