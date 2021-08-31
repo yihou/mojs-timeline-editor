@@ -1,7 +1,7 @@
 import { Component } from 'react'
 
-import { Icon } from './icon'
-import { CurveEditor } from './curve-editor'
+import { Icon } from './Icons/Icon'
+import { CurveEditor } from './CurveEditor'
 import { pointsSlice } from '../reducers/points'
 import styled from '@emotion/styled'
 

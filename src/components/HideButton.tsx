@@ -1,7 +1,7 @@
 import { Component } from 'react'
 
 import Hammer from 'hammerjs'
-import { Icon } from './icon'
+import { Icon } from './Icons/Icon'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 

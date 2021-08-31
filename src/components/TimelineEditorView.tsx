@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
 import { InsertPoint } from './InsertPoint'
-import { Icons } from './icons'
+import { Icons } from './Icons'
 import { Points } from './Points'
 import { MainPanel } from './MainPanel'
 

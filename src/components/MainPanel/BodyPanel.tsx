@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import { PointsPanel } from '../points-panel/points-panel'
-import { TimelinesPanel } from '../timelines-panel'
+import { PointsPanel } from '../PointsPanel'
+import { TimelinesPanel } from '../TimelinesPanel'
 
 const BodyPanelWrapper = styled.div`
   position: absolute;

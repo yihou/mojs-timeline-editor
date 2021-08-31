@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 
-interface ToolsPanelButtonProps {
+export interface ToolsPanelButtonProps {
   isLink?: boolean
   isActive?: boolean
   isLogo?: boolean
@@ -65,5 +65,3 @@ export const ToolsPanelButton = styled.div<ToolsPanelButtonProps>`
   ${({ isLogo }) => isLogo && logoStyle}
   ${({ isLink }) => isLink && linkStyle}
 `
-
-export const ToolsPanelAnchor = ToolsPanelButton.withComponent('a')

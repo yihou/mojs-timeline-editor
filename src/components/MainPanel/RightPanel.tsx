@@ -1,9 +1,9 @@
 import { GlobalState } from 'types'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 import { css } from '@emotion/react'
-import { HideButton } from '../hide-button'
-import { ResizeHandle } from '../resize-handle'
-import { TimelinePanel } from '../timeline-panel'
+import { HideButton } from '../HideButton'
+import { ResizeHandle } from '../ResizeHandle'
+import { TimelinePanel } from '../TimelinePanel'
 import { useDispatch, useSelector } from 'react-redux'
 
 interface RightPanelProps {

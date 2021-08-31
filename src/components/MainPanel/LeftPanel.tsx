@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { ToolsPanel } from '../tools-panel'
+import { ToolsPanel } from '../ToolsPanel'
 
 export const LeftPanel = () => {
   return (

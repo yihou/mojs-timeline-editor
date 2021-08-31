@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { GlobalState } from 'types'
 import { ReactNode } from 'react'
-import { Point } from './point'
+import { Point } from './Point'
 
 export const Points = () => {
   const points = useSelector((state: GlobalState) => state.points)

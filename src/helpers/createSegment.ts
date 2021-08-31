@@ -1,7 +1,8 @@
 import { constants } from '../constants'
 
-import { createSpot, Spot } from './create-spot'
+import { createSpot } from './createSpot'
 import { fallback } from './fallback'
+import { Segment } from '../types'
 
 interface CreateSegmentOptions {
   delay?: number
@@ -10,17 +11,6 @@ interface CreateSegmentOptions {
   index?: number
   startValue?: number[]
   endValue?: number[]
-}
-
-export interface Segment {
-  index: number
-  start: Spot
-  end: Spot
-  easing: string
-  isChanged: boolean
-  isSelected: boolean
-  delay: number
-  duration: number
 }
 
 export const createSegment = (o: CreateSegmentOptions = {}): Segment => {

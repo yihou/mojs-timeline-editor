@@ -1,6 +1,6 @@
 import { GlobalState } from 'types'
 import { ReactNode } from 'react'
-import { PointTimelineLine } from './point-timeline-line'
+import { PointTimelineLine } from './PointTimelineLine'
 import { css } from '@emotion/react'
 import { useSelector } from 'react-redux'
 

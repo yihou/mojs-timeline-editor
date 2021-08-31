@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { ReactNode } from 'react'
 import { pointsSlice, UpdateSelectedSpotOptions } from '../../reducers/points'
-import { Button } from '../button'
+import { Button } from '../Button'
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GlobalState } from 'types'

@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { constants } from '../constants'
 
-import { getLast } from '../helpers/get-last'
-import { createPoint, CreatePointOptions, Point } from '../helpers/create-point'
-import { createSegment } from '../helpers/create-segment'
+import { getLast } from '../helpers/getLast'
+import { createPoint, CreatePointOptions } from '../helpers/createPoint'
+import { createSegment } from '../helpers/createSegment'
 import { change } from '../helpers/change'
+import { Point } from '../types'
 
 const resetSelectedPoints = (state) => {
   const newState = {}

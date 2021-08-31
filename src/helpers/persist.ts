@@ -1,5 +1,5 @@
 import { constants } from '../constants'
-import { addUnload } from './add-unload'
+import { addUnload } from './addUnload'
 import { SET_APP_STATE } from '../reducers/allReducers'
 
 /*

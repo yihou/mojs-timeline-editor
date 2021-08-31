@@ -1,9 +1,9 @@
 import { Component } from 'react'
 
-import { Spot } from './spot'
-import { Easing } from './easing'
+import { Spot } from './Spot'
+import { Easing } from './Easing'
 import styled from '@emotion/styled'
-import { Segment } from '../helpers/create-segment'
+import { Segment } from '../types'
 
 const SegmentTimelineWrapper = styled.div`
   height: 100%;

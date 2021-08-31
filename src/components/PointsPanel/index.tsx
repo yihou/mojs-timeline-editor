@@ -1,8 +1,8 @@
 import { GlobalState } from 'types'
 import { ReactNode } from 'react'
-import { PointLine } from './point-line'
 import { css } from '@emotion/react'
 import { useSelector } from 'react-redux'
+import { PointLine } from './PointLine'
 
 export const PointsPanel = () => {
   const points = useSelector((state: GlobalState) => state.points)

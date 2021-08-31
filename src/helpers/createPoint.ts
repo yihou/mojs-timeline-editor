@@ -1,21 +1,13 @@
 import { constants } from '../constants'
 import { makeID } from './makeID'
-import { createSegment, Segment } from './create-segment'
+import { createSegment } from './createSegment'
+import { Point } from '../types'
 
 export interface CreatePointOptions {
   x: number
   y: number
   name?: string
   time: number
-}
-
-export interface Point {
-  id: string
-  name: string
-  isOpen: boolean
-  isSelected: boolean
-  currentProps: Record<typeof constants.POSITION_NAME, number[]>
-  props: Record<typeof constants.POSITION_NAME, Segment[]>
 }
 
 export const createPoint = (data: CreatePointOptions, i = 0): Point => {

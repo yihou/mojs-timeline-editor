@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { IconProps } from './icon'
+import { IconProps } from './Icons/Icon'
 import { css } from '@emotion/react'
-import { Button } from './button'
+import { Button } from './Button'
 
 interface ToolsPanelButtonProps {
   icon: IconProps['shape']

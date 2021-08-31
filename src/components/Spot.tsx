@@ -2,12 +2,11 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
+import { GlobalState, Segment } from 'types'
 import { constants } from '../constants'
-import { isSelectedByConnection } from '../helpers/is-selected-by-connection'
+import { isSelectedByConnection } from '../helpers/isSelectedByConnection'
 import { pointsSlice } from '../reducers/points'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
-import { Segment } from '../helpers/create-segment'
 
 const SpotWrapper = styled.div<{ type: SpotProps['type']; isSelect: boolean }>`
   position: relative;

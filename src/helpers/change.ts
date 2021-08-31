@@ -10,7 +10,7 @@
 
 // console.log(change(OBJ, [point2.id, 'props', 'x', 0, 'end', 'isSelected'], (state) => !state )[point2.id]);
 
-import { getLast } from './get-last'
+import { getLast } from './getLast'
 
 const copy = (obj) => {
   const type = typeof obj

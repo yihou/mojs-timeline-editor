@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
-import { Icon } from './icon'
+import { Icon } from './Icons/Icon'
 import Hammer from 'hammerjs'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
 import { progressSlice } from '../reducers/progress'

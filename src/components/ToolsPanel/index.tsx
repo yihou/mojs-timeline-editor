@@ -1,10 +1,11 @@
-import { controlsSlice } from '../../reducers/controls'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
 import { css } from '@emotion/react'
-import { InsertPoint } from './point'
-import { ToolsPanelAnchor, ToolsPanelButton } from './button'
-import { Icon } from '../icon'
+import { GlobalState } from 'types'
+import { controlsSlice } from '../../reducers/controls'
+import { Icon } from '../Icons/Icon'
+import { InsertPoint } from './InsertPoint'
+import { ToolsPanelButton } from './ToolsPanelButton'
+import { ToolsPanelAnchor } from './ToolsPanelAnchor'
 
 /* TODO:
     [x] refactor to emit `action creators` in event handlers;

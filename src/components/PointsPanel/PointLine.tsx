@@ -1,14 +1,13 @@
 import { FC, ReactNode } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button, ButtonProps } from '../button'
-import { PropertyLine } from './property-line'
-import { PropertyLineAdd } from './property-line-add'
+import { Button, ButtonProps } from '../Button'
+import { PropertyLine } from './PropertyLine'
+import { PropertyLineAdd } from './PropertyLineAdd'
 import { pointsSlice } from '../../reducers/points'
 import { BasePointLine } from './BasePointLine'
-import { Point } from '../../helpers/create-point'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
+import { GlobalState, Point } from 'types'
 
 interface PointLineProps {
   point: Point

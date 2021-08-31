@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, Component, DetailedHTMLProps } from 'react'
-import { Icon, IconProps } from './icon'
+import { Icon, IconProps } from './Icons/Icon'
 import styled from '@emotion/styled'
 
 export interface ButtonProps

@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import Hammer from 'hammerjs'
 import propagating from 'propagating-hammerjs'
-import { Icon } from './icon'
+import { Icon } from './Icons/Icon'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 

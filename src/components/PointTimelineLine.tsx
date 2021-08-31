@@ -1,8 +1,7 @@
-import { Point } from '../helpers/create-point'
 import styled from '@emotion/styled'
 import { ReactNode } from 'react'
-import { SegmentTimeline } from './segment-timeline'
-import { Segment } from '../helpers/create-segment'
+import { SegmentTimeline } from './SegmentTimeline'
+import { Point, Segment } from '../types'
 
 interface PointTimelineLineProps {
   point: Point

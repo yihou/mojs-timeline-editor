@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
 import { useEffect, useRef, useState } from 'react'
-import { resetEvent } from '../../helpers/global-reset-event'
+import { resetEvent } from '../../helpers/globalResetEvent'
 import { clamp } from '../../helpers/clamp'
 import { pointsSlice } from '../../reducers/points'
 import { BasePointLine } from './BasePointLine'
 import { css } from '@emotion/react'
-import { ToolsPanelButton } from '../tools-panel-button'
+import { ToolsPanelButton } from '../ToolsPanelButton'
 import { useDispatch } from 'react-redux'
-import { Point } from '../../helpers/create-point'
+import { Point } from 'types'
 
 const EXIST_MESSAGE = 'already exist'
 const DEFAULT_STATE = {

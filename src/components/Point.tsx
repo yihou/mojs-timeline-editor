@@ -1,11 +1,10 @@
-import { Point as PointType } from '../helpers/create-point'
 import { constants } from '../constants'
 import Hammer from 'hammerjs'
 import { pointsSlice } from '../reducers/points'
 import { css } from '@emotion/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
+import { GlobalState, Point as PointType } from 'types'
 
 interface PointProps {
   state: PointType
