@@ -42,28 +42,22 @@ const PointTimelineLineWrapper = styled.div`
 `
 
 export const PointTimelineLine = ({ point }: PointTimelineLineProps) => {
-  const renderProperty = (key, prop: Segment[]): ReactNode => {
-    const results: ReactNode[] = []
-
-    for (let i = 0; i < prop.length; i++) {
-      const segment = prop[i]
-      const meta = { id: point.id, prop: key, spotIndex: i }
-      results.push(<SegmentTimeline segment={segment} meta={meta} />)
-    }
-
-    return <PointTimelineLineProperty>{results}</PointTimelineLineProperty>
+  const renderProperty = (key, segments: Segment[]): ReactNode => {
+    return (
+      <PointTimelineLineProperty key={key}>
+        {segments.map((segment, index) => {
+          const meta = { id: point.id, prop: key, spotIndex: index }
+          return <SegmentTimeline key={index} segment={segment} meta={meta} />
+        })}
+      </PointTimelineLineProperty>
+    )
   }
 
   const renderProperties = (point: Point) => {
     const { props } = point
-    const results: ReactNode[] = []
-
     const keys = Object.keys(props)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      results.push(renderProperty(key, props[key]))
-    }
-    return results
+
+    return keys.map((key) => renderProperty(key, props[key]))
   }
 
   return (

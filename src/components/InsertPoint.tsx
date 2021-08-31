@@ -29,15 +29,15 @@ export const InsertPoint = () => {
     dispatch(controlsSlice.actions.toolsResetSelected())
   }
 
-  const mouseMove = (e) => {
-    if (!isVisible) {
-      return
-    }
-    const { pageX: x, pageY: y } = e
-    setMousePosition({ x, y })
-  }
-
   useEffect(() => {
+    const mouseMove = (e) => {
+      if (!isVisible) {
+        return
+      }
+      const { pageX: x, pageY: y } = e
+      setMousePosition({ x, y })
+    }
+
     document.addEventListener('mousemove', mouseMove)
 
     return () => {

@@ -123,7 +123,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
     setIsFocus(false)
   }, [isFocus])
 
-  const onNameKeyUp = (e) => {
+  const onInputChange = (e) => {
     if (e.which === 13) {
       return onSubmit()
     }
@@ -142,7 +142,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
     setError(error)
   }
 
-  const onCountKeyUp = (e) => {
+  const onCountChange = (e) => {
     const code = e.which
     if (code === 8) {
       return
@@ -206,7 +206,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
       <PropertyLineAddLabel
         isAdd={isAdd}
         className="label"
-        ref="_label"
+        // ref="_label"
         onClick={onLabelClick}
       >
         {'+ add'}
@@ -236,7 +236,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
             className="input input--name"
             ref={nameRef}
             value={inputName}
-            onKeyUp={onNameKeyUp}
+            onChange={onInputChange}
             title="property name"
           />
           <ErrorLabel isValid={isValid} className="error-label">
@@ -250,7 +250,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
             width: var(--mojs-point-line-height);
           `}
           className="input input--count"
-          onKeyUp={onCountKeyUp}
+          onChange={onCountChange}
           value={count}
           title="number of properties [1...4]"
         />

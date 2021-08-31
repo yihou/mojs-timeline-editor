@@ -35,20 +35,23 @@ export const TimelineEditorView = forwardRef<HTMLDivElement>(() => {
     dispatch(controlsSlice.actions.controlsSetMouseInside(true))
   }
 
-  const docMouseMove = (e) => {
-    if (e.isTimelinePanel) {
-    }
-
-    if (controls.isMouseInside) {
-      dispatch(controlsSlice.actions.controlsSetMouseInside(false))
-    }
-  }
-
   // on mount
   useEffect(() => {
-    // const { store } = this.context
-    // store.subscribe(this.forceUpdate.bind(this))
+    const docMouseMove = (e) => {
+      if (e.isTimelinePanel) {
+      }
+
+      if (controls.isMouseInside) {
+        dispatch(controlsSlice.actions.controlsSetMouseInside(false))
+      }
+    }
+
     document.addEventListener('mousemove', docMouseMove)
+
+    return () => {
+      console.log('remove docMousemove event')
+      document.removeEventListener('mousemove', docMouseMove)
+    }
   }, [])
 
   return (

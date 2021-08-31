@@ -1,5 +1,3 @@
-import { Component } from 'react'
-
 import { Spot } from './Spot'
 import { Easing } from './Easing'
 import styled from '@emotion/styled'
@@ -39,18 +37,14 @@ export interface SegmentTimelineProps {
   meta: any
 }
 
-export class SegmentTimeline extends Component<SegmentTimelineProps> {
-  render() {
-    return (
-      <SegmentTimelineWrapper data-component="segment-timeline">
-        <SegmentTimelineBar>
-          <SegmentTimelineDelay />
-          <Spot type="start" {...this.props} />
-          <Spot type="end" {...this.props}>
-            <Easing meta={this.props.meta} state={this.props.segment} />
-          </Spot>
-        </SegmentTimelineBar>
-      </SegmentTimelineWrapper>
-    )
-  }
-}
+export const SegmentTimeline = (props: SegmentTimelineProps) => (
+  <SegmentTimelineWrapper data-component="segment-timeline">
+    <SegmentTimelineBar>
+      <SegmentTimelineDelay />
+      <Spot type="start" {...props} />
+      <Spot type="end" {...props}>
+        <Easing meta={props.meta} state={props.segment} />
+      </Spot>
+    </SegmentTimelineBar>
+  </SegmentTimelineWrapper>
+)

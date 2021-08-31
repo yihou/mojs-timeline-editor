@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import { FC } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button, ButtonProps } from '../Button'
@@ -59,23 +59,9 @@ const PointLineButton = styled(Button)<PointLineButtonProps>`
   }
 ` as FC<PointLineButtonProps>
 
-export const PointLine = ({ point }: PointLineProps) => {
+export const PointLine = (props: PointLineProps) => {
   const dispatch = useDispatch()
   const progress = useSelector((state: GlobalState) => state.progress)
-
-  const renderProperties = () => {
-    const names = Object.keys(point)
-    const results: ReactNode[] = []
-
-    for (let i = 0; i < names.length; i++) {
-      const name = names[i]
-      results.push(<PropertyLine id={point.id} name={name} state={point} />)
-    }
-
-    results.push(<PropertyLineAdd name={'+ add'} state={point} />)
-
-    return results
-  }
 
   const onCheck = () => {
     // const { point } = this.props
@@ -86,7 +72,7 @@ export const PointLine = ({ point }: PointLineProps) => {
   const onAddSpot = () => {
     dispatch(
       pointsSlice.actions.addSnapshot({
-        id: point.id,
+        id: props.point.id,
         time: progress
       })
     )
@@ -94,19 +80,21 @@ export const PointLine = ({ point }: PointLineProps) => {
 
   const onOpen = (e) => {
     e.stopPropagation()
-    dispatch(pointsSlice.actions.toggleOpenPoint(point.id))
+    dispatch(pointsSlice.actions.toggleOpenPoint(props.point.id))
   }
+
+  const names = Object.keys(props.point)
 
   return (
     <BasePointLine
-      isCheck={point.isSelected}
+      isCheck={props.point.isSelected}
       css={css`
         margin-top: 10px;
         border-bottom: 1px solid var(--mojs-color-light-purple);
       `}
     >
-      <PointLineLabel isCheck={point.isSelected} onClick={onCheck}>
-        {point.name}
+      <PointLineLabel isCheck={props.point.isSelected} onClick={onCheck}>
+        {props.point.name}
       </PointLineLabel>
 
       <PointLineButton
@@ -120,7 +108,7 @@ export const PointLine = ({ point }: PointLineProps) => {
       <PointLineButton
         css={css`
           [data-component='button-inner'] {
-            ${point.isOpen &&
+            ${props.point.isOpen &&
             css`
               transform: rotate(180deg);
             `}
@@ -129,8 +117,19 @@ export const PointLine = ({ point }: PointLineProps) => {
         icon="dropdown"
         onClick={onOpen}
       />
-      <PointLineBody isOpen={point.isOpen} isCheck={point.isSelected}>
-        {renderProperties()}
+      <PointLineBody
+        isOpen={props.point.isOpen}
+        isCheck={props.point.isSelected}
+      >
+        {names.map((name) => (
+          <PropertyLine
+            key={`${props.point.id}_${name}`}
+            id={props.point.id}
+            name={name}
+            point={props.point}
+          />
+        ))}
+        <PropertyLineAdd name={'+ add'} state={props.point} />
       </PointLineBody>
     </BasePointLine>
   )

@@ -1,16 +1,10 @@
-import { Component } from 'react'
-
 import { Icon } from './Icons/Icon'
 import { CurveEditor } from './CurveEditor'
-import { pointsSlice } from '../reducers/points'
 import styled from '@emotion/styled'
+import { EasingSelect } from './EasingSelect'
+import { pointsSlice } from '../reducers/points'
+import { useDispatch } from 'react-redux'
 
-const GAP = '---'
-const DELIMITER = (
-  <option value={GAP} disabled>
-    {GAP}
-  </option>
-)
 const EASING_HEIGHT = 14
 const EASING_WIDTH = 60
 const EASING_ICON_SIZE = 6
@@ -97,30 +91,6 @@ const EasingLabel = styled.div`
   }
 `
 
-const EasingDropdown = styled.div`
-  .dropdown {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-
-    select {
-      height: 100%;
-      width: 100%;
-
-      appearance: none;
-      outline: 0;
-      border-radius: var(--mojs-border-radius);
-      cursor: pointer;
-      position: absolute;
-      z-index: 1;
-      opacity: 0;
-    }
-  }
-`
-
 interface EasingProps {
   state: {
     easing: string
@@ -128,78 +98,11 @@ interface EasingProps {
   meta: any
 }
 
-export class Easing extends Component<EasingProps> {
-  render() {
-    const { state, meta } = this.props
-    const { easing } = state
-    const isFull = this.props.state.easing !== 'none'
-
-    return (
-      <EasingWrapper isFull={isFull} data-component="easing">
-        <EasingShortIcon isFull={isFull}>
-          <Icon shape="plus" />
-        </EasingShortIcon>
-        <EasingFullIcon isFull={isFull}>
-          {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
-          <EasingLabel title={easing}>{easing}</EasingLabel>
-          <EasingDropdownIcon>
-            <Icon shape="dropdown" />
-          </EasingDropdownIcon>
-        </EasingFullIcon>
-        <EasingDropdown>
-          <select onChange={this._onChange}>
-            {this._makeOption('none')}
-            {DELIMITER}
-            {this._makeOption('custom')}
-            {DELIMITER}
-            {this._makeOption('ease.out')}
-            {this._makeOption('ease.in')}
-            {this._makeOption('ease.inout')}
-            {DELIMITER}
-            {this._makeOption('sin.out')}
-            {this._makeOption('sin.in')}
-            {this._makeOption('sin.inout')}
-            {DELIMITER}
-            {this._makeOption('quad.out')}
-            {this._makeOption('quad.in')}
-            {this._makeOption('quad.inout')}
-            {DELIMITER}
-            {this._makeOption('cubic.out')}
-            {this._makeOption('cubic.in')}
-            {this._makeOption('cubic.inout')}
-            {DELIMITER}
-            {this._makeOption('quart.out')}
-            {this._makeOption('quart.in')}
-            {this._makeOption('quart.inout')}
-            {DELIMITER}
-            {this._makeOption('quint.out')}
-            {this._makeOption('quint.in')}
-            {this._makeOption('quint.inout')}
-            {DELIMITER}
-            {this._makeOption('expo.out')}
-            {this._makeOption('expo.in')}
-            {this._makeOption('expo.inout')}
-            {DELIMITER}
-            {this._makeOption('circ.out')}
-            {this._makeOption('circ.in')}
-            {this._makeOption('circ.inout')}
-            {DELIMITER}
-            {this._makeOption('back.out')}
-            {this._makeOption('back.in')}
-            {this._makeOption('back.inout')}
-            {DELIMITER}
-            {this._makeOption('elastic.out')}
-            {this._makeOption('elastic.in')}
-            {this._makeOption('elastic.inout')}
-            {DELIMITER}
-            {this._makeOption('bounce.out')}
-            {this._makeOption('bounce.in')}
-            {this._makeOption('bounce.inout')}
-          </select>
-        </EasingDropdown>
-      </EasingWrapper>
-    )
-  }
+export const Easing = (props: EasingProps) => {
+  const { state, meta } = props
+  const { easing } = state
+  const isFull = props.state.easing !== 'none'
+  const dispatch = useDispatch()
 
   // _renderEasing() {
   //   const {state, meta} = this.props;
@@ -210,29 +113,33 @@ export class Easing extends Component<EasingProps> {
   //     : <div className="label" title={easing}>{easing}</div>;
   // }
 
-  _makeOption(name) {
-    const { easing } = this.props.state
-    return (
-      <option value={name} selected={easing === name}>
-        {name}
-      </option>
-    )
-  }
-
-  _onChange = (e) => {
-    const { store } = this.context
+  const onChange = (e) => {
     const { target } = e
     const { value } = target.options[target.selectedIndex]
 
-    const data = { ...this.props.meta, easing: value }
-    store.dispatch(pointsSlice.actions.setEasing(data))
+    const data = { ...props.meta, easing: value }
+    dispatch(pointsSlice.actions.setEasing(data))
   }
 
-  // noinspection JSUnusedGlobalSymbols
-  _onEasingAdd() {
-    const { store } = this.context
-
-    const data = { ...this.props.meta, easing: 'ease.out' }
-    store.dispatch(pointsSlice.actions.setEasing(data))
+  // noinspection JSUnusedLocalSymbols
+  const _onEasingAdd = () => {
+    const data = { ...props.meta, easing: 'ease.out' }
+    dispatch(pointsSlice.actions.setEasing(data))
   }
+
+  return (
+    <EasingWrapper isFull={isFull} data-component="easing">
+      <EasingShortIcon isFull={isFull}>
+        <Icon shape="plus" />
+      </EasingShortIcon>
+      <EasingFullIcon isFull={isFull}>
+        {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
+        <EasingLabel title={easing}>{easing}</EasingLabel>
+        <EasingDropdownIcon>
+          <Icon shape="dropdown" />
+        </EasingDropdownIcon>
+      </EasingFullIcon>
+      <EasingSelect onChange={onChange} value={easing} />
+    </EasingWrapper>
+  )
 }

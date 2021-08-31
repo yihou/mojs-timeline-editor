@@ -4,20 +4,11 @@ import { pointsSlice, UpdateSelectedSpotOptions } from '../../reducers/points'
 import { Button } from '../Button'
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
+import { GlobalState, Point } from 'types'
 import { BasePointLine } from './BasePointLine'
 
 const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
-}
-
-export interface PropertyLineProps {
-  id: string
-  name: string
-  state: {
-    id: any
-    currentProps: any
-  }
 }
 
 const PropertyLineLabel = styled.div`
@@ -30,6 +21,7 @@ const PropertyLineLabel = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
 `
+
 const PropertyLineInput = styled.input`
   display: block;
   color: white;
@@ -79,12 +71,17 @@ const PropertyLineInput = styled.input`
     width: calc(100% / 4);
   }
 `
-
 const PropertyLineInputs = styled.div`
   position: absolute;
   right: 24px;
   left: 25%;
 `
+
+export interface PropertyLineProps {
+  id: string
+  name: string
+  point: Point
+}
 
 export const PropertyLine = (props: PropertyLineProps) => {
   const dispatch = useDispatch()
@@ -100,6 +97,7 @@ export const PropertyLine = (props: PropertyLineProps) => {
     for (let i = 0; i < value.length; i++) {
       result.push(
         <PropertyLineInput
+          key={i}
           value={value[i]}
           data-width={`1/${value.length}`}
           data-index={i}
@@ -111,8 +109,8 @@ export const PropertyLine = (props: PropertyLineProps) => {
   }
 
   const onKeyDown = (e) => {
-    const { state, name } = props
-    const { id } = state
+    const { point, name } = props
+    const { id } = point
 
     // if selected spot doesnt match the property line -
     // update the current value
@@ -167,7 +165,7 @@ export const PropertyLine = (props: PropertyLineProps) => {
   }
 
   const onKeyDownCurrent = (e) => {
-    const { state, name } = props
+    const { point, name } = props
 
     const target = e.target
     const index = parseInt(target.getAttribute('data-index'), 10)
@@ -185,7 +183,7 @@ export const PropertyLine = (props: PropertyLineProps) => {
       newValue[index] = value
     }
 
-    const data = { id: state.id, name, value: newValue }
+    const data = { id: point.id, name, value: newValue }
     let step = e.altKey ? 10 : 1
     if (e.shiftKey) {
       step *= 10
@@ -209,12 +207,12 @@ export const PropertyLine = (props: PropertyLineProps) => {
   }
 
   const getValue = () => {
-    const { name, state } = props
-    const { currentProps, id } = state
+    const { name, point } = props
+    const { currentProps, id } = point
 
     // if selected spot matches the property line -
     // get the selected spot values
-    if (state && id && isMatch(selectedSpot, id, name)) {
+    if (point && id && isMatch(selectedSpot, id, name)) {
       const { id, prop, spotIndex, type } = selectedSpot
 
       if (id && spotIndex && type) {

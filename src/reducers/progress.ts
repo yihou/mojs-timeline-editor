@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export const initialState = 0
+export const initialState = 1
 
 const reducers = {
   setProgress: (_state, action: PayloadAction<number>) => {
