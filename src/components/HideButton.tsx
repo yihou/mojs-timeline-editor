@@ -60,7 +60,7 @@ export const HideButton = (props: HideButtonProps) => {
           opacity: 1;
         }
       `}
-      data-component='hide-button'
+      data-component="hide-button"
     >
       <HideIconContainer />
       <Icon
@@ -74,7 +74,7 @@ export const HideButton = (props: HideButtonProps) => {
           margin-top: ${props.isHidden ? 0 : 1}px;
           transition: ${props.isHidden ? 'rotate(180deg)' : 'transform 0.2s'};
         `}
-        shape='hide-icon'
+        shape="hide-icon"
       />
     </div>
   )

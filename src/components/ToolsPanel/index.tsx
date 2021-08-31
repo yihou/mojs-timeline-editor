@@ -37,15 +37,15 @@ export const ToolsPanel = () => {
     >
       <InsertPoint />
       <ToolsPanelButton isActive={selected === 'plus'} onClick={setPlus}>
-        <Icon shape='plus' />
+        <Icon shape="plus" />
       </ToolsPanelButton>
       <ToolsPanelButton isActive={selected === 'html'} onClick={setHtml}>
         {'HTML'}
       </ToolsPanelButton>
 
       <ToolsPanelAnchor
-        href='https://github.com/legomushroom/mojs-timeline-editor/'
-        target='_blank'
+        href="https://github.com/legomushroom/mojs-timeline-editor/"
+        target="_blank"
         css={css`
           float: right;
 
@@ -56,7 +56,7 @@ export const ToolsPanel = () => {
           }
         `}
       >
-        <Icon shape='mojs-logo' />
+        <Icon shape="mojs-logo" />
       </ToolsPanelAnchor>
 
       {/*

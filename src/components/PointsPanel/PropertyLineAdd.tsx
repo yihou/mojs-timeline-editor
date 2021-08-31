@@ -205,17 +205,17 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
     >
       <PropertyLineAddLabel
         isAdd={isAdd}
-        className='label'
-        ref='_label'
+        className="label"
+        ref="_label"
         onClick={onLabelClick}
       >
         {'+ add'}
       </PropertyLineAddLabel>
-      <PropertyLineAddInputs className='property-line-add__inputs'>
+      <PropertyLineAddInputs className="property-line-add__inputs">
         <NameInputWrapper
           isAdd={isAdd}
-          data-component='name-input-wrapper'
-          className='name-input-wrapper'
+          data-component="name-input-wrapper"
+          className="name-input-wrapper"
         >
           <Input
             isAdd={isAdd}
@@ -233,13 +233,13 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
                     border: 1px solid var(--mojs-color-orange);
                   `}
             `}
-            className='input input--name'
+            className="input input--name"
             ref={nameRef}
             value={inputName}
             onKeyUp={onNameKeyUp}
-            title='property name'
+            title="property name"
           />
-          <ErrorLabel isValid={isValid} className='error-label'>
+          <ErrorLabel isValid={isValid} className="error-label">
             {error}
           </ErrorLabel>
         </NameInputWrapper>
@@ -249,10 +249,10 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
             right: 0;
             width: var(--mojs-point-line-height);
           `}
-          className='input input--count'
+          className="input input--count"
           onKeyUp={onCountKeyUp}
           value={count}
-          title='number of properties [1...4]'
+          title="number of properties [1...4]"
         />
       </PropertyLineAddInputs>
       <ToolsPanelButton
@@ -274,7 +274,7 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
           `}
         `}
         onClick={onSubmit}
-        icon='tick'
+        icon="tick"
       />
     </BasePointLine>
   )

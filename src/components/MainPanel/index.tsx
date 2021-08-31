@@ -94,7 +94,7 @@ export const MainPanel = () => {
     <MainPanelSection
       style={{ height }}
       isTransition={mainPanel.isTransition}
-      data-component='main-panel'
+      data-component="main-panel"
     >
       {'>'}
       <TimelineHandle />

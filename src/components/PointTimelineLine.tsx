@@ -67,7 +67,7 @@ export const PointTimelineLine = ({ point }: PointTimelineLineProps) => {
   }
 
   return (
-    <PointTimelineLineWrapper data-component='point-timeline-line'>
+    <PointTimelineLineWrapper data-component="point-timeline-line">
       {'>'}
       <PointTimelineLineInner>
         <PointTimelineLineHeader />

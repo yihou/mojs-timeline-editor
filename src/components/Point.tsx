@@ -124,7 +124,7 @@ export const Point = ({ state }: PointProps) => {
       style={style}
       onClick={onClick}
       title={state.name}
-      data-component='point'
+      data-component="point"
     />
   )
 }

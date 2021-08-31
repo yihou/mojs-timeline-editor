@@ -164,7 +164,7 @@ export const Spot: FC<SpotProps> = ({ type, segment, meta, children }) => {
       type={type}
       isSelect={isSelect}
       style={style}
-      data-component='spot'
+      data-component="spot"
     >
       <SpotDot ref={dot} isSelected={isSelect} isEasing={isEasing} />
       {children}

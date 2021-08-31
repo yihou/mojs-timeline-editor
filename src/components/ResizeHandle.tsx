@@ -72,7 +72,7 @@ export const ResizeHandle = (props: ResizeHandleProps) => {
   }, [])
 
   return (
-    <ResizeHandleWrapper ref={baseRef} data-component='resize-handle'>
+    <ResizeHandleWrapper ref={baseRef} data-component="resize-handle">
       <Icon
         css={css`
           position: absolute;
@@ -82,7 +82,7 @@ export const ResizeHandle = (props: ResizeHandleProps) => {
           height: ${ICON_SIZE}px;
           display: inline-block;
         `}
-        shape='ellipsis'
+        shape="ellipsis"
       />
     </ResizeHandleWrapper>
   )

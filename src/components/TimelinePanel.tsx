@@ -86,7 +86,7 @@ export class TimelinePanel extends Component<
     return (
       <rect
         key={dashNumber}
-        width='1'
+        width="1"
         height={height}
         x={`${x}em`}
         y={y}

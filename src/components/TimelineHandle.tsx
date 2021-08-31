@@ -84,9 +84,9 @@ export const TimelineHandle = () => {
   const style = { transform: `translateX(${shift}em)` }
 
   return (
-    <TimelineHandleWrapper style={style} data-component='timeline-handle'>
+    <TimelineHandleWrapper style={style} data-component="timeline-handle">
       <TimelineHandleHead ref={headRef}>
-        <Icon shape='handle' />
+        <Icon shape="handle" />
       </TimelineHandleHead>
     </TimelineHandleWrapper>
   )

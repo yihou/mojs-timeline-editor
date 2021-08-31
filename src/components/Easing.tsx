@@ -135,15 +135,15 @@ export class Easing extends Component<EasingProps> {
     const isFull = this.props.state.easing !== 'none'
 
     return (
-      <EasingWrapper isFull={isFull} data-component='easing'>
+      <EasingWrapper isFull={isFull} data-component="easing">
         <EasingShortIcon isFull={isFull}>
-          <Icon shape='plus' />
+          <Icon shape="plus" />
         </EasingShortIcon>
         <EasingFullIcon isFull={isFull}>
           {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
           <EasingLabel title={easing}>{easing}</EasingLabel>
           <EasingDropdownIcon>
-            <Icon shape='dropdown' />
+            <Icon shape="dropdown" />
           </EasingDropdownIcon>
         </EasingFullIcon>
         <EasingDropdown>

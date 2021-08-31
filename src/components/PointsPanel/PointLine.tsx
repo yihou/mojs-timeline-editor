@@ -113,7 +113,7 @@ export const PointLine = ({ point }: PointLineProps) => {
         css={css`
           right: 24px;
         `}
-        icon='spot'
+        icon="spot"
         onClick={onAddSpot}
       />
 
@@ -126,7 +126,7 @@ export const PointLine = ({ point }: PointLineProps) => {
             `}
           }
         `}
-        icon='dropdown'
+        icon="dropdown"
         onClick={onOpen}
       />
       <PointLineBody isOpen={point.isOpen} isCheck={point.isSelected}>

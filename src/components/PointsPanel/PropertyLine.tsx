@@ -250,7 +250,7 @@ export const PropertyLine = (props: PropertyLineProps) => {
         css={css`
           right: var(--mojs-point-line-height);
         `}
-        icon='spot'
+        icon="spot"
         onClick={onAddSpot}
       />
     </BasePointLine>

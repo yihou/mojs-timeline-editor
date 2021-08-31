@@ -39,8 +39,8 @@ export const ButtonInner = styled.div`
 `
 
 export const Button = (props: ButtonProps) => (
-  <ButtonWrapper {...props} data-component='button'>
-    <ButtonInner data-component='button-inner'>
+  <ButtonWrapper {...props} data-component="button">
+    <ButtonInner data-component="button-inner">
       <Icon shape={props.icon} />
     </ButtonInner>
   </ButtonWrapper>

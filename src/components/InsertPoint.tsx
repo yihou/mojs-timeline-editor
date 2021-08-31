@@ -63,7 +63,7 @@ export const InsertPoint = () => {
         margin-top: -(var(--mojs-point-size) / 2) * 1px;
       `}
       onClick={addPoint}
-      data-component='insert-point'
+      data-component="insert-point"
     >
       {'>'}
     </div>

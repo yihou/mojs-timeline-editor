@@ -54,9 +54,9 @@ export const Icon = (props: IconProps) => {
         }
       `}
       className={className}
-      data-component='icon'
+      data-component="icon"
     >
-      <svg viewBox='0 0 32 32'>
+      <svg viewBox="0 0 32 32">
         <use xlinkHref={`#${shape}-shape`} />
       </svg>
     </div>

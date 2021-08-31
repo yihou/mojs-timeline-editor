@@ -42,11 +42,11 @@ export interface SegmentTimelineProps {
 export class SegmentTimeline extends Component<SegmentTimelineProps> {
   render() {
     return (
-      <SegmentTimelineWrapper data-component='segment-timeline'>
+      <SegmentTimelineWrapper data-component="segment-timeline">
         <SegmentTimelineBar>
           <SegmentTimelineDelay />
-          <Spot type='start' {...this.props} />
-          <Spot type='end' {...this.props}>
+          <Spot type="start" {...this.props} />
+          <Spot type="end" {...this.props}>
             <Easing meta={this.props.meta} state={this.props.segment} />
           </Spot>
         </SegmentTimelineBar>

@@ -30,7 +30,7 @@ export class ToolsPanelButton extends Component<ToolsPanelButtonProps> {
           }
         `}
         {...this.props}
-        data-component='tools-panel-button'
+        data-component="tools-panel-button"
       />
     )
   }
