@@ -11,13 +11,12 @@ const TIMELINE_HEAD_SIZE = 14
 const TIMELINE_ICON_SIZE = 6
 
 const TimelineHandleWrapper = styled.div`
-  .timeline-handle {
-    position: absolute;
-    min-height: 100%;
-    width: 1px;
-    background: var(--mojs-color-orange);
-    z-index: 20;
-  }
+  position: absolute;
+  top: 0;
+  min-height: 100%;
+  width: 1px;
+  background: var(--mojs-color-orange);
+  z-index: 20;
 `
 
 const TimelineHandleHead = styled.div`
@@ -38,7 +37,7 @@ const TimelineHandleHead = styled.div`
     left: 50%;
     top: 50%;
     margin-left: -${TIMELINE_ICON_SIZE / 2}px;
-    margin-top: -${TIMELINE_ICON_SIZE / 2 - 1}px;
+    margin-top: -${TIMELINE_ICON_SIZE - 2}px;
   }
 
   &:hover {

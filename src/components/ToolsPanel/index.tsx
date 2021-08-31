@@ -44,9 +44,17 @@ export const ToolsPanel = () => {
       </ToolsPanelButton>
 
       <ToolsPanelAnchor
-        isLogo
         href='https://github.com/legomushroom/mojs-timeline-editor/'
         target='_blank'
+        css={css`
+          float: right;
+
+          [data-component='icon'] {
+            fill: var(--mojs-color-orange);
+            width: 8px;
+            height: 8px;
+          }
+        `}
       >
         <Icon shape='mojs-logo' />
       </ToolsPanelAnchor>

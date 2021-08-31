@@ -4,7 +4,6 @@ import { css } from '@emotion/react'
 export interface ToolsPanelButtonProps {
   isLink?: boolean
   isActive?: boolean
-  isLogo?: boolean
 }
 
 const activeStyle = css`
@@ -13,15 +12,6 @@ const activeStyle = css`
   fill: var(--mojs-color-purple);
 `
 
-const logoStyle = css`
-  float: right;
-  fill: var(--mojs-color-orange);
-
-  [data-component='icon'] {
-    width: 8px;
-    height: 8px;
-  }
-`
 const linkStyle = css`
   float: right;
   fill: var(--mojs-color-white);
@@ -62,6 +52,5 @@ export const ToolsPanelButton = styled.div<ToolsPanelButtonProps>`
     height: 6px;
   }
 
-  ${({ isLogo }) => isLogo && logoStyle}
   ${({ isLink }) => isLink && linkStyle}
 `

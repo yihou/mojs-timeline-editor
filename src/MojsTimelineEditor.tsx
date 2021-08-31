@@ -43,15 +43,13 @@ export const MojsTimelineEditor = ({ withPlayer = true }) => {
 
             --mojs-left-panel-width: 195px; /* old was 165px */
             --mojs-point-size: 6px;
-            --mojs-top-panels-size: 22px;
+            --mojs-top-panel-size: 22px;
             --mojs-player-size: 40px;
             --mojs-point-line-height: 24px;
           }
         `}
       />
-      <div ref={editorWrapperRef}>
-        <TimelineEditorView />
-      </div>
+      <TimelineEditorView ref={editorWrapperRef} />
     </Provider>
   )
 }

@@ -44,12 +44,12 @@ export const HideButton = (props: HideButtonProps) => {
       ref={baseRef}
       css={css`
         position: relative;
-        top: -${BUTTON_HEIGHT};
+        top: -${BUTTON_HEIGHT}px;
         left: 50%;
 
         display: inline-block;
-        width: ${BUTTON_WIDTH};
-        height: ${BUTTON_HEIGHT};
+        width: ${BUTTON_WIDTH}px;
+        height: ${BUTTON_HEIGHT}px;
         cursor: pointer;
 
         &:hover {

@@ -1,9 +1,12 @@
 import styled from '@emotion/styled'
-import { useEffect } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { InsertPoint } from './InsertPoint'
 import { Icons } from './Icons'
 import { Points } from './Points'
 import { MainPanel } from './MainPanel'
+import { useDispatch, useSelector } from 'react-redux'
+import { GlobalState } from '../types'
+import { controlsSlice } from '../reducers/controls'
 
 const Wrapper = styled.div`
   font-family: Arial, sans-serif;
@@ -14,8 +17,9 @@ const Wrapper = styled.div`
   }
 `
 
-export const TimelineEditorView = () => {
-  // const { store } = context
+export const TimelineEditorView = forwardRef<HTMLDivElement>(() => {
+  const dispatch = useDispatch()
+  const controls = useSelector((state: GlobalState) => state.controls)
 
   const _mouseMove = (e) => {
     /* we cannot `stopPropagation` the event, because `hammerjs`
@@ -24,26 +28,23 @@ export const TimelineEditorView = () => {
        inside the `timeline-editor` panel
     */
     e.isTimelinePanel = true
-    // const { store } = this.context
-    // const { controls } = this.getState()
-    // if (controls.isMouseInside) {
-    //   return
-    // }
+    if (controls.isMouseInside) {
+      return
+    }
 
-    // store.dispatch(controlsSlice.actions.controlsSetMouseInside(true))
+    dispatch(controlsSlice.actions.controlsSetMouseInside(true))
   }
 
   const docMouseMove = (e) => {
     if (e.isTimelinePanel) {
     }
-    // const { store } = this.context
-    // const { controls } = this.getState()
 
-    // if (controls.isMouseInside) {
-    //   store.dispatch(controlsSlice.actions.controlsSetMouseInside(false))
-    // }
+    if (controls.isMouseInside) {
+      dispatch(controlsSlice.actions.controlsSetMouseInside(false))
+    }
   }
 
+  // on mount
   useEffect(() => {
     // const { store } = this.context
     // store.subscribe(this.forceUpdate.bind(this))
@@ -60,4 +61,4 @@ export const TimelineEditorView = () => {
       </div>
     </Wrapper>
   )
-}
+})

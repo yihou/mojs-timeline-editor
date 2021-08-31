@@ -3,7 +3,7 @@
 */
 
 export const constants = {
-  NAME: 'MOJS_TIMELINE_EDITOR_Hjs891ksPP',
+  NAME: 'MOJS_TIMELINE_EDITOR_Hjs891ksP',
   /* defines if need to persist the state of the editor in localStorage */
   IS_PERSIST_STATE: true,
   /* height of `mojs-timeline-player` module */

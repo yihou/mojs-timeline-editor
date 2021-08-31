@@ -17,14 +17,14 @@ const BodyPanelLeft = styled.div`
   min-height: 100%;
   padding-top: 1px;
   float: left;
-  width: var(--mojs-left-panel-size);
+  width: var(--mojs-left-panel-width);
   background: var(--mojs-color-purple);
 `
 
 const BodyPanelRight = styled.div`
   min-height: 100%;
   padding-top: 1px;
-  margin-left: var(--mojs-left-panel-size);
+  margin-left: var(--mojs-left-panel-width);
   background: var(--mojs-color-light-purple);
   overflow: auto;
   /*min-width: 1600px*/

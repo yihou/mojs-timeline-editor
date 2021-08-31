@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, Component, DetailedHTMLProps } from 'react'
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
 import { Icon, IconProps } from './Icons/Icon'
 import styled from '@emotion/styled'
 
@@ -38,14 +38,10 @@ export const ButtonInner = styled.div`
   transition: all 0.15s ease;
 `
 
-export class Button extends Component<ButtonProps> {
-  render() {
-    return (
-      <ButtonWrapper {...this.props} data-component='button'>
-        <ButtonInner data-component='button-inner'>
-          <Icon shape={this.props.icon} />
-        </ButtonInner>
-      </ButtonWrapper>
-    )
-  }
-}
+export const Button = (props: ButtonProps) => (
+  <ButtonWrapper {...props} data-component='button'>
+    <ButtonInner data-component='button-inner'>
+      <Icon shape={props.icon} />
+    </ButtonInner>
+  </ButtonWrapper>
+)
