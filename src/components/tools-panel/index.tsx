@@ -1,6 +1,6 @@
 import { controlsSlice } from '../../reducers/controls'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from '../../../types/store'
+import { GlobalState } from 'types'
 import { css } from '@emotion/react'
 import { InsertPoint } from './point'
 import { ToolsPanelAnchor, ToolsPanelButton } from './button'

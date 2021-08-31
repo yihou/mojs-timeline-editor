@@ -4,7 +4,7 @@ import { pointsSlice, UpdateSelectedSpotOptions } from '../../reducers/points'
 import { Button } from '../button'
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from '../../../types/store'
+import { GlobalState } from 'types'
 import { BasePointLine } from './BasePointLine'
 
 const isMatch = (spot, id, name) => {

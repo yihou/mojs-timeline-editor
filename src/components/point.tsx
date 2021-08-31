@@ -5,7 +5,7 @@ import { pointsSlice } from '../reducers/points'
 import { css } from '@emotion/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from '../../types/store'
+import { GlobalState } from 'types'
 
 interface PointProps {
   state: PointType

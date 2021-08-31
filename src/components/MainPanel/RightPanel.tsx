@@ -1,4 +1,4 @@
-import { GlobalState } from '../../../types/store'
+import { GlobalState } from 'types'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 import { css } from '@emotion/react'
 import { HideButton } from '../hide-button'

@@ -5,7 +5,7 @@ import Hammer from 'hammerjs'
 import { selectedSpotSlice } from '../reducers/selectedSpot'
 import { progressSlice } from '../reducers/progress'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from '../../types/store'
+import { GlobalState } from 'types'
 
 const TIMELINE_HEAD_SIZE = 14
 const TIMELINE_ICON_SIZE = 6

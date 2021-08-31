@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "outDir": "dist",
     "module": "esnext",
     "lib": ["dom", "esnext"],
@@ -19,6 +20,6 @@
 //    "noUnusedParameters": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src", "types"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist", "example", "app"]
 }

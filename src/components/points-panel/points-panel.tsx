@@ -1,4 +1,4 @@
-import { GlobalState } from '../../../types/store'
+import { GlobalState } from 'types'
 import { ReactNode } from 'react'
 import { PointLine } from './point-line'
 import { css } from '@emotion/react'

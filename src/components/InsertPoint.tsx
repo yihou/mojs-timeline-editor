@@ -1,4 +1,4 @@
-import { GlobalState } from '../../types/store'
+import { GlobalState } from 'types'
 import { pointsSlice } from '../reducers/points'
 import { controlsSlice } from '../reducers/controls'
 import { css } from '@emotion/react'

@@ -1,11 +1,9 @@
 import styled from '@emotion/styled'
-import { useSelector } from 'react-redux'
-import { GlobalState } from '../../types/store'
-import { ReactNode, useEffect } from 'react'
+import { useEffect } from 'react'
 import { InsertPoint } from './InsertPoint'
 import { Icons } from './icons'
-import { MainPanel } from './main-panel/main-panel'
-import { Point } from './point'
+import { Points } from './Points'
+import { MainPanel } from './MainPanel'
 
 const Wrapper = styled.div`
   font-family: Arial, sans-serif;
@@ -15,19 +13,6 @@ const Wrapper = styled.div`
     user-select: none;
   }
 `
-
-const Points = () => {
-  const points = useSelector((state: GlobalState) => state.points)
-  const results: ReactNode[] = []
-  const props = Object.keys(points)
-
-  for (let i = 0; i < props.length; i++) {
-    const key = props[i]
-    results.push(<Point key={key} state={points[key]} />)
-  }
-
-  return <div>{results}</div>
-}
 
 export const TimelineEditorView = () => {
   // const { store } = context

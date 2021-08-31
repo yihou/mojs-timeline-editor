@@ -8,7 +8,7 @@ import { pointsSlice } from '../../reducers/points'
 import { BasePointLine } from './BasePointLine'
 import { Point } from '../../helpers/create-point'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from '../../../types/store'
+import { GlobalState } from 'types'
 
 interface PointLineProps {
   point: Point
