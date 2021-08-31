@@ -18,7 +18,7 @@ export const Point = ({ state }: PointProps) => {
   const selectedSpot = useSelector((state: GlobalState) => state.selectedSpot)
 
   const [isPan, setIsPan] = useState(false)
-  const base = useRef<EventTarget>() // TODO: check who define base
+  const baseRef = useRef<HTMLDivElement>(null)
   const [deltaX, setDeltaX] = useState(0)
   const [deltaY, setDeltaY] = useState(0)
 
@@ -36,12 +36,15 @@ export const Point = ({ state }: PointProps) => {
     return [x + deltaX, y + deltaY]
   }
 
+  // on mount
   useEffect(() => {
-    const mc = new Hammer.Manager(base.current as any)
-    mc.add(new Hammer.Pan())
+    if (baseRef.current) {
+      const mc = new Hammer.Manager(baseRef.current)
+      mc.add(new Hammer.Pan())
 
-    mc.on('pan', onPan)
-    mc.on('panend', onPanEnd)
+      mc.on('pan', onPan)
+      mc.on('panend', onPanEnd)
+    }
   }, [])
 
   const onPan = (e) => {
@@ -93,6 +96,7 @@ export const Point = ({ state }: PointProps) => {
 
   return (
     <div
+      ref={baseRef}
       css={css`
         position: absolute;
         width: var(--mojs-point-size);

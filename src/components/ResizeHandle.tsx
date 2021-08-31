@@ -1,11 +1,11 @@
-import { Component } from 'react'
+import { useEffect, useRef } from 'react'
 import Hammer from 'hammerjs'
 import propagating from 'propagating-hammerjs'
 import { Icon } from './Icons/Icon'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 
-interface ResizeHandleProps {
+export interface ResizeHandleProps {
   onResize: (e: any) => void
   onResizeStart: (e: any) => void
   onResizeEnd: (e: any) => void
@@ -46,44 +46,44 @@ const ResizeHandleWrapper = styled.div`
   }
 `
 
-export class ResizeHandle extends Component<ResizeHandleProps> {
-  base
+export const ResizeHandle = (props: ResizeHandleProps) => {
+  const baseRef = useRef<HTMLDivElement>(null)
 
-  render() {
-    return (
-      <ResizeHandleWrapper data-component='resize-handle'>
-        <Icon
-          css={css`
-            position: absolute;
-            top: ${(HANDLE_HEIGHT - ICON_SIZE) / 2}px;
-            left: ${(HANDLE_WIDTH - ICON_SIZE) / 2}px;
-            width: ${ICON_SIZE}px;
-            height: ${ICON_SIZE}px;
-            display: inline-block;
-          `}
-          shape='ellipsis'
-        />
-      </ResizeHandleWrapper>
-    )
-  }
+  useEffect(() => {
+    if (baseRef.current) {
+      const mc = propagating(new Hammer.Manager(baseRef.current))
+      const p = props
 
-  componentDidMount() {
-    const mc = propagating(new Hammer.Manager(this.base))
-    const p = this.props
-
-    mc.add(new Hammer.Pan({ threshold: 0 }))
-    mc.on('pan', (e) => {
-      p.onResize(e.deltaY)
-      e.stopPropagation()
-    })
-
-      .on('panstart', (e) => {
-        p.onResizeStart && p.onResizeStart(e)
+      mc.add(new Hammer.Pan({ threshold: 0 }))
+      mc.on('pan', (e) => {
+        p.onResize(e.deltaY)
         e.stopPropagation()
       })
-      .on('panend', (e) => {
-        p.onResizeEnd && p.onResizeEnd(e)
-        e.stopPropagation()
-      })
-  }
+
+        .on('panstart', (e) => {
+          p.onResizeStart && p.onResizeStart(e)
+          e.stopPropagation()
+        })
+        .on('panend', (e) => {
+          p.onResizeEnd && p.onResizeEnd(e)
+          e.stopPropagation()
+        })
+    }
+  }, [])
+
+  return (
+    <ResizeHandleWrapper ref={baseRef} data-component='resize-handle'>
+      <Icon
+        css={css`
+          position: absolute;
+          top: ${(HANDLE_HEIGHT - ICON_SIZE) / 2}px;
+          left: ${(HANDLE_WIDTH - ICON_SIZE) / 2}px;
+          width: ${ICON_SIZE}px;
+          height: ${ICON_SIZE}px;
+          display: inline-block;
+        `}
+        shape='ellipsis'
+      />
+    </ResizeHandleWrapper>
+  )
 }

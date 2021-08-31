@@ -2,17 +2,11 @@ import { GlobalState } from 'types'
 import { mainPanelSlice } from '../../reducers/mainPanel'
 import { css } from '@emotion/react'
 import { HideButton } from '../HideButton'
-import { ResizeHandle } from '../ResizeHandle'
+import { ResizeHandle, ResizeHandleProps } from '../ResizeHandle'
 import { TimelinePanel } from '../TimelinePanel'
 import { useDispatch, useSelector } from 'react-redux'
 
-interface RightPanelProps {
-  onResize: (e: any) => void
-  onResizeEnd: (e: any) => void
-  onResizeStart: (e: any) => void
-}
-
-export const RightPanel = (props: RightPanelProps) => {
+export const RightPanel = (props: ResizeHandleProps) => {
   const dispatch = useDispatch()
   const mainPanel = useSelector((state: GlobalState) => state.mainPanel)
 

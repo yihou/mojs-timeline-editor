@@ -38,7 +38,6 @@ export class TimelinePanel extends Component<
 > {
   _svg = createRef<SVGSVGElement>()
   _dashesCnt = 0
-  _timeline: ReactNode = null
 
   constructor(props) {
     super(props)
@@ -54,31 +53,25 @@ export class TimelinePanel extends Component<
   }
 
   render() {
-    return <TimelinePanelWrapper>{this._timeline}</TimelinePanelWrapper>
-  }
-
-  componentWillMount() {
-    this._timeline = this._createTimeline()
-  }
-
-  // will be removed when `preact` issue with nested `svg` will be fixed
-  componentDidMount() {
-    // this._svg.current?.classList.add(CLASSES['main-svg'])
-  }
-
-  _createTimeline = () => {
     const dashes = this._compileDashes()
     const pointerValues = this._compileLabels()
     const { scale } = this.state
 
     return (
-      <TimelinePanelMainSvg ref={this._svg}>
-        <g style={{ fontSize: `${scale}px` }}>
-          {dashes}
-          {pointerValues}
-        </g>
-      </TimelinePanelMainSvg>
+      <TimelinePanelWrapper>
+        <TimelinePanelMainSvg ref={this._svg}>
+          <g style={{ fontSize: `${scale}px` }}>
+            {dashes}
+            {pointerValues}
+          </g>
+        </TimelinePanelMainSvg>
+      </TimelinePanelWrapper>
     )
+  }
+
+  // will be removed when `preact` issue with nested `svg` will be fixed
+  componentDidMount() {
+    // this._svg.current?.classList.add(CLASSES['main-svg'])
   }
 
   _createDash(dashNumber) {
@@ -90,7 +83,16 @@ export class TimelinePanel extends Component<
     const x = DASH_STEP * dashNumber
     const y = constants.TIMELINE_HEIGHT - height
 
-    return <rect width='1' height={height} x={`${x}em`} y={y} fill={color} />
+    return (
+      <rect
+        key={dashNumber}
+        width='1'
+        height={height}
+        x={`${x}em`}
+        y={y}
+        fill={color}
+      />
+    )
   }
 
   _getDashType(dashNumber, dashesPerSec) {
@@ -122,7 +124,7 @@ export class TimelinePanel extends Component<
       const y = constants.TIMELINE_HEIGHT / 2
 
       labels.push(
-        <svg x={`${x}em`} style={{ overflow: 'visible' }}>
+        <svg key={j} x={`${x}em`} style={{ overflow: 'visible' }}>
           <TimelinePanelLabel y={y} textAnchor={textAnchor}>
             {value}
           </TimelinePanelLabel>
