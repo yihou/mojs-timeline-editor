@@ -995,6 +995,8 @@ declare module '@mojs/core' {
  * [3 times] alt + \ - reset curve
  */
 declare module '@mojs/curve-editor' {
+  import { Store } from 'redux'
+
   class MojsCurveEditor {
     constructor(opts: MojsCurveEditor.Options)
     constructor()
@@ -1010,6 +1012,20 @@ declare module '@mojs/curve-editor' {
 
     // toggle `maximize/minimize` methods regarding editor's state
     toggleSize()
+
+    store: Store
+
+    readonly _defaults: Partial<MojsCurveEditor.Options>
+    readonly _easing: Function
+    readonly _easings: any[]
+    readonly _el: any
+    readonly _localStorage: string
+    readonly _o: MojsCurveEditor.Options
+    readonly _prevPath: string
+    readonly _progressLines: any[]
+    readonly _props: MojsCurveEditor.Options
+    readonly _rootEl: HTMLDivElement
+    readonly _tm: number
   }
 
   namespace MojsCurveEditor {
@@ -1056,6 +1072,9 @@ declare module '@mojs/player' {
 
   class MojsPlayer {
     constructor(opts: MojsPlayer.Options)
+
+    readonly el: HTMLDivElement
+    readonly _defaults: Partial<MojsPlayer.Options>
   }
 
   namespace MojsPlayer {

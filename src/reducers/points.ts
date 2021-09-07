@@ -85,13 +85,19 @@ const reducers = {
     const newState = resetSelectedPoints(state)
     const point = createPoint(action.payload, Object.keys(newState).length)
     newState[point.id] = point
-    return newState
+    state = { ...newState }
+
+    return state
   },
   selectPoint: (state, action: PayloadAction<string>) => {
-    return change(state, [action.payload, 'isSelected'], (state) => !state)
+    state = change(state, [action.payload, 'isSelected'], (state) => !state)
+
+    return state
   },
   toggleOpenPoint: (state, action: PayloadAction<string>) => {
-    return change(state, [action.payload, 'isOpen'], (state) => !state)
+    state = change(state, [action.payload, 'isOpen'], (state) => !state)
+
+    return state
   },
   addSnapshot: (state, action: PayloadAction<{ time: number; id: string }>) => {
     const { id } = action.payload
@@ -106,7 +112,9 @@ const reducers = {
       )
     }
 
-    return newState
+    state = { ...newState }
+
+    return state
   },
   addPropertySegment: (
     state,
@@ -115,19 +123,32 @@ const reducers = {
     const { id, name } = action.payload
     const current = state[id].currentProps
 
-    return change<PointsState>(state, [id, 'props', name], (segments) =>
-      addSegment([...segments], name, action.payload, current)
+    const newState = change<PointsState>(
+      state,
+      [id, 'props', name],
+      (segments) => addSegment([...segments], name, action.payload, current)
     )
+
+    state = { ...newState }
+
+    return state
   },
   changePointCurrentPosition: (
     state,
     action: PayloadAction<{ id: string; deltaX: number; deltaY: number }>
   ) => {
-    return change(state, [action.payload.id, 'currentProps'], (obj) => {
-      const { deltaX: dX, deltaY: dY } = action.payload
-      const pos = obj[constants.POSITION_NAME]
-      return { ...obj, [constants.POSITION_NAME]: [pos[0] + dX, pos[1] + dY] }
-    })
+    const newState = change(
+      state,
+      [action.payload.id, 'currentProps'],
+      (obj) => {
+        const { deltaX: dX, deltaY: dY } = action.payload
+        const pos = obj[constants.POSITION_NAME]
+        return { ...obj, [constants.POSITION_NAME]: [pos[0] + dX, pos[1] + dY] }
+      }
+    )
+
+    state = { ...newState }
+    return state
   },
   shiftSegment: (
     state,
@@ -152,7 +173,9 @@ const reducers = {
     })
 
     ensureTimeBounds(newState[action.payload.id].props[action.payload.prop])
-    return newState
+
+    state = { ...newState }
+    return state
   },
   addPointProperty: (
     state,
@@ -166,10 +189,12 @@ const reducers = {
       return props
     })
 
-    return change(newState, [action.payload.id, 'currentProps'], (props) => {
+    state = change(newState, [action.payload.id, 'currentProps'], (props) => {
       props[name] = value
       return props
     })
+
+    return state
   },
   updateSelectedSpot: (
     state,
@@ -202,7 +227,8 @@ const reducers = {
       )
     }
 
-    return newState
+    state = { ...newState }
+    return state
   },
   updateSelectedSpotCurrent: (
     state,
@@ -210,7 +236,7 @@ const reducers = {
   ) => {
     const { value, name } = action.payload
 
-    return change(
+    const newState = change(
       state,
       [action.payload.id, 'currentProps'],
       (currentProps) => {
@@ -218,6 +244,9 @@ const reducers = {
         return currentProps
       }
     )
+
+    state = { ...newState }
+    return state
   },
   setEasing: (
     state,
@@ -230,7 +259,14 @@ const reducers = {
   ) => {
     const { id, prop, spotIndex, easing } = action.payload
 
-    return change(state, [id, 'props', prop, spotIndex, 'easing'], easing)
+    const newState = change(
+      state,
+      [id, 'props', prop, spotIndex, 'easing'],
+      easing
+    )
+
+    state = { ...newState }
+    return state
   }
 }
 

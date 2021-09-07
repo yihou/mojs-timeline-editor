@@ -29,13 +29,19 @@ export const HideButton = (props: HideButtonProps) => {
   const baseRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (baseRef.current) {
-      const mc = new Hammer.Manager(baseRef.current)
-      mc.add(new Hammer.Tap())
+    let hammerInstance
 
-      mc.on('tap', (e) => {
+    if (baseRef.current) {
+      hammerInstance = new Hammer.Manager(baseRef.current)
+      hammerInstance.add(new Hammer.Tap())
+
+      hammerInstance.on('tap', (e) => {
         props.onTap && props.onTap(e)
       })
+    }
+
+    return () => {
+      hammerInstance?.destroy()
     }
   }, [])
 
@@ -72,7 +78,9 @@ export const HideButton = (props: HideButtonProps) => {
           width: ${ICON_SIZE}px;
           height: ${ICON_SIZE}px;
           margin-top: ${props.isHidden ? 0 : 1}px;
-          transition: ${props.isHidden ? 'rotate(180deg)' : 'transform 0.2s'};
+          transition: transform 0.2s;
+          transform: ${props.isHidden ? 'rotate(180deg)' : 'rotate(0deg)'};
+          will-change: transform;
         `}
         shape="hide-icon"
       />

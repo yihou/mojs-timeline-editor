@@ -17,25 +17,33 @@ const initialState: MainPanelStates = {
 }
 
 const reducers = {
-  hideToggle: (state) => {
+  hideToggle(state) {
     const isHidden = !state.isHidden
-    const ySize = isHidden ? constants.PLAYER_HEIGHT : state.prevHeight
-    const prevHeight = isHidden ? state.ySize : constants.PLAYER_HEIGHT
-    const isTransition = true
+    const oldHeight = isHidden ? state.ySize : state.prevHeight
 
-    return { ...state, isHidden, ySize, prevHeight, isTransition }
+    state.isHidden = isHidden
+    state.prevHeight = isHidden ? oldHeight : constants.PLAYER_HEIGHT
+    state.ySize = isHidden ? constants.PLAYER_HEIGHT : oldHeight
+    state.isTransition = true
   },
-  setYSize: (state, action: PayloadAction<number>) => {
-    return { ...state, ySize: state.ySize - action.payload }
+  setYSize(state, action: PayloadAction<number>) {
+    state.ySize = state.ySize - action.payload
+
+    // if height is more than player height, let's treat it as open
+    if (state.ySize > constants.PLAYER_HEIGHT + 10) {
+      state.isHidden = false
+    }
   },
-  resetTransition: (state) => {
-    return { ...state, isTransition: false }
+  saveYPrev(state) {
+    // reset `isTransition` state that is responsible
+    // for removing transition from MainPanel
+    if (state.isTransition) {
+      state.isTransition = false
+    }
+    state.prevHeight = state.ySize
   },
-  saveYPrev: (state) => {
-    return { ...state, prevHeight: state.ySize }
-  },
-  setHidden: (state, action: PayloadAction<boolean>) => {
-    return { ...state, isHidden: action.payload }
+  setHidden(state, action: PayloadAction<boolean>) {
+    state.isHidden = action.payload
   }
 }
 

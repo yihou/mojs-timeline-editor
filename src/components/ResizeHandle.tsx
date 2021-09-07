@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react'
 import Hammer from 'hammerjs'
-import propagating from 'propagating-hammerjs'
+import propagating, { PropagatedManager } from 'propagating-hammerjs'
 import { Icon } from './Icons/Icon'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 
 export interface ResizeHandleProps {
-  onResize: (e: any) => void
-  onResizeStart: (e: any) => void
-  onResizeEnd: (e: any) => void
+  onResize: (e: HammerInput) => void
+  onResizeStart: (e: HammerInput) => void
+  onResizeEnd: (e: HammerInput) => void
 }
 
 const HANDLE_WIDTH = 32
@@ -50,24 +50,31 @@ export const ResizeHandle = (props: ResizeHandleProps) => {
   const baseRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (baseRef.current) {
-      const mc = propagating(new Hammer.Manager(baseRef.current))
-      const p = props
+    let hammerInstance: PropagatedManager
 
-      mc.add(new Hammer.Pan({ threshold: 0 }))
-      mc.on('pan', (e) => {
-        p.onResize(e.deltaY)
+    if (baseRef.current) {
+      hammerInstance = propagating(new Hammer.Manager(baseRef.current))
+      hammerInstance.add(new Hammer.Pan({ threshold: 0 }))
+      hammerInstance.on('pan', (e) => {
+        props.onResize(e)
         e.stopPropagation()
       })
 
-        .on('panstart', (e) => {
-          p.onResizeStart && p.onResizeStart(e)
-          e.stopPropagation()
-        })
-        .on('panend', (e) => {
-          p.onResizeEnd && p.onResizeEnd(e)
-          e.stopPropagation()
-        })
+      hammerInstance.on('panstart', (e) => {
+        props.onResizeStart && props.onResizeStart(e)
+        e.stopPropagation()
+      })
+
+      hammerInstance.on('panend', (e) => {
+        props.onResizeEnd && props.onResizeEnd(e)
+        e.stopPropagation()
+      })
+    }
+
+    return () => {
+      if (hammerInstance && hammerInstance.destroy) {
+        hammerInstance?.destroy()
+      }
     }
   }, [])
 

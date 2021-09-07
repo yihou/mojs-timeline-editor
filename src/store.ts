@@ -1,8 +1,14 @@
-import { createStore } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import { allReducers } from './reducers/allReducers'
+import { configureStore } from '@reduxjs/toolkit'
 
-export const store = createStore(allReducers, undefined, composeWithDevTools())
+export const store = configureStore({
+  reducer: allReducers,
+  devTools: process.env.NODE_ENV !== 'production'
+})
+
+// instance type
+export type RootState = ReturnType<typeof store.getState>
+export type StoreDispatch = typeof store.dispatch
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept('./reducers/allReducers', () => {

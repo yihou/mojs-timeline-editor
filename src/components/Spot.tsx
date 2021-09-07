@@ -138,23 +138,28 @@ export const Spot: FC<SpotProps> = ({ type, segment, meta, children }) => {
   }
 
   useEffect(() => {
+    let hammerInstance
     if (dot.current) {
-      const mc = new Hammer.Manager(dot.current)
-      mc.add(new Hammer.Pan())
-      mc.add(new Hammer.Tap())
-      mc.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
+      hammerInstance = new Hammer.Manager(dot.current)
+      hammerInstance.add(new Hammer.Pan())
+      hammerInstance.add(new Hammer.Tap())
+      hammerInstance.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL })
 
-      mc.on('pan', pan)
-      mc.on('panend', panEnd)
-      mc.on('tap', tap)
+      hammerInstance.on('pan', pan)
+      hammerInstance.on('panend', panEnd)
+      hammerInstance.on('tap', tap)
+    }
+
+    return () => {
+      hammerInstance?.destroy()
     }
   }, [])
 
-  const delayWidth = segment.delay / 10 + dDelay
-  const durationWidth = segment.duration / 10 + dDuration
+  const delayWidth = segment.delay + dDelay
+  const durationWidth = segment.duration + dDuration
 
   const style = {
-    width: `${type === 'start' ? delayWidth : durationWidth}em`
+    width: `${type === 'start' ? delayWidth : durationWidth}px` // TODO: check accuracy, previously using `em`
   }
 
   const isSelect = isSelected()

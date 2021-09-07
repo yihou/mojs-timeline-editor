@@ -6,6 +6,7 @@ import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GlobalState, Point } from 'types'
 import { BasePointLine } from './BasePointLine'
+import { RootState } from '../../store'
 
 const isMatch = (spot, id, name) => {
   return spot.id === id && spot.prop === name
@@ -85,7 +86,7 @@ export interface PropertyLineProps {
 
 export const PropertyLine = (props: PropertyLineProps) => {
   const dispatch = useDispatch()
-  const progress = useSelector((state: GlobalState) => state.progress)
+  const progress = useSelector((state: RootState) => state.progress)
   const selectedSpot = useSelector((state: GlobalState) => state.selectedSpot)
   const points = useSelector((state: GlobalState) => state.points)
 

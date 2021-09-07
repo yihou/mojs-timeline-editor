@@ -1,7 +1,6 @@
-import { Component, createRef, ReactNode } from 'react'
-
-import { constants } from '../constants'
 import styled from '@emotion/styled'
+import { memo, useRef } from 'react'
+import { constants } from '../constants'
 
 const TimelinePanelWrapper = styled.div`
   position: relative;
@@ -21,112 +20,78 @@ const TimelinePanelLabel = styled.text`
   font-size: 7px;
 `
 
+const DASHES_PER_SEC = 20
+const DASH_STEP = 100 * (1 / DASHES_PER_SEC)
+
 interface TimelinePanelProps {
   time: number
   scale?: number
 }
 
-interface TimelinePanelStates {
-  scale: number
-  dashesPerSec: number
-  DASH_STEP: number
+const getDashType = (dashNumber, dashesPerSec) => {
+  const isLarge = !(dashNumber % (dashesPerSec / 2)) || dashNumber === 0
+  const isMiddle = !(dashNumber % (dashesPerSec / 4))
+  return isLarge ? 'large' : isMiddle ? 'middle' : 'small'
 }
 
-export class TimelinePanel extends Component<
-  TimelinePanelProps,
-  TimelinePanelStates
-> {
-  _svg = createRef<SVGSVGElement>()
-  _dashesCnt = 0
+const Dash = ({ dashNumber }) => {
+  const dashType = getDashType(dashNumber, DASHES_PER_SEC)
 
-  constructor(props) {
-    super(props)
+  const color = dashType === 'large' ? '#fff' : '#ae9bae'
+  const height = dashType === 'large' ? 7 : dashType === 'middle' ? 6 : 4
+  const x = DASH_STEP * dashNumber
+  const y = constants.TIMELINE_HEIGHT - height
 
-    const DASHES_PER_SEC = 20
-    this.state = {
-      scale: props.scale || 1,
-      dashesPerSec: DASHES_PER_SEC,
-      DASH_STEP: 100 * (1 / DASHES_PER_SEC)
-    }
-
-    this._dashesCnt = props.time * this.state.dashesPerSec
-  }
-
-  render() {
-    const dashes = this._compileDashes()
-    const pointerValues = this._compileLabels()
-    const { scale } = this.state
-
-    return (
-      <TimelinePanelWrapper>
-        <TimelinePanelMainSvg ref={this._svg}>
-          <g style={{ fontSize: `${scale}px` }}>
-            {dashes}
-            {pointerValues}
-          </g>
-        </TimelinePanelMainSvg>
-      </TimelinePanelWrapper>
-    )
-  }
-
-  _createDash(dashNumber) {
-    const { dashesPerSec, DASH_STEP } = this.state
-    const dashType = this._getDashType(dashNumber, dashesPerSec)
-
-    const color = dashType === 'large' ? '#fff' : '#ae9bae'
-    const height = dashType === 'large' ? 7 : dashType === 'middle' ? 6 : 4
-    const x = DASH_STEP * dashNumber
-    const y = constants.TIMELINE_HEIGHT - height
-
-    return (
-      <rect
-        key={dashNumber}
-        width="1"
-        height={height}
-        x={`${x}em`}
-        y={y}
-        fill={color}
-      />
-    )
-  }
-
-  _getDashType(dashNumber, dashesPerSec) {
-    const isLarge = !(dashNumber % (dashesPerSec / 2)) || dashNumber === 0
-    const isMiddle = !(dashNumber % (dashesPerSec / 4))
-    return isLarge ? 'large' : isMiddle ? 'middle' : 'small'
-  }
-
-  _compileDashes = () => {
-    const dashes: ReactNode[] = []
-    for (let j = 0; j <= this._dashesCnt; j++) {
-      dashes.push(this._createDash(j))
-    }
-
-    return dashes
-  }
-
-  _compileLabels = () => {
-    const labels: ReactNode[] = []
-    const { dashesPerSec, DASH_STEP } = this.state
-
-    for (
-      let j = 0, value = 0;
-      j <= this._dashesCnt;
-      j += dashesPerSec / 2, value += 500
-    ) {
-      const textAnchor = j === 0 ? 'start' : 'middle'
-      const x = DASH_STEP * j
-      const y = constants.TIMELINE_HEIGHT / 2
-
-      labels.push(
-        <svg key={j} x={`${x}em`} style={{ overflow: 'visible' }}>
-          <TimelinePanelLabel y={y} textAnchor={textAnchor}>
-            {value}
-          </TimelinePanelLabel>
-        </svg>
-      )
-    }
-
-    return labels
-  }
+  return (
+    <rect
+      key={dashNumber}
+      width="1"
+      height={height}
+      x={`${x}px`} // TODO: check accuracy, previously using `em`
+      y={y}
+      fill={color}
+    />
+  )
 }
+
+const DashLabel = ({ dashNumber }) => {
+  const amount = dashNumber * (DASHES_PER_SEC / 2)
+  const textAnchor = amount === 0 ? 'start' : 'middle'
+  const x = DASH_STEP * amount
+  const y = constants.TIMELINE_HEIGHT / 2
+  const label = amount * 50
+
+  return (
+    <svg key={dashNumber} x={`${x}px`} style={{ overflow: 'visible' }}>
+      <TimelinePanelLabel y={y} textAnchor={textAnchor}>
+        {label}
+      </TimelinePanelLabel>
+    </svg>
+  )
+}
+
+export const TimelinePanel = memo((props: TimelinePanelProps) => {
+  const svgRef = useRef<SVGSVGElement>(null)
+  const scale = props.scale || 1
+  const dashCount = props.time * DASHES_PER_SEC
+  const labelsCount = dashCount / (DASHES_PER_SEC / 2)
+
+  // add the last label and tick at the end
+  const dashes = [...Array(dashCount + 1)]
+  const labels = [...Array(labelsCount + 1)]
+
+  return (
+    <TimelinePanelWrapper>
+      <TimelinePanelMainSvg ref={svgRef}>
+        <g style={{ fontSize: `${scale}px` }}>
+          {dashes.map((_e, num) => (
+            <Dash key={num} dashNumber={num} />
+          ))}
+          {labels.map((_e, num) => (
+            <DashLabel key={num} dashNumber={num} />
+          ))}
+        </g>
+      </TimelinePanelMainSvg>
+    </TimelinePanelWrapper>
+  )
+})

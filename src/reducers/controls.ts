@@ -19,14 +19,13 @@ export const controlsSlice = createSlice({
       state,
       action: PayloadAction<ControlsStates['selected']>
     ) => {
-      const selected = action.payload === state.selected ? null : action.payload
-      return { ...state, selected }
+      state.selected = action.payload === state.selected ? null : action.payload
     },
     toolsResetSelected: (state) => {
-      return { ...state, selected: null }
+      state.selected = null
     },
     controlsSetMouseInside: (state, action: PayloadAction<boolean>) => {
-      return { ...state, isMouseInside: action.payload }
+      state.isMouseInside = action.payload
     }
   }
 })

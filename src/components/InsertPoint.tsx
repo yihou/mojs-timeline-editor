@@ -1,14 +1,14 @@
-import { GlobalState } from 'types'
 import { pointsSlice } from '../reducers/points'
 import { controlsSlice } from '../reducers/controls'
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { RootState, StoreDispatch } from '../store'
 
 export const InsertPoint = () => {
-  const dispatch = useDispatch()
-  const controls = useSelector((state: GlobalState) => state.controls)
-  const progress = useSelector((state: GlobalState) => state.progress)
+  const dispatch = useDispatch<StoreDispatch>()
+  const controls = useSelector((state: RootState) => state.controls)
+  const progress = useSelector((state: RootState) => state.progress)
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0
@@ -55,17 +55,14 @@ export const InsertPoint = () => {
       style={style}
       css={css`
         position: absolute;
-        width: var(--mojs-left-panel-width);
+        width: var(--mojs-point-size);
         height: var(--mojs-point-size);
         border-radius: 50%;
         background: var(--mojs-color-orange);
-        margin-left: -(var(--mojs-point-size) / 2) * 1px;
-        margin-top: -(var(--mojs-point-size) / 2) * 1px;
+        margin-left: calc(var(--mojs-point-size) / -2);
+        margin-top: calc(var(--mojs-point-size) / -2);
       `}
       onClick={addPoint}
-      data-component="insert-point"
-    >
-      {'>'}
-    </div>
+    />
   )
 }

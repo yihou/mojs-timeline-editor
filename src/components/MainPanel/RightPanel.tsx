@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 export const RightPanel = (props: ResizeHandleProps) => {
   const dispatch = useDispatch()
-  const mainPanel = useSelector((state: GlobalState) => state.mainPanel)
+  const isHidden = useSelector((state: GlobalState) => state.mainPanel.isHidden)
 
   const onHideButton = () => {
     dispatch(mainPanelSlice.actions.hideToggle())
@@ -21,14 +21,12 @@ export const RightPanel = (props: ResizeHandleProps) => {
         right: 0;
         top: 0;
         left: var(--mojs-left-panel-width);
-        z-index: 1;
         height: var(--mojs-point-line-height);
-        /*height: 100%;*/
-
         color: var(--mojs-color-white);
+        z-index: 1;
       `}
     >
-      <HideButton isHidden={mainPanel.isHidden} onTap={onHideButton} />
+      <HideButton isHidden={isHidden} onTap={onHideButton} />
       <ResizeHandle {...props} />
       <TimelinePanel time={15} />
     </div>

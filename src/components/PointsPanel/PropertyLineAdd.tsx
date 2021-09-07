@@ -109,9 +109,13 @@ export const PropertyLineAdd = (props: PropertyLineAddProps) => {
   useEffect(() => {
     setError(isSegmentExist() ? EXIST_MESSAGE : undefined)
 
-    resetEvent.add(() => {
+    const resetEventId = resetEvent.add(() => {
       setIsAdd(false)
     })
+
+    return () => {
+      resetEvent.remove(resetEventId)
+    }
   }, [])
 
   // componentDidUpdate

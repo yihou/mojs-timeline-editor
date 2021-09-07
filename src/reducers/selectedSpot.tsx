@@ -8,23 +8,25 @@ export interface SelectedSpot {
 }
 
 // Define the initial state using that type
-const initialState: SelectedSpot = {
+const initialState: SelectedSpot = Object.freeze({
   id: undefined,
   spotIndex: undefined,
   type: undefined,
   prop: undefined
-}
+})
 
 export const selectedSpotSlice = createSlice({
   name: 'selectedSpot',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setSelectedSpot: (_state, action: PayloadAction<SelectedSpot>) => {
-      return { ...action.payload }
+    setSelectedSpot: (state, action: PayloadAction<SelectedSpot>) => {
+      state = action.payload
+      return state
     },
-    resetSelectedSpot: () => {
-      return { ...initialState }
+    resetSelectedSpot: (state) => {
+      state = initialState
+      return state
     }
   }
 })

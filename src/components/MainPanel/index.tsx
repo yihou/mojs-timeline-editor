@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { css } from '@emotion/react'
 import { GlobalState } from 'types'
 import { TimelineHandle } from '../TimelineHandle'
@@ -22,89 +22,81 @@ const MainPanelSection = styled.section<{ isTransition: boolean }>`
     css`
       transition: height 0.4s;
     `};
-
-  [data-component='timeline-handle'] {
-    margin-left: var(--mojs-left-panel-width);
-    font-size: 1px;
-  }
 `
 
-export const MainPanel = () => {
-  const dispatch = useDispatch()
-  const mainPanel = useSelector((state: GlobalState) => state.mainPanel)
+// HELPERS
+const clampMinHeight = constants.PLAYER_HEIGHT
+const getClampHeight = (height) => {
+  return Math.max(clampMinHeight, height)
+}
+
+const clampDeltaY = (ySize, deltaY) => {
+  if (ySize - deltaY <= clampMinHeight) {
+    return ySize - clampMinHeight
+  }
+
+  return deltaY
+}
+
+export const MainPanel = memo(() => {
   const [deltaY, setDeltaY] = useState<number>(0)
 
-  const _resizeHeight = (deltaY) => {
-    // reset `isTransition` state that is responsible
-    // for applying a className with transition enabled
-    if (mainPanel.isTransition) {
-      dispatch(mainPanelSlice.actions.resetTransition())
-    }
+  const dispatch = useDispatch()
+  const isHidden = useSelector((state: GlobalState) => state.mainPanel.isHidden)
+  const ySize = useSelector((state: GlobalState) => state.mainPanel.ySize)
+  const currentHeight = getClampHeight(ySize - deltaY)
+  const isTransition = useSelector(
+    (state: GlobalState) => state.mainPanel.isTransition
+  )
 
-    setDeltaY(_clampDeltaY(deltaY))
+  const onResizeHeight = (hammerInput) => {
+    setDeltaY(clampDeltaY(ySize, hammerInput.deltaY))
   }
 
-  const _resizeHeightEnd = () => {
-    const data = _clampDeltaY(deltaY)
-    setDeltaY(0)
+  const onResizeHeightEnd = (hammerInput) => {
+    const data = clampDeltaY(ySize, hammerInput.deltaY)
     dispatch(mainPanelSlice.actions.setYSize(data))
+    setDeltaY(0)
   }
 
-  const _resizeHeightStart = () => {
-    if (mainPanel.ySize !== _getMinHeight()) {
+  const onResizeHeightStart = () => {
+    if (ySize !== clampMinHeight) {
       dispatch(mainPanelSlice.actions.saveYPrev())
     }
   }
 
-  // HELPERS
-
-  const _clampHeight = (height) => {
-    return Math.max(_getMinHeight(), height)
-  }
-
-  const _clampDeltaY = (deltaY) => {
-    const minSize = _getMinHeight()
-    return mainPanel.ySize - deltaY <= minSize
-      ? mainPanel.ySize - minSize
-      : deltaY
-  }
-
-  const _checkHideButton = (height) => {
+  const checkHideButton = () => {
     // if we drag the panel and it is in `isHidden` state, reset that state
-    if (height > _getMinHeight() && mainPanel.isHidden) {
+    if (currentHeight > clampMinHeight && isHidden) {
       dispatch(mainPanelSlice.actions.setHidden(false))
     }
     // if we drag the panel and it is not in `isHidden` state, set that state
     // and reset prevHeight to add user the ability to expand the panel,
     // otherwise it will stick at the bottom
-    if (height === _getMinHeight() && !mainPanel.isHidden) {
+    if (currentHeight === clampMinHeight && !isHidden) {
       dispatch(mainPanelSlice.actions.setHidden(true))
     }
   }
 
-  const _getMinHeight = () => {
-    return constants.PLAYER_HEIGHT
-  }
-
-  const height = _clampHeight(mainPanel.ySize - deltaY)
-  // check state of `hide button` regarding current height
-  _checkHideButton(height)
+  // on mount
+  useEffect(() => {
+    // check state of `hide button` regarding current height
+    checkHideButton()
+  }, [])
 
   return (
     <MainPanelSection
-      style={{ height }}
-      isTransition={mainPanel.isTransition}
-      data-component="main-panel"
+      style={{ height: currentHeight }}
+      isTransition={isTransition}
     >
-      {'>'}
       <TimelineHandle />
       <LeftPanel />
       <RightPanel
-        onResize={_resizeHeight}
-        onResizeEnd={_resizeHeightEnd}
-        onResizeStart={_resizeHeightStart}
+        onResize={onResizeHeight}
+        onResizeEnd={onResizeHeightEnd}
+        onResizeStart={onResizeHeightStart}
       />
       <BodyPanel />
     </MainPanelSection>
   )
-}
+})

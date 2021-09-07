@@ -38,12 +38,18 @@ export const Point = ({ state }: PointProps) => {
 
   // on mount
   useEffect(() => {
-    if (baseRef.current) {
-      const mc = new Hammer.Manager(baseRef.current)
-      mc.add(new Hammer.Pan())
+    let hammerInstance
 
-      mc.on('pan', onPan)
-      mc.on('panend', onPanEnd)
+    if (baseRef.current) {
+      hammerInstance = new Hammer.Manager(baseRef.current)
+      hammerInstance.add(new Hammer.Pan())
+
+      hammerInstance.on('pan', onPan)
+      hammerInstance.on('panend', onPanEnd)
+    }
+
+    return () => {
+      hammerInstance?.destroy()
     }
   }, [])
 

@@ -37,14 +37,16 @@ export interface SegmentTimelineProps {
   meta: any
 }
 
-export const SegmentTimeline = (props: SegmentTimelineProps) => (
-  <SegmentTimelineWrapper data-component="segment-timeline">
-    <SegmentTimelineBar>
-      <SegmentTimelineDelay />
-      <Spot type="start" {...props} />
-      <Spot type="end" {...props}>
-        <Easing meta={props.meta} state={props.segment} />
-      </Spot>
-    </SegmentTimelineBar>
-  </SegmentTimelineWrapper>
-)
+export const SegmentTimeline = (props: SegmentTimelineProps) => {
+  return (
+    <SegmentTimelineWrapper data-component="segment-timeline">
+      <SegmentTimelineBar>
+        <SegmentTimelineDelay />
+        <Spot type="start" {...props} />
+        <Spot type="end" {...props}>
+          <Easing meta={props.meta} state={props.segment} />
+        </Spot>
+      </SegmentTimelineBar>
+    </SegmentTimelineWrapper>
+  )
+}

@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from 'redux'
 import recycleState from 'redux-recycle'
-import { progressSlice } from './progress'
+import { timelineSlice } from './timeline'
 import { mainPanelSlice } from './mainPanel'
 import { controlsSlice } from './controls'
 import { pointsSlice } from './points'
@@ -10,7 +10,7 @@ export const SET_APP_STATE = 'SET_APP_STATE'
 
 export const allReducers: Reducer = recycleState(
   combineReducers({
-    [progressSlice.name]: progressSlice.reducer,
+    [timelineSlice.name]: timelineSlice.reducer,
     [mainPanelSlice.name]: mainPanelSlice.reducer,
     [controlsSlice.name]: controlsSlice.reducer,
     [pointsSlice.name]: pointsSlice.reducer,

@@ -12,15 +12,22 @@ const onClick = (e) => {
   }
 }
 
-const add = (fun) => {
-  const id = makeID()
-  listeners[id] = fun
-  return id
-}
-
-const remove = (id) => {
-  delete listeners[id]
-}
-
 document.addEventListener('click', onClick)
-export const resetEvent = { add, remove }
+
+// make sure hot reload remove previous global event listener
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+  module.hot.dispose(() => {
+    document.removeEventListener('click', onClick)
+  })
+}
+
+export const resetEvent = {
+  add: (fun) => {
+    const id = makeID()
+    listeners[id] = fun
+    return id
+  },
+  remove: (id) => {
+    delete listeners[id]
+  }
+}

@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { GlobalState } from 'types'
 import { controlsSlice } from '../../reducers/controls'
 import { Icon } from '../Icons/Icon'
-import { InsertPoint } from './InsertPoint'
+import { Point } from './Point'
 import { ToolsPanelButton } from './ToolsPanelButton'
 import { ToolsPanelAnchor } from './ToolsPanelAnchor'
 
@@ -35,7 +35,7 @@ export const ToolsPanel = () => {
         z-index: 1;
       `}
     >
-      <InsertPoint />
+      <Point />
       <ToolsPanelButton isActive={selected === 'plus'} onClick={setPlus}>
         <Icon shape="plus" />
       </ToolsPanelButton>

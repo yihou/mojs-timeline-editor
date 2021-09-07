@@ -7,7 +7,8 @@ import { PropertyLineAdd } from './PropertyLineAdd'
 import { pointsSlice } from '../../reducers/points'
 import { BasePointLine } from './BasePointLine'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState, Point } from 'types'
+import { RootState } from '../../store'
+import { Point } from 'types'
 
 interface PointLineProps {
   point: Point
@@ -61,7 +62,7 @@ const PointLineButton = styled(Button)<PointLineButtonProps>`
 
 export const PointLine = (props: PointLineProps) => {
   const dispatch = useDispatch()
-  const progress = useSelector((state: GlobalState) => state.progress)
+  const progress = useSelector((state: RootState) => state.progress)
 
   const onCheck = () => {
     // const { point } = this.props

@@ -18,12 +18,22 @@ export const MojsTimelineEditor = ({ withPlayer = true }) => {
   const editorWrapperRef = useRef<HTMLDivElement>(null)
   // on mount, persist store
   useEffect(() => {
-    persist(store)
+    const disposeUnloadEvent = persist(store)
+    let mojsPlayer
 
     if (withPlayer) {
-      createMojsPlayer({
+      mojsPlayer = createMojsPlayer({
         parent: editorWrapperRef.current as HTMLDivElement
       })
+    }
+
+    return () => {
+      // remove player before unmount
+      mojsPlayer?.el.remove()
+
+      if (disposeUnloadEvent) {
+        disposeUnloadEvent()
+      }
     }
   }, [])
 
@@ -54,9 +64,8 @@ export const MojsTimelineEditor = ({ withPlayer = true }) => {
   )
 }
 
-export const createTimelineEditor = (
-  parent = document.getElementById('app')
-) => {
+// noinspection JSUnusedGlobalSymbols
+export const createTimelineEditor = (parent = document.body) => {
   const TimelineEditor = createElement(MojsTimelineEditor)
   ReactDOM.render(TimelineEditor, parent)
 }

@@ -1,11 +1,11 @@
 import styled from '@emotion/styled'
-import { useEffect, useRef, useState } from 'react'
-import { Icon } from './Icons/Icon'
-import Hammer from 'hammerjs'
-import { selectedSpotSlice } from '../reducers/selectedSpot'
-import { progressSlice } from '../reducers/progress'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GlobalState } from 'types'
+import Hammer from 'hammerjs'
+import { Icon } from './Icons/Icon'
+import { GlobalState } from '../types'
+import { selectedSpotSlice } from '../reducers/selectedSpot'
+import { clampDeltaX, timelineSlice } from '../reducers/timeline'
 
 const TIMELINE_HEAD_SIZE = 14
 const TIMELINE_ICON_SIZE = 6
@@ -17,6 +17,8 @@ const TimelineHandleWrapper = styled.div`
   width: 1px;
   background: var(--mojs-color-orange);
   z-index: 20;
+  margin-left: var(--mojs-left-panel-width);
+  font-size: 1px;
 `
 
 const TimelineHandleHead = styled.div`
@@ -47,47 +49,46 @@ const TimelineHandleHead = styled.div`
   }
 `
 
-export const TimelineHandle = () => {
+export const TimelineHandle = memo(() => {
   const dispatch = useDispatch()
-  const progress = useSelector((state: GlobalState) => state.progress)
+  const progress = useSelector((state: GlobalState) => state.timeline.progress)
   const [deltaX, setDeltaX] = useState<number>(0)
   const headRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (headRef.current) {
-      const mc = new Hammer.Manager(headRef.current)
-      mc.add(new Hammer.Pan())
+    let hammerInstance
 
-      mc.on('pan', (e) => {
-        setDeltaX(clampDeltaX(10 * e.deltaX, 7000))
+    if (headRef.current) {
+      hammerInstance = new Hammer.Manager(headRef.current)
+      hammerInstance.add(new Hammer.Pan({ threshold: 0 }))
+
+      hammerInstance.on('pan', (e) => {
+        setDeltaX(clampDeltaX(10 * e.deltaX, progress))
       })
 
-      mc.on('panstart', () => {
+      hammerInstance.on('panstart', () => {
         dispatch(selectedSpotSlice.actions.resetSelectedSpot())
       })
 
-      mc.on('panend', () => {
-        const data = progress + deltaX
-        dispatch(progressSlice.actions.setProgress(data))
+      hammerInstance.on('panend', (e) => {
+        dispatch(timelineSlice.actions.updateProgress(10 * e.deltaX))
         setDeltaX(0)
       })
     }
-  })
-  //
-  const clampDeltaX = (deltaX, max) => {
-    deltaX = progress + deltaX < 0 ? -progress : deltaX
-    deltaX = progress + deltaX > max ? max - progress : deltaX
-    return deltaX
-  }
+
+    return () => {
+      hammerInstance?.destroy()
+    }
+  }, [progress])
 
   const shift = (progress + deltaX) / 10
   const style = { transform: `translateX(${shift}em)` }
 
   return (
-    <TimelineHandleWrapper style={style} data-component="timeline-handle">
+    <TimelineHandleWrapper style={style}>
       <TimelineHandleHead ref={headRef}>
         <Icon shape="handle" />
       </TimelineHandleHead>
     </TimelineHandleWrapper>
   )
-}
+})

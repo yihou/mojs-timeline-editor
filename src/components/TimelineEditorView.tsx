@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { forwardRef, useEffect } from 'react'
+import React, { forwardRef } from 'react'
 import { InsertPoint } from './InsertPoint'
 import { Icons } from './Icons'
 import { Points } from './Points'
@@ -21,13 +21,7 @@ export const TimelineEditorView = forwardRef<HTMLDivElement>(() => {
   const dispatch = useDispatch()
   const controls = useSelector((state: GlobalState) => state.controls)
 
-  const _mouseMove = (e) => {
-    /* we cannot `stopPropagation` the event, because `hammerjs`
-       will not be able to work properly on `resize-handle`, so we
-       set the `isTimelinePanel` flag instead indicating that we are
-       inside the `timeline-editor` panel
-    */
-    e.isTimelinePanel = true
+  const mainPanelOnMouseEnter = () => {
     if (controls.isMouseInside) {
       return
     }
@@ -35,30 +29,22 @@ export const TimelineEditorView = forwardRef<HTMLDivElement>(() => {
     dispatch(controlsSlice.actions.controlsSetMouseInside(true))
   }
 
-  // on mount
-  useEffect(() => {
-    const docMouseMove = (e) => {
-      if (e.isTimelinePanel) {
-      }
-
-      if (controls.isMouseInside) {
-        dispatch(controlsSlice.actions.controlsSetMouseInside(false))
-      }
+  const mainPanelOnMouseLeave = () => {
+    if (!controls.isMouseInside) {
+      return
     }
 
-    document.addEventListener('mousemove', docMouseMove)
-
-    return () => {
-      console.log('remove docMousemove event')
-      document.removeEventListener('mousemove', docMouseMove)
-    }
-  }, [])
+    dispatch(controlsSlice.actions.controlsSetMouseInside(false))
+  }
 
   return (
     <Wrapper>
       <InsertPoint />
       <Points />
-      <div onMouseMove={_mouseMove}>
+      <div
+        onMouseEnter={mainPanelOnMouseEnter}
+        onMouseLeave={mainPanelOnMouseLeave}
+      >
         <Icons />
         <MainPanel />
       </div>
