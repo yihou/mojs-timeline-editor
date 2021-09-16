@@ -34,6 +34,8 @@ export const ButtonInner = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   fill: white;
   transition: all 0.15s ease;
 `

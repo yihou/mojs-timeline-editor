@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 import { GlobalState } from 'types'
-import { controlsSlice } from '../../reducers/controls'
+import { controlsSlice, ToolsType } from '../../reducers/controls'
 import { Icon } from '../Icons/Icon'
-import { Point } from './Point'
 import { ToolsPanelButton } from './ToolsPanelButton'
 import { ToolsPanelAnchor } from './ToolsPanelAnchor'
 
@@ -15,12 +14,12 @@ export const ToolsPanel = () => {
   const selected = useSelector((state: GlobalState) => state.controls.selected)
 
   const setPlus = () => {
-    dispatch(controlsSlice.actions.toolsSetSelected('plus'))
+    dispatch(controlsSlice.actions.toolsSetSelected(ToolsType.PLUS))
     // dispatch(setSelected('OBJECT'));
   }
 
   const setHtml = () => {
-    dispatch(controlsSlice.actions.toolsSetSelected('html'))
+    dispatch(controlsSlice.actions.toolsSetSelected(ToolsType.HTML))
     // dispatch(setSelected('HTML'));
   }
 
@@ -35,7 +34,7 @@ export const ToolsPanel = () => {
         z-index: 1;
       `}
     >
-      <Point />
+      {/* <Point /> */}
       <ToolsPanelButton isActive={selected === 'plus'} onClick={setPlus}>
         <Icon shape="plus" />
       </ToolsPanelButton>

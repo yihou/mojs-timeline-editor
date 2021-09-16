@@ -1,5 +1,5 @@
 import { pointsSlice } from '../reducers/points'
-import { controlsSlice } from '../reducers/controls'
+import { controlsSlice, ToolsType } from '../reducers/controls'
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ export const InsertPoint = () => {
   })
   const isOut = !controls.isMouseInside
   /* To find out if the insert point should be visible. */
-  const isVisible = controls.selected === 'plus' && isOut
+  const isVisible = controls.selected === ToolsType.PLUS && isOut
 
   const addPoint = () => {
     dispatch(
@@ -29,11 +29,13 @@ export const InsertPoint = () => {
     dispatch(controlsSlice.actions.toolsResetSelected())
   }
 
+  // on visible change, attach mousemove event listener
   useEffect(() => {
+    if (!isVisible) {
+      return
+    }
+
     const mouseMove = (e) => {
-      if (!isVisible) {
-        return
-      }
       const { pageX: x, pageY: y } = e
       setMousePosition({ x, y })
     }
@@ -43,7 +45,7 @@ export const InsertPoint = () => {
     return () => {
       document.removeEventListener('mousemove', mouseMove)
     }
-  }, [])
+  }, [isVisible])
 
   const style = {
     display: isVisible ? 'block' : 'none',

@@ -1,12 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+export enum ToolsType {
+  PLUS = 'plus',
+  HTML = 'html'
+}
+
 export interface ControlsStates {
-  selected: null | 'html' | 'plus'
+  selected?: ToolsType
   isMouseInside: boolean
 }
 
 const initialState: ControlsStates = {
-  selected: null,
+  selected: undefined,
   isMouseInside: false
 }
 
@@ -19,10 +24,11 @@ export const controlsSlice = createSlice({
       state,
       action: PayloadAction<ControlsStates['selected']>
     ) => {
-      state.selected = action.payload === state.selected ? null : action.payload
+      state.selected =
+        action.payload === state.selected ? undefined : action.payload
     },
     toolsResetSelected: (state) => {
-      state.selected = null
+      state.selected = undefined
     },
     controlsSetMouseInside: (state, action: PayloadAction<boolean>) => {
       state.isMouseInside = action.payload

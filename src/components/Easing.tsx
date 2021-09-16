@@ -15,7 +15,7 @@ const EasingWrapper = styled.div<{ isFull: boolean }>`
   top: 50%;
   z-index: 1;
   margin-left: -${(props) => (props.isFull ? 0 : EASING_ICON_SIZE)}px;
-  margin-top: -${EASING_HEIGHT / 2};
+  margin-top: -${EASING_HEIGHT / 2}px;
 
   &:hover {
     opacity: 0.85;
@@ -27,8 +27,19 @@ const EasingFullIcon = styled.div<{ isFull: boolean }>`
   height: ${EASING_HEIGHT}px;
   background: var(--mojs-color-purple);
   border-radius: var(--mojs-border-radius);
-  margin-left: -${EASING_WIDTH / 2};
+  margin-left: -${EASING_WIDTH / 2}px;
   display: ${(props) => (props.isFull ? 'block' : 'none')};
+`
+
+const EasingIcon = styled(Icon)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: ${EASING_ICON_SIZE}px;
+  height: ${EASING_ICON_SIZE}px;
+  margin-left: -${EASING_ICON_SIZE / 2}px;
+  margin-top: -${EASING_ICON_SIZE / 2}px;
+  fill: var(--mojs-color-purple);
 `
 
 const EasingShortIcon = styled.div<{ isFull: boolean }>`
@@ -36,52 +47,30 @@ const EasingShortIcon = styled.div<{ isFull: boolean }>`
   height: ${EASING_HEIGHT}px;
   cursor: pointer;
   display: ${(props) => (props.isFull ? 'none' : 'block')};
-
-  [data-component='icon'] {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: -${EASING_ICON_SIZE}px;
-    height: -${EASING_ICON_SIZE}px;
-    margin-left: -${EASING_ICON_SIZE / 2}px;
-    margin-top: -${EASING_ICON_SIZE / 2}px;
-    fill: var(--mojs-color-purple);
-  }
 `
 
 const EasingDropdownIcon = styled.div`
   .dropdown-icon {
     position: absolute;
-    width: ${EASING_HEIGHT};
-    height: ${EASING_HEIGHT};
+    width: ${EASING_HEIGHT}px;
+    height: ${EASING_HEIGHT}px;
     right: 0;
     top: 0;
     border-left: 1px solid var(--mojs-color-light-purple);
-
-    [data-component='icon'] {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: ${EASING_ICON_SIZE};
-      height: ${EASING_ICON_SIZE};
-      margin-top: -${EASING_ICON_SIZE / 2};
-      margin-left: -${EASING_ICON_SIZE / 2 - 1};
-      fill: var(--mojs-color-white);
-    }
   }
 `
 
 const EasingLabel = styled.div`
   .label {
     position: absolute;
-    left: -${EASING_WIDTH / 2};
+    left: -${EASING_WIDTH / 2}px;
     right: 0;
     top: 3px;
     color: var(--mojs-color-white);
     font-size: 7px;
     /*width:           100%;*/
     letter-spacing: 0.5px;
-    padding-right: ${EASING_HEIGHT + 3};
+    padding-right: ${EASING_HEIGHT + 3}px;
     padding-left: 5px;
 
     // ellipsis
@@ -130,13 +119,13 @@ export const Easing = (props: EasingProps) => {
   return (
     <EasingWrapper isFull={isFull} data-component="easing">
       <EasingShortIcon isFull={isFull}>
-        <Icon shape="plus" />
+        <EasingIcon shape="plus" />
       </EasingShortIcon>
       <EasingFullIcon isFull={isFull}>
         {easing === 'custom' ? <CurveEditor meta={meta} /> : null}
         <EasingLabel title={easing}>{easing}</EasingLabel>
         <EasingDropdownIcon>
-          <Icon shape="dropdown" />
+          <EasingIcon shape="dropdown" />
         </EasingDropdownIcon>
       </EasingFullIcon>
       <EasingSelect onChange={onChange} value={easing} />

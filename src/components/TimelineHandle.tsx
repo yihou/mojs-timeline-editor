@@ -10,17 +10,6 @@ import { clampDeltaX, timelineSlice } from '../reducers/timeline'
 const TIMELINE_HEAD_SIZE = 14
 const TIMELINE_ICON_SIZE = 6
 
-const TimelineHandleWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  min-height: 100%;
-  width: 1px;
-  background: var(--mojs-color-orange);
-  z-index: 20;
-  margin-left: var(--mojs-left-panel-width);
-  font-size: 1px;
-`
-
 const TimelineHandleHead = styled.div`
   cursor: pointer;
   background: var(--mojs-color-purple);
@@ -45,6 +34,23 @@ const TimelineHandleHead = styled.div`
   &:hover {
     [data-component='icon'] {
       opacity: 0.85;
+    }
+  }
+`
+
+const TimelineHandleWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  min-height: 100%;
+  width: 1px;
+  background: var(--mojs-color-orange);
+  z-index: 20;
+  margin-left: var(--mojs-left-panel-width);
+  font-size: 1px;
+
+  &:hover {
+    ${TimelineHandleHead} {
+      transform: scale(1.3);
     }
   }
 `
@@ -82,11 +88,11 @@ export const TimelineHandle = memo(() => {
   }, [progress])
 
   const shift = (progress + deltaX) / 10
-  const style = { transform: `translateX(${shift}em)` }
+  const style = { transform: `translateX(${shift}px)` }
 
   return (
-    <TimelineHandleWrapper style={style}>
-      <TimelineHandleHead ref={headRef}>
+    <TimelineHandleWrapper ref={headRef} style={style}>
+      <TimelineHandleHead>
         <Icon shape="handle" />
       </TimelineHandleHead>
     </TimelineHandleWrapper>

@@ -5,7 +5,7 @@ import { getLast } from '../helpers/getLast'
 import { createPoint, CreatePointOptions } from '../helpers/createPoint'
 import { createSegment } from '../helpers/createSegment'
 import { change } from '../helpers/change'
-import { Point } from '../types'
+import { Point, Segment } from '../types'
 
 const resetSelectedPoints = (state) => {
   const newState = {}
@@ -19,7 +19,7 @@ const resetSelectedPoints = (state) => {
   return newState
 }
 
-const ensureTimeBounds = (prop, i = 0, start = 0) => {
+const ensureTimeBounds = (prop, i: number = 0, start: number = 0) => {
   if (i >= prop.length) {
     return
   }
@@ -32,6 +32,10 @@ const ensureTimeBounds = (prop, i = 0, start = 0) => {
 }
 
 const addSegment = (segments, name, data, current) => {
+  if (!Array.isArray(segments)) {
+    throw new Error('`segments` not found')
+  }
+
   const prevSpot = getLast(segments)
   const isChanged = segments.length > 1 || segments[0].isChanged
   const isUpdate = !isChanged && segments[0].duration === constants.MIN_DURATION
@@ -101,18 +105,24 @@ const reducers = {
   },
   addSnapshot: (state, action: PayloadAction<{ time: number; id: string }>) => {
     const { id } = action.payload
-    const current = state[id].currentProps
+    const current = state[id]?.currentProps
 
-    const props = Object.keys(current)
-    let newState = state
-    for (let i = 0; i < props.length; i++) {
-      const name = props[i]
-      newState = change(newState, [id, 'props', name], (segments) =>
-        addSegment([...segments], name, action.payload, current)
-      )
+    if (!current) {
+      throw new Error('Current snapshot not found')
     }
 
-    state = { ...newState }
+    const props = Object.keys(current)
+    for (let i = 0; i < props.length; i++) {
+      const name = props[i]
+      const segments = state[id].props[name]
+
+      state[id].props[name] = addSegment(
+        segments,
+        name,
+        action.payload,
+        current
+      )
+    }
 
     return state
   },
@@ -122,14 +132,9 @@ const reducers = {
   ) => {
     const { id, name } = action.payload
     const current = state[id].currentProps
+    const segments: Segment[] = state[id].props[name] || []
 
-    const newState = change<PointsState>(
-      state,
-      [id, 'props', name],
-      (segments) => addSegment([...segments], name, action.payload, current)
-    )
-
-    state = { ...newState }
+    state[id].props[name] = addSegment(segments, name, action.payload, current)
 
     return state
   },
@@ -160,22 +165,23 @@ const reducers = {
       duration: number
     }>
   ) => {
-    const { id, prop, spotIndex } = action.payload
+    const { id, prop, spotIndex, delay = 0, duration = 0 } = action.payload
+    const selectedPoint = state[id]
 
-    const newState = change(state, [id, 'props', prop, spotIndex], (prop) => {
-      const { delay = 0, duration = 0 } = action.payload
+    if (selectedPoint) {
+      const selectedSegments: Segment[] = selectedPoint.props[prop]
+      const selectedSegment = selectedSegments[spotIndex]
 
-      return {
-        ...prop,
-        duration: Math.max(prop.duration + duration, constants.MIN_DURATION),
-        delay: Math.max(prop.delay + delay, 0)
-      }
-    })
+      selectedSegment.duration = Math.max(
+        selectedSegment.duration + duration,
+        constants.MIN_DURATION
+      )
+      selectedSegment.delay = Math.max(selectedSegment.delay + delay, 0)
 
-    ensureTimeBounds(newState[action.payload.id].props[action.payload.prop])
-
-    state = { ...newState }
-    return state
+      ensureTimeBounds(selectedSegments)
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.warn(`point with id '${id}' not found`)
+    }
   },
   addPointProperty: (
     state,
@@ -183,16 +189,15 @@ const reducers = {
   ) => {
     const { name, count } = action.payload
     const value = Array(count).fill(0)
+    const selectedPoint = state[action.payload.id]
 
-    const newState = change(state, [action.payload.id, 'props'], (props) => {
-      props[name] = [createSegment({ startValue: value, endValue: value })]
-      return props
-    })
+    if (selectedPoint) {
+      selectedPoint.props[name] = [
+        createSegment({ startValue: value, endValue: value })
+      ]
 
-    state = change(newState, [action.payload.id, 'currentProps'], (props) => {
-      props[name] = value
-      return props
-    })
+      selectedPoint.currentProps = value
+    }
 
     return state
   },

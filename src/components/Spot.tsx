@@ -78,6 +78,14 @@ function isSpotEasing(
   return durationWidth >= 80
 }
 
+function getDuration(deltaX: number, minDuration: number): number {
+  if (deltaX * 10 < minDuration) {
+    return minDuration / 10
+  }
+
+  return deltaX
+}
+
 interface SpotProps {
   type: 'start' | 'end'
   meta: any
@@ -92,6 +100,7 @@ export const Spot: FC<SpotProps> = ({ type, segment, meta, children }) => {
   const [dDelay, setDDelay] = useState(0)
   const [dDuration, setDDuration] = useState(0)
   const isEasing = isSpotEasing(type, segment.duration, dDuration)
+  const minDuration = -segment.duration + constants.MIN_DURATION
 
   const isSelected = () => {
     const { id, spotIndex, type: selType, prop } = selectedSpot
@@ -107,24 +116,18 @@ export const Spot: FC<SpotProps> = ({ type, segment, meta, children }) => {
 
   const pan = (e) => {
     if (type === 'end') {
-      const threshold = constants.MIN_DURATION
-      // TODO: double check
-      // previously:
-      // const min = -this.props.duration + threshold
-      const min = -segment.duration + threshold
-      const dDuration = e.deltaX * 10 < min ? min / 10 : e.deltaX
-      setDDuration(dDuration)
+      setDDuration(getDuration(e.deltaX, minDuration))
     }
     if (type === 'start') {
       setDDelay(e.deltaX)
     }
   }
 
-  const panEnd = () => {
+  const panEnd = (e) => {
     dispatch(
       pointsSlice.actions.shiftSegment({
-        delay: dDelay * 10,
-        duration: dDuration * 10,
+        delay: dDelay,
+        duration: getDuration(e.deltaX, minDuration),
         ...meta
       })
     )
