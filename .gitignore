@@ -3,6 +3,7 @@ npm-debug.log
 
 # IDE config files
 .idea
+.run
 .DS_Store
 */**/.DS_Store
 
@@ -15,3 +16,6 @@ yarn-error.log*
 
 # build / generate output
 /dist/
+
+# env
+/.env
