@@ -7,7 +7,13 @@ declare module '@mojs/core' {
   export type Shape = mojs.Shape
   export type Tween = mojs.Tween
 
-  export namespace mojs {
+  export type ShapeOptions = mojs.ShapeOptions
+  export type PropertyValue = mojs.PropertyValue
+  export type DeltaConfig = mojs.DeltaConfig
+  export type DeltaValue = mojs.DeltaValue
+  export type DeltaNumberValue = mojs.DeltaNumberValue
+
+  namespace mojs {
     // define custom name here.
     export class Shape extends Tunable {
       constructor(opts: ShapeOptions | CustomShapeOptions<string>)
@@ -119,14 +125,13 @@ declare module '@mojs/core' {
       | 'zigzag'
       | string
 
-    interface ShapeOptions extends TweenCallbacks {
+    export interface ShapeOptions extends TweenCallbacks {
       /**
        *  Parent of the module.
        *  {String, Object}
        *  [selector, HTMLElement]
        */
       parent?: string | Object | Element | null
-
       /**
        * Class Name
        * {string}
@@ -378,7 +383,7 @@ declare module '@mojs/core' {
       shape: Shape
     }
 
-    type EasingPath = Function
+    export type EasingPath = Function
 
     /**
      * exp string: 'ease.in'. can refer to ./utils/mojo.ts
@@ -386,7 +391,7 @@ declare module '@mojs/core' {
      * exp using mojs easing.path: mojs.easing.path('M0,100 C50,100 50,67.578125 50,50 C50,32.421875 50,0 100,0')
      * exp svg path easing: 'M0,100 C50,100 50,67.578125 50,50 C50,32.421875'
      */
-    type EasingOption = string | Function
+    export type EasingOption = string | Function
 
     class easing {
       static bezier(...args)
@@ -426,9 +431,9 @@ declare module '@mojs/core' {
     // <property> : { '10%' : '100%' },
     // <property> : 'rand(min, max)',
     // <property> : [ 20, { 20 : 0 }, 'rand(0, 20)', null ]
-    type PropertyValue<T = number | string> = T | any[]
+    export type PropertyValue<T = number | string> = T | any[]
 
-    interface DeltaConfig {
+    export interface DeltaConfig {
       delay?: number
       duration?: number
       easing?: EasingOption
@@ -439,8 +444,8 @@ declare module '@mojs/core' {
       [delta: string]: PropertyValue<T>
     }
 
-    type DeltaValue = PropertyValue | CustomDelta | DeltaConfig
-    type DeltaNumberValue = PropertyValue<number> | CustomDelta<number>
+    export type DeltaValue = PropertyValue | CustomDelta | DeltaConfig
+    export type DeltaNumberValue = PropertyValue<number> | CustomDelta<number>
 
     // Custom properties to alter mojs behaviour (see `Teach mojs with customProperties` section). {Object}
     // ref: https://mojs.github.io/api/modules/html/#teach-mojs-with-customproperties
@@ -928,6 +933,36 @@ declare module '@mojs/core' {
     export class Timeline extends Tween {
       constructor(opts?: TweenOptions)
 
+      _timelines: Timeline[]
+      _arrayPropertyMap: ShapeOptions
+      _deltas: ShapeOptions
+      _index: number
+      _isCompleted: boolean
+      _isFirstUpdate: boolean
+      _isInActiveArea: boolean
+      _isRefreshed: boolean
+      _isRepeatCompleted: boolean
+      _isRepeatStart: boolean
+      _isStarted: boolean
+      _negativeShift: number
+      _o: ShapeOptions
+      _onEdge: number
+      _playTime: number
+      _prevState: string
+      _prevTime: number
+      _prevYoyo: boolean
+      _progressTime: number
+      _props: ShapeOptions
+      _resumeTime: null
+      _skipPropsDelta: {
+        timeline: number
+        prevChainModule: number
+        callbacksContext: number
+      }
+
+      _state: string
+      _wasUknownUpdate: boolean
+
       /**
        *  API method to add child tweens/timelines.
        *  @param tween {Object, Array} Tween/Timeline or an array of such.
@@ -1068,7 +1103,7 @@ declare module '@mojs/curve-editor' {
  * shift + alt + 3 - increase speed by 1/10
  */
 declare module '@mojs/player' {
-  import { Timeline, Shape, Tween } from '@mojs/core'
+  import { Shape, Timeline, Tween } from '@mojs/core'
 
   class MojsPlayer {
     constructor(opts: MojsPlayer.Options)

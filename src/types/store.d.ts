@@ -3,6 +3,7 @@ import { ControlsStates } from '../reducers/controls'
 import { PointsState } from '../reducers/points'
 import { SelectedSpot } from '../reducers/selectedSpot'
 import { TimelineStates } from '../reducers/timeline'
+import { MojsStates } from '../reducers/mojs'
 
 export interface GlobalState {
   timeline: TimelineStates
@@ -10,4 +11,5 @@ export interface GlobalState {
   controls: ControlsStates
   points: PointsState
   selectedSpot: SelectedSpot
+  mojs: MojsStates
 }

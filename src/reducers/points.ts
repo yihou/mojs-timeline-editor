@@ -123,8 +123,6 @@ const reducers = {
         current
       )
     }
-
-    return state
   },
   addPropertySegment: (
     state,
@@ -135,8 +133,6 @@ const reducers = {
     const segments: Segment[] = state[id].props[name] || []
 
     state[id].props[name] = addSegment(segments, name, action.payload, current)
-
-    return state
   },
   changePointCurrentPosition: (
     state,
@@ -198,8 +194,6 @@ const reducers = {
 
       selectedPoint.currentProps = value
     }
-
-    return state
   },
   updateSelectedSpot: (
     state,

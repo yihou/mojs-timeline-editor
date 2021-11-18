@@ -1,36 +1,37 @@
 import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
+import MojsPlayer from '@mojs/player'
+import { Timeline } from '@mojs/core'
 
 import { store } from './store'
 import { TimelineEditorView } from './components/TimelineEditorView'
 import { persist } from './helpers/persist'
-import { createElement, useEffect, useRef } from 'react'
+import { createElement, useEffect } from 'react'
 import { css, Global } from '@emotion/react'
-import { createMojsPlayer } from './player'
+import { MojsSetup } from './components/MojsSetup'
 
 /* TODO:
     [x] point-timeline.babel.jsx add animation
         when start/end points got selected
     [x] test if `onClick` handler on components is optimized for mobiles
 */
-export const MojsTimelineEditor = ({ withPlayer = true }) => {
-  const editorWrapperRef = useRef<HTMLDivElement>(null)
+interface MojsTimelineEditorProps {
+  timeline?: Timeline
+  player?: MojsPlayer
+  parent?: HTMLDivElement
+  onMounted?: () => void
+  withPlayer?: boolean
+}
+
+export const MojsTimelineEditor = (props: MojsTimelineEditorProps) => {
   // on mount, persist store
   useEffect(() => {
     const disposeUnloadEvent = persist(store)
-    let mojsPlayer
 
-    if (withPlayer) {
-      mojsPlayer = createMojsPlayer({
-        parent: editorWrapperRef.current as HTMLDivElement
-      })
-    }
+    typeof props.onMounted === 'function' && props.onMounted()
 
     return () => {
-      // remove player before unmount
-      mojsPlayer?.el.remove()
-
       if (disposeUnloadEvent) {
         disposeUnloadEvent()
       }
@@ -59,7 +60,13 @@ export const MojsTimelineEditor = ({ withPlayer = true }) => {
           }
         `}
       />
-      <TimelineEditorView ref={editorWrapperRef} />
+      <MojsSetup
+        player={props.player}
+        parent={props.parent}
+        timeline={props.timeline}
+        withPlayer={props.withPlayer}
+      />
+      <TimelineEditorView />
     </Provider>
   )
 }

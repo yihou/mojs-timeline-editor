@@ -9,7 +9,10 @@ export interface ToolsPanelButtonProps {
 const activeStyle = css`
   background: white;
   color: var(--mojs-color-purple);
-  fill: var(--mojs-color-purple);
+
+  [data-component='icon'] {
+    fill: var(--mojs-color-purple);
+  }
 `
 
 const linkStyle = css`
